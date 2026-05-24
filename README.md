@@ -1,16 +1,17 @@
-# attack-shark-x11-driver
+# attack-shark-x11-driver (UI Enhanced Version)
 
 [![npm version](https://img.shields.io/npm/v/attack-shark-x11-driver.svg)](https://www.npmjs.com/package/attack-shark-x11-driver)
 [![license](https://img.shields.io/npm/l/attack-shark-x11-driver.svg)](https://github.com/HarukaYamamoto0/attack-shark-x11-driver/blob/main/LICENSE)
 [![Bun](https://img.shields.io/badge/Bun-%23000000.svg?style=flat&logo=bun&logoColor=white)](https://bun.sh)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/HarukaYamamoto0/attack-shark-x11-driver)
 
 A TypeScript driver for the **Attack Shark X11 gaming mouse**, providing cross-platform support (focused on Linux) to configure DPI, macros, lighting, and polling rates via USB HID.
 
-The official software is Windows-only; this project provides a way to interact with the device on any platform supported by Node.js or Bun.
+This repository is an enhanced version of the original driver created by [HarukaYamamoto0](https://github.com/HarukaYamamoto0), featuring a new integrated User Interface for easier device configuration.
 
-## Features
+## Features Added
+- 🖥️ **Modern User Interface**: Intuitive management of device settings.
 
+## Original Features
 - ✅ **DPI Configuration**: Set stages and active stage.
 - ✅ **Button Remapping**: Fully customizable button behavior.
 - ✅ **Macros**: Support for custom macros and templates.
