@@ -127,11 +127,19 @@ onMounted(() => {
 	<div class="flex h-full">
 		<!-- Sidebar -->
 		<div class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col app-drag">
-			<div class="p-6">
+			<div class="p-6 flex items-center justify-between">
 				<h1 class="text-xl font-bold flex items-center gap-2 text-shark-primary">
 					<MousePointer2 class="w-6 h-6" />
 					Attack Shark X11
 				</h1>
+				<div class="flex items-center gap-2 app-no-drag">
+					<button @click="window.api.minimizeWindow()" class="hover:text-white text-slate-500">
+						<div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+					</button>
+					<button @click="window.api.closeWindow()" class="hover:text-white text-slate-500">
+						<div class="w-3 h-3 rounded-full bg-red-500"></div>
+					</button>
+				</div>
 			</div>
 
 			<nav class="flex-1 px-4 space-y-2">

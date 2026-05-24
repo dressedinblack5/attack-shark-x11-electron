@@ -13,8 +13,8 @@ let driver: AttackSharkX11 | null = null;
 function createWindow(): void {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
-		width: 900,
-		height: 670,
+		width: 1125,
+		height: 837,
 		show: false,
 		autoHideMenuBar: true,
 		frame: false,
@@ -59,6 +59,14 @@ app.whenReady().then(() => {
 	});
 
 	// IPC Handlers
+	ipcMain.handle('minimize-window', () => {
+		BrowserWindow.getFocusedWindow()?.minimize();
+	});
+
+	ipcMain.handle('close-window', () => {
+		BrowserWindow.getFocusedWindow()?.close();
+	});
+
 	ipcMain.handle('connect-device', async (_, mode: ConnectionMode) => {
 		console.log(
 			`Attempting to connect to device in mode: ${mode === ConnectionMode.Adapter ? 'Adapter' : 'Wired'} (0x${mode.toString(16)})`,
