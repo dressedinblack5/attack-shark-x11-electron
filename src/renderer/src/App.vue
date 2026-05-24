@@ -4,7 +4,9 @@ import { MousePointer2, Battery, Settings, Zap, Info, ShieldAlert, Keyboard } fr
 import UserPreferences from './components/UserPreferences.vue';
 import DpiSettings from './components/DpiSettings.vue';
 import MacroSettings from './components/MacroSettings.vue';
+import packageInfo from '../../../package.json';
 
+const version = packageInfo.version;
 const isConnected = ref(false);
 const batteryLevel = ref(-1);
 const preferences = reactive({
@@ -123,7 +125,7 @@ onMounted(() => {
 			<div class="p-6">
 				<h1 class="text-xl font-bold flex items-center gap-2 text-shark-primary">
 					<MousePointer2 class="w-6 h-6" />
-					SharkX11
+					Attack Shark X11
 				</h1>
 			</div>
 
@@ -200,6 +202,7 @@ onMounted(() => {
 					}}</span>
 				</div>
 				<div v-else class="text-xs text-slate-500 italic">Device Disconnected</div>
+				<div class="text-[10px] text-slate-600 mt-2">v{{ version }}</div>
 			</div>
 		</div>
 
