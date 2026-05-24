@@ -1,6 +1,6 @@
 # attack-shark-x11-driver (UI Enhanced Version)
 
-![Attack Shark X11 Gaming Mouse](assets/shark-x11-electron.png)
+![Attack Shark X11 Gaming Mouse](shark-x11-electron.png)
 
 [![npm version](https://img.shields.io/npm/v/attack-shark-x11-driver.svg)](https://www.npmjs.com/package/attack-shark-x11-driver)
 [![license](https://img.shields.io/npm/l/attack-shark-x11-driver.svg)](https://github.com/HarukaYamamoto0/attack-shark-x11-driver/blob/main/LICENSE)
