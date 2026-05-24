@@ -71,15 +71,17 @@ const connect = async (mode: number) => {
 		const result = await window.api.connectDevice(mode);
 		if (result.success) {
 			isConnected.value = true;
-			updateBattery();
-			fetchSummary();
-			updateProfiles();
+			// Refresh battery explicitly after successful connection
+			await updateBattery();
+			await fetchSummary();
+			await updateProfiles();
 		} else {
 			connectionError.value = result.error || 'Unknown error';
 		}
-	} catch (err: any) {
-		console.error('IPC Error:', err);
-		connectionError.value = `Connection Error: ${err.message}`;
+	} catch (err: unknown) {
+		const error = err instanceof Error ? err : new Error(String(err));
+		console.error('IPC Error:', error);
+		connectionError.value = `Connection Error: ${error.message}`;
 	}
 };
 
@@ -97,14 +99,16 @@ const reset = async () => {
 		await window.api.resetDevice();
 		alert('Reset successful! Please reconnect the device.');
 		isConnected.value = false;
-	} catch (err: any) {
-		alert(`Reset failed: ${err.message}`);
+	} catch (err: unknown) {
+		const error = err instanceof Error ? err : new Error(String(err));
+		alert(`Reset failed: ${error.message}`);
 	}
 };
 
 const updateBattery = async () => {
 	try {
-		batteryLevel.value = await window.api.getBattery();
+		const level = await window.api.getBattery();
+		batteryLevel.value = level;
 	} catch (err) {
 		console.warn('Battery update timed out or failed:', err);
 		batteryLevel.value = -1;
@@ -112,7 +116,8 @@ const updateBattery = async () => {
 };
 
 onMounted(() => {
-	window.api.onBatteryUpdated((level) => {
+	window.api.onBatteryUpdated((level: number) => {
+		console.log('Received battery update:', level);
 		batteryLevel.value = level;
 	});
 });
