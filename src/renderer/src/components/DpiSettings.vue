@@ -156,19 +156,19 @@ const dpiStep = 50;
 			</div>
 
 			<!-- DPI Stages -->
-			<div class="lg:col-span-2 bg-slate-900 p-8 rounded-2xl border border-slate-800">
-				<h3 class="text-xl font-bold mb-8 flex items-center gap-2">
-					<Zap class="w-6 h-6 text-shark-primary" />
+			<div class="lg:col-span-2 bg-slate-900 p-6 rounded-2xl border border-slate-800">
+				<h3 class="text-lg font-bold mb-6 flex items-center gap-2">
+					<Zap class="w-5 h-5 text-shark-primary" />
 					Sensitivity Stages (1-6)
 				</h3>
 
-				<div class="space-y-10">
-					<div v-for="i in 6" :key="i" class="space-y-2">
-						<div class="flex justify-between items-end">
-							<label class="font-bold text-slate-300 flex items-center gap-2">
+				<div class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+					<div v-for="i in 6" :key="i" class="space-y-1">
+						<div class="flex justify-between items-center">
+							<label class="font-semibold text-sm text-slate-300 flex items-center gap-2">
 								<span
 									:class="[
-										'w-6 h-6 flex items-center justify-center rounded text-xs',
+										'w-5 h-5 flex items-center justify-center rounded text-[10px]',
 										dpiConfig.activeStage === i
 											? 'bg-shark-primary text-white'
 											: 'bg-slate-800 text-slate-500',
@@ -178,27 +178,21 @@ const dpiStep = 50;
 								</span>
 								Stage {{ i }}
 							</label>
-							<div class="text-2xl font-black text-shark-primary">
+							<div class="text-lg font-bold text-shark-primary">
 								{{ dpiConfig.dpiValues[i - 1] }}
-								<span class="text-xs font-normal text-slate-500">DPI</span>
+								<span class="text-[10px] font-normal text-slate-500">DPI</span>
 							</div>
 						</div>
 
-						<div class="relative pt-1">
+						<div class="relative">
 							<input
 								type="range"
 								v-model.number="dpiConfig.dpiValues[i - 1]"
 								:min="dpiMin"
 								:max="dpiMax"
 								:step="dpiStep"
-								class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-shark-primary"
+								class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-shark-primary"
 							/>
-							<div
-								class="flex justify-between text-[10px] text-slate-600 mt-2 uppercase tracking-widest font-bold"
-							>
-								<span>{{ dpiMin }} DPI</span>
-								<span>{{ dpiMax }} DPI</span>
-							</div>
 						</div>
 					</div>
 				</div>
