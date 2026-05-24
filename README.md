@@ -81,6 +81,28 @@ To access the device without root permissions on Linux, you need to create an ud
     sudo udevadm trigger
     ```
 
+## Installation from Binaries
+
+You can find pre-built binaries in the [Releases](https://github.com/dressedinblack5/attack-shark-x11-electron/releases) section.
+
+### AppImage (Portable)
+1. Download the `.AppImage` file.
+2. Make it executable:
+   ```bash
+   chmod +x Attack-Shark-X11-Driver-*.AppImage
+   ```
+3. Run it:
+   ```bash
+   ./Attack-Shark-X11-Driver-*.AppImage
+   ```
+
+### .deb Package (Debian/Ubuntu/Pop!_OS)
+1. Download the `.deb` file.
+2. Install it using `apt`:
+   ```bash
+   sudo apt install ./Attack-Shark-X11-Driver-*.deb
+   ```
+
 ## Supported Hardware
 
 | Device           | Mode            | Status     |
