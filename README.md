@@ -22,14 +22,6 @@ This repository is an enhanced version of the original driver created by [Haruka
 - ✅ **Battery Status**: Real-time battery monitoring.
 - ✅ **Cross-platform**: Works on Linux, macOS, and Windows.
 
-## Installation
-
-```bash
-bun add attack-shark-x11-driver
-# or
-npm install attack-shark-x11-driver
-```
-
 ## Quick Start
 
 ```typescript
