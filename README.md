@@ -1,4 +1,4 @@
-# attack-shark-x11-driver (UI Enhanced Version)
+# attack-shark-x11-electron (UI Enhanced Version)
 
 [![npm version](https://img.shields.io/npm/v/attack-shark-x11-driver.svg)](https://www.npmjs.com/package/attack-shark-x11-driver)
 [![license](https://img.shields.io/npm/l/attack-shark-x11-driver.svg)](https://github.com/HarukaYamamoto0/attack-shark-x11-driver/blob/main/LICENSE)
@@ -88,11 +88,6 @@ To access the device without root permissions on Linux, you need to create an ud
 | Attack Shark X11 | Bluetooth       | Not tested |
 
 _Note: Attack Shark R1 might be compatible but hasn't been verified yet._
-
-## Important Warnings ⚠️
-
-- **Packet Delay**: Sending configuration packets too quickly can cause the firmware to hang. Always maintain at least a **250 ms** (500 ms recommended) delay between commands.
-- **Recovery**: If the mouse stops responding, switch it to Bluetooth mode for a few seconds, then back to 2.4 GHz/Wired.
 
 ## Contributing
 
