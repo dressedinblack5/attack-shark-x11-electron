@@ -78,21 +78,21 @@ To access the device without root permissions on Linux, you need to create an ud
 You can find pre-built binaries in the [Releases](https://github.com/dressedinblack5/attack-shark-x11-electron/releases) section.
 
 ### AppImage (Portable)
-1. Download the `.AppImage` file.
+1. Download the `Attack Shark X11 Driver-1.0.1.AppImage` file.
 2. Make it executable:
    ```bash
-   chmod +x Attack-Shark-X11-Driver-*.AppImage
+   chmod +x Attack\ Shark\ X11\ Driver-1.0.1.AppImage
    ```
 3. Run it:
    ```bash
-   ./Attack-Shark-X11-Driver-*.AppImage
+   ./Attack\ Shark\ X11\ Driver-1.0.1.AppImage
    ```
 
 ### .deb Package (Debian/Ubuntu/Pop!_OS)
-1. Download the `.deb` file.
+1. Download the `attack-shark-x11-driver_1.0.1_amd64.deb` file.
 2. Install it using `apt`:
    ```bash
-   sudo apt install ./Attack-Shark-X11-Driver-*.deb
+   sudo apt install ./attack-shark-x11-driver_1.0.1_amd64.deb
    ```
 
 ## Supported Hardware
