@@ -42,6 +42,7 @@
 	"build": {
 		"appId": "com.attackshark.driver",
 		"productName": "Attack Shark X11 Driver",
+		"artifactName": "attack-shark-x11-electron-${version}.${ext}",
 		"directories": {
 			"output": "dist"
 		},
