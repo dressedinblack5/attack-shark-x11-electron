@@ -62,20 +62,22 @@ app.whenReady().then(() => {
 			`Attempting to connect to device in mode: ${mode === ConnectionMode.Adapter ? 'Adapter' : 'Wired'} (0x${mode.toString(16)})`,
 		);
 		try {
-			if (driver) {
+			let currentDriver = driver;
+			if (currentDriver) {
 				console.log('Closing existing driver instance...');
-				await driver.close();
+				await currentDriver.close();
 			}
 
 			console.log('Creating new AttackSharkX11 instance...');
 			driver = new AttackSharkX11({ connectionMode: mode });
+			currentDriver = driver;
 
 			console.log('Opening driver...');
-			await driver.open();
+			await currentDriver.open();
 
 			console.log('Driver opened successfully. Setting up listeners...');
 			// Setup battery listener to push to renderer
-			driver.on('batteryChange', (level) => {
+			currentDriver.on('batteryChange', (level) => {
 				console.log(`Battery level updated: ${level}%`);
 				const windows = BrowserWindow.getAllWindows();
 				windows.forEach((w) => w.webContents.send('battery-updated', level));
@@ -83,17 +85,20 @@ app.whenReady().then(() => {
 
 			console.log('Connection complete.');
 			return { success: true };
-		} catch (error: any) {
-			console.error('Connection failed:', error);
-			return { success: false, error: error.message || String(error) };
+		} catch (error: unknown) {
+			const err = error instanceof Error ? error : new Error(String(error));
+			console.error('Connection failed:', err);
+			return { success: false, error: err.message };
 		}
 	});
 
-	ipcMain.handle('get-battery', () => {
+	ipcMain.handle('get-battery', async () => {
 		if (!driver) return -1;
 		try {
-			return driver.getBatteryLevel();
-		} catch {
+			const level = await driver.getBatteryLevel();
+			return level;
+		} catch (err) {
+			console.error('Failed to get battery:', err);
 			return -1;
 		}
 	});
