@@ -1,4 +1,4 @@
-# attack-shark-x11-driver (UI Enhanced Version)
+# attack-shark-x11-electron (UI Enhanced Version)
 
 ![Attack Shark X11 Gaming Mouse](assets/x11-mouse.png)
 
@@ -112,11 +112,6 @@ You can find pre-built binaries in the [Releases](https://github.com/dressedinbl
 | Attack Shark X11 | Bluetooth       | Not tested |
 
 _Note: Attack Shark R1 might be compatible but hasn't been verified yet._
-
-## Important Warnings ⚠️
-
-- **Packet Delay**: Sending configuration packets too quickly can cause the firmware to hang. Always maintain at least a **250 ms** (500 ms recommended) delay between commands.
-- **Recovery**: If the mouse stops responding, switch it to Bluetooth mode for a few seconds, then back to 2.4 GHz/Wired.
 
 ## Contributing
 
