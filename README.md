@@ -6,7 +6,7 @@
 
 A TypeScript driver for the **Attack Shark X11 gaming mouse**, providing cross-platform support (focused on Linux) to configure DPI, macros, lighting, and polling rates via USB HID.
 
-This repository is an enhanced version of the original driver created by [HarukaYamamoto0](https://github.com/HarukaYamamoto0), featuring a new integrated User Interface for easier device configuration.
+This repository is an enhanced version of the original driver created by [HarukaYamamoto0](https://github.com/HarukaYamamoto0), featuring a new integrated User Interface built with **Electron** for easier device configuration.
 
 ## Features Added
 - 🖥️ **Modern User Interface**: Intuitive management of device settings.
