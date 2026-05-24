@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, reactive } from 'vue';
-import MouseImage from './assets/shark-x11-small.png';
 import { MousePointer2, Battery, Settings, Zap, Info, ShieldAlert, Keyboard } from 'lucide-vue-next';
 import UserPreferences from './components/UserPreferences.vue';
 import DpiSettings from './components/DpiSettings.vue';
@@ -130,7 +129,7 @@ onMounted(() => {
 		<div class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col">
 			<div class="p-6">
 				<h1 class="text-xl font-bold flex items-center gap-2 text-shark-primary">
-					<img :src="MouseImage" alt="Attack Shark X11" class="w-8 h-8 object-contain" />
+					<MousePointer2 class="w-6 h-6" />
 					Attack Shark X11
 				</h1>
 			</div>
