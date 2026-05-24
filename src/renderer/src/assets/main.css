@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+
+@theme {
+	--color-shark-dark: #0f172a;
+	--color-shark-primary: #3b82f6;
+	--color-shark-accent: #10b981;
+}
+
+body {
+	@apply bg-shark-dark text-slate-100 font-sans antialiased overflow-hidden;
+}
+
+#app {
+	@apply h-screen flex flex-col;
+}
