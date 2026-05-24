@@ -126,7 +126,7 @@ onMounted(() => {
 <template>
 	<div class="flex h-full">
 		<!-- Sidebar -->
-		<div class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col">
+		<div class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col app-drag">
 			<div class="p-6">
 				<h1 class="text-xl font-bold flex items-center gap-2 text-shark-primary">
 					<MousePointer2 class="w-6 h-6" />
