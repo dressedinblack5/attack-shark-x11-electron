@@ -17,8 +17,6 @@ function createWindow(): void {
 		height: 837,
 		show: false,
 		autoHideMenuBar: true,
-		frame: false,
-		titleBarStyle: 'hidden',
 		webPreferences: {
 			preload: join(__dirname, '../preload/index.js'),
 			sandbox: false,
@@ -59,14 +57,6 @@ app.whenReady().then(() => {
 	});
 
 	// IPC Handlers
-	ipcMain.handle('minimize-window', () => {
-		BrowserWindow.getFocusedWindow()?.minimize();
-	});
-
-	ipcMain.handle('close-window', () => {
-		BrowserWindow.getFocusedWindow()?.close();
-	});
-
 	ipcMain.handle('connect-device', async (_, mode: ConnectionMode) => {
 		console.log(
 			`Attempting to connect to device in mode: ${mode === ConnectionMode.Adapter ? 'Adapter' : 'Wired'} (0x${mode.toString(16)})`,

@@ -13,15 +13,3 @@ body {
 #app {
 	@apply h-screen flex flex-col;
 }
-
-.app-drag {
-  -webkit-app-region: drag;
-}
-
-.app-no-drag {
-  -webkit-app-region: no-drag;
-}
-
-button {
-  -webkit-app-region: no-drag;
-}
