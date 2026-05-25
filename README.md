@@ -1,4 +1,4 @@
-# attack-shark-x11-driver (UI Enhanced Version)
+# attack-shark-x11-electron (UI Enhanced Version)
 
 ![Attack Shark X11 Gaming Mouse](assets/shark-x11-electron.png)
 
