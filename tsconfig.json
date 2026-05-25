@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "ESNext",
-		"module": "NodeNext",
+		"module": "ESNext",
 		"moduleResolution": "NodeNext",
 		"lib": ["ESNext"],
 		"outDir": "dist",
@@ -24,7 +24,8 @@
 		"declarationMap": true,
 		"resolveJsonModule": true,
 		"isolatedModules": true,
-		"verbatimModuleSyntax": true
+		"moduleDetection": "force",
+		"verbatimModuleSyntax": false
 	},
 	"include": ["src"]
 }
