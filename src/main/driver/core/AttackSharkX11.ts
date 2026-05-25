@@ -111,13 +111,14 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 			try {
 				this.logger.info(`Opening USB device VID:${VID.toString(16)} PID:${this.productId.toString(16)}...`);
 				this.device.open();
-			} catch (e: any) {
-				this.logger.error('Failed to open USB device', e);
+			} catch (e: unknown) {
+				const error = e instanceof Error ? e : new Error(String(e));
+				this.logger.error('Failed to open USB device', error);
 				return reject(
 					new DeviceError(
-						`An unexpected error occurred while trying to open device ${this.connectionMode}. ${e.message}`,
+						`An unexpected error occurred while trying to open device ${this.connectionMode}. ${error.message}`,
 						{
-							cause: e,
+							cause: error,
 						},
 					),
 				);
@@ -126,10 +127,11 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 			let iface: Interface;
 			try {
 				iface = this.device.interface(DEVICE_INTERFACE);
-			} catch (e: any) {
-				this.logger.error(`Failed to get interface ${DEVICE_INTERFACE}`, e);
+			} catch (e: unknown) {
+				const error = e instanceof Error ? e : new Error(String(e));
+				this.logger.error(`Failed to get interface ${DEVICE_INTERFACE}`, error);
 				return reject(
-					new InterfaceError(`interface ${DEVICE_INTERFACE} not found`, DEVICE_INTERFACE, { cause: e }),
+					new InterfaceError(`interface ${DEVICE_INTERFACE} not found`, DEVICE_INTERFACE, { cause: error }),
 				);
 			}
 
@@ -147,16 +149,17 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 
 				this.logger.info(`Claiming interface ${DEVICE_INTERFACE}...`);
 				iface.claim();
-			} catch (e: any) {
-				if (e.message.includes('LIBUSB_ERROR_BUSY')) {
+			} catch (e: unknown) {
+				const error = e instanceof Error ? e : new Error(String(e));
+				if (error.message.includes('LIBUSB_ERROR_BUSY')) {
 					this.logger.warn(`Interface ${DEVICE_INTERFACE} is already claimed. Attempting to continue...`);
 				} else {
-					this.logger.error(`Could not claim interface ${DEVICE_INTERFACE}`, e);
+					this.logger.error(`Could not claim interface ${DEVICE_INTERFACE}`, error);
 					return reject(
 						new InterfaceError(
-							`Could not claim interface ${DEVICE_INTERFACE}. ${e.message}`,
+							`Could not claim interface ${DEVICE_INTERFACE}. ${error.message}`,
 							DEVICE_INTERFACE,
-							{ cause: e },
+							{ cause: error },
 						),
 					);
 				}
@@ -269,11 +272,12 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 		try {
 			this.logger.info('Closing USB device...');
 			this.device.close();
-		} catch (e: any) {
-			if (e.message.includes('pending request')) {
+		} catch (e: unknown) {
+			const error = e instanceof Error ? e : new Error(String(e));
+			if (error.message.includes('pending request')) {
 				this.logger.warn('Device had pending requests during close. This is common on app exit.');
 			} else {
-				this.logger.error('Error while closing device', e);
+				this.logger.error('Error while closing device', error);
 			}
 		}
 

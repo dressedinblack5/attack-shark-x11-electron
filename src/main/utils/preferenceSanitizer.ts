@@ -1,4 +1,6 @@
-export const sanitizePreferences = (prefs: any) => {
+import type { UserPreferencesBuilderOptions } from '../driver/protocols/UserPreferencesBuilder.js';
+
+export const sanitizePreferences = (prefs: UserPreferencesBuilderOptions): UserPreferencesBuilderOptions => {
 	const sanitized = { ...prefs };
 
 	// Ensure ledSpeed is between 1 and 5

@@ -29,7 +29,7 @@ const profiles = ref<string[]>([]);
 const selectedProfile = ref('');
 const newProfileName = ref('');
 const connectionError = ref('');
-const activeTab = ref('dashboard');
+const activeTab = ref('preferences');
 
 const updateProfiles = async () => {
 	profiles.value = await window.api.listProfiles();
@@ -135,17 +135,6 @@ onMounted(() => {
 			</div>
 
 			<nav class="flex-1 px-4 space-y-2">
-				<button
-					@click="activeTab = 'dashboard'"
-					:class="[
-						'w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-colors',
-						activeTab === 'dashboard'
-							? 'bg-shark-primary/20 text-shark-primary'
-							: 'hover:bg-slate-800 text-slate-400',
-					]"
-				>
-					<Zap class="w-5 h-5" /> Dashboard
-				</button>
 				<button
 					@click="activeTab = 'preferences'"
 					:class="[
@@ -257,38 +246,6 @@ onMounted(() => {
 			</div>
 
 			<div v-else>
-				<!-- Dashboard Content -->
-				<div v-if="activeTab === 'dashboard'">
-					<h2 class="text-3xl font-bold mb-8">Welcome Back</h2>
-
-					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-						<div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-							<div class="flex items-center justify-between mb-4">
-								<h3 class="text-lg font-semibold text-slate-300">Battery Status</h3>
-								<Battery class="w-6 h-6 text-shark-accent" />
-							</div>
-							<div class="text-4xl font-bold mb-2">
-								{{ batteryLevel >= 0 ? `${batteryLevel}%` : 'N/A' }}
-							</div>
-							<p class="text-slate-500 text-sm">
-								Monitoring real-time telemetry from {{ batteryLevel >= 0 ? 'Wireless' : 'Wired' }} mode.
-							</p>
-						</div>
-
-						<div
-							class="bg-slate-900 p-6 rounded-2xl border border-slate-800 cursor-pointer hover:border-shark-primary transition-colors"
-							@click="activeTab = 'preferences'"
-						>
-							<div class="flex items-center justify-between mb-4">
-								<h3 class="text-lg font-semibold text-slate-300">Polling Rate</h3>
-								<Zap class="w-6 h-6 text-shark-primary" />
-							</div>
-							<div class="text-4xl font-bold mb-2">{{ pollingRate }}Hz</div>
-							<p class="text-slate-500 text-sm">Optimal for high-performance gaming.</p>
-						</div>
-					</div>
-				</div>
-
 				<!-- Preferences Content -->
 				<div v-if="activeTab === 'preferences'">
 					<UserPreferences :preferences="preferences" :isConnected="isConnected" />

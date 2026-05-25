@@ -7,6 +7,10 @@ import { validateDpiConfig } from './utils/validation.js';
 import { sanitizePreferences } from './utils/preferenceSanitizer.js';
 import * as profileManager from './storage/profileManager.js';
 
+import type { CustomMacroBuilderOptions } from './driver/protocols/CustomMacroBuilder.js';
+import type { UserPreferencesBuilderOptions } from './driver/protocols/UserPreferencesBuilder.js';
+import type { MacroBuilderOptions } from './driver/protocols/MacrosBuilder.js';
+
 let driver: AttackSharkX11 | null = null;
 // ... (in app.whenReady())
 
@@ -62,27 +66,27 @@ app.whenReady().then(() => {
 			`Attempting to connect to device in mode: ${mode === ConnectionMode.Adapter ? 'Adapter' : 'Wired'} (0x${mode.toString(16)})`,
 		);
 		try {
-			let currentDriver = driver;
-			if (currentDriver) {
+			const oldDriver = driver;
+			if (oldDriver) {
 				console.log('Closing existing driver instance...');
-				await currentDriver.close();
+				await oldDriver.close();
 			}
 
 			console.log('Creating new AttackSharkX11 instance...');
-			driver = new AttackSharkX11({ connectionMode: mode });
-			currentDriver = driver;
+			const newDriver = new AttackSharkX11({ connectionMode: mode });
 
 			console.log('Opening driver...');
-			await currentDriver.open();
+			await newDriver.open();
 
 			console.log('Driver opened successfully. Setting up listeners...');
 			// Setup battery listener to push to renderer
-			currentDriver.on('batteryChange', (level) => {
+			newDriver.on('batteryChange', (level) => {
 				console.log(`Battery level updated: ${level}%`);
 				const windows = BrowserWindow.getAllWindows();
 				windows.forEach((w) => w.webContents.send('battery-updated', level));
 			});
 
+			driver = newDriver;
 			console.log('Connection complete.');
 			return { success: true };
 		} catch (error: unknown) {
@@ -103,18 +107,18 @@ app.whenReady().then(() => {
 		}
 	});
 
-	ipcMain.handle('set-dpi', (_, config) => {
+	ipcMain.handle('set-dpi', (_, config: unknown) => {
 		if (!driver) throw new Error('Device not connected');
 		const validated = validateDpiConfig(config);
 		return driver.setDpi(validated);
 	});
 
-	ipcMain.handle('set-polling-rate', (_, rate) => {
+	ipcMain.handle('set-polling-rate', (_, rate: number) => {
 		if (!driver) throw new Error('Device not connected');
 		return driver.setPollingRate(rate);
 	});
 
-	ipcMain.handle('set-user-preferences', (_, prefs) => {
+	ipcMain.handle('set-user-preferences', (_, prefs: UserPreferencesBuilderOptions) => {
 		if (!driver) throw new Error('Device not connected');
 		return driver.setUserPreferences(sanitizePreferences(prefs));
 	});
@@ -165,33 +169,24 @@ app.whenReady().then(() => {
 		return { success: true };
 	});
 
-	ipcMain.handle('set-macro', (_, config) => {
+	ipcMain.handle('set-macro', (_, config: MacroBuilderOptions) => {
 		if (!driver) throw new Error('Device not connected');
 		return driver.setMacro(config);
 	});
 
-	ipcMain.handle('set-custom-macro', async (_, options: any) => {
+	ipcMain.handle('set-custom-macro', async (_, options: CustomMacroBuilderOptions) => {
 		if (!driver) throw new Error('Device not connected');
 
 		const { CustomMacroBuilder } = await import('./driver/protocols/CustomMacroBuilder.js');
-		const builder = new CustomMacroBuilder({
-			playOptions: options.playOptions,
-			targetButton: options.targetButton,
-		});
-
-		if (options.events && Array.isArray(options.events)) {
-			for (const event of options.events) {
-				builder.addEvent(event.key, event.delay, event.isRelease);
-			}
-		}
+		const builder = new CustomMacroBuilder(options);
 
 		return driver.setCustomMacro(builder);
 	});
 
 	ipcMain.handle('list-profiles', () => profileManager.listProfiles());
-	ipcMain.handle('save-profile', (_, name, data) => profileManager.saveProfile(name, data));
-	ipcMain.handle('load-profile', (_, name) => profileManager.loadProfile(name));
-	ipcMain.handle('delete-profile', (_, name) => profileManager.deleteProfile(name));
+	ipcMain.handle('save-profile', (_, name: string, data: unknown) => profileManager.saveProfile(name, data));
+	ipcMain.handle('load-profile', (_, name: string) => profileManager.loadProfile(name));
+	ipcMain.handle('delete-profile', (_, name: string) => profileManager.deleteProfile(name));
 
 	createWindow();
 
@@ -204,12 +199,13 @@ app.whenReady().then(() => {
 		if (driver) {
 			e.preventDefault();
 			console.log('Closing driver before quit...');
+			const driverToClose = driver;
+			driver = null;
 			try {
-				await driver.close();
+				await driverToClose.close();
 			} catch (err) {
 				console.error('Error during driver cleanup:', err);
 			} finally {
-				driver = null;
 				app.quit();
 			}
 		}

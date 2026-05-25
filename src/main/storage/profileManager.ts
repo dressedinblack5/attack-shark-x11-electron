@@ -6,7 +6,7 @@ const STORAGE_PATH = path.join(app.getPath('userData'), 'profiles.json');
 
 export interface Profile {
 	name: string;
-	data: any;
+	data: unknown;
 }
 
 export async function listProfiles(): Promise<string[]> {
@@ -19,7 +19,7 @@ export async function listProfiles(): Promise<string[]> {
 	}
 }
 
-export async function saveProfile(name: string, data: any): Promise<void> {
+export async function saveProfile(name: string, data: unknown): Promise<void> {
 	const profiles = await getAllProfiles();
 	const index = profiles.findIndex((p) => p.name === name);
 	if (index !== -1) {
@@ -30,7 +30,7 @@ export async function saveProfile(name: string, data: any): Promise<void> {
 	await fs.writeFile(STORAGE_PATH, JSON.stringify(profiles));
 }
 
-export async function loadProfile(name: string): Promise<any> {
+export async function loadProfile(name: string): Promise<unknown> {
 	const profiles = await getAllProfiles();
 	const profile = profiles.find((p) => p.name === name);
 	return profile ? profile.data : null;

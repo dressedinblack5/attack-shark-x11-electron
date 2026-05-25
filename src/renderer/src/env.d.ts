@@ -4,14 +4,19 @@ interface Window {
 	api: {
 		connectDevice: (mode: number) => Promise<{ success: boolean; error?: string }>;
 		getBattery: () => Promise<number>;
-		setDpi: (config: any) => Promise<number>;
+		setDpi: (config: unknown) => Promise<number>;
 		getDpi: () => Promise<Buffer>;
 		getPreferences: () => Promise<Buffer>;
 		resetDevice: () => Promise<{ success: boolean }>;
 		setPollingRate: (rate: number) => Promise<number>;
-		setUserPreferences: (prefs: any) => Promise<number>;
-		setMacro: (config: any) => Promise<number>;
-		setCustomMacro: (options: any) => Promise<void>;
+		setUserPreferences: (prefs: unknown) => Promise<number>;
+		setMacro: (config: unknown) => Promise<number>;
+		setCustomMacro: (options: unknown) => Promise<void>;
+		listProfiles: () => Promise<string[]>;
+		saveProfile: (name: string, data: unknown) => Promise<void>;
+		loadProfile: (name: string) => Promise<unknown>;
+		deleteProfile: (name: string) => Promise<void>;
+		getSummary: () => Promise<unknown>;
 		onBatteryUpdated: (callback: (level: number) => void) => void;
 	};
 }
