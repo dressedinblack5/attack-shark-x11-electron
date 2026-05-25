@@ -81,11 +81,11 @@ You can find pre-built binaries in the [Releases](https://github.com/dressedinbl
 1. Download the `Attack Shark X11 Driver-1.0.1.AppImage` file.
 2. Make it executable:
    ```bash
-   chmod +x Attack\ Shark\ X11\ Driver-1.0.1.AppImage
+   chmod +x attack-shark-x11-driver_1.0.1.AppImage
    ```
 3. Run it:
    ```bash
-   ./Attack\ Shark\ X11\ Driver-1.0.1.AppImage
+   ./attack-shark-x11-driver_1.0.1.AppImage
    ```
 
 ### .deb Package (Debian/Ubuntu/Pop!_OS)
