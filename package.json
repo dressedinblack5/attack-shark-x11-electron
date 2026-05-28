@@ -8,13 +8,13 @@
 		"url": "https://harukadev.com"
 	},
 	"license": "MIT",
-	"homepage": "https://github.com/HarukaYamamoto0/attack-shark-x11-driver#readme",
+	"homepage": "https://github.com/dressedinblack5/attack-shark-x11-electron#readme",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/HarukaYamamoto0/attack-shark-x11-driver.git"
+		"url": "git+https://github.com/dressedinblack5/attack-shark-x11-electron.git"
 	},
 	"bugs": {
-		"url": "https://github.com/HarukaYamamoto0/attack-shark-x11-driver/issues"
+		"url": "https://github.com/dressedinblack5/attack-shark-x11-electron/issues"
 	},
 	"keywords": [
 		"attack-shark",
