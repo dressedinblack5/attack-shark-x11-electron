@@ -1,4 +1,4 @@
-# attack-shark-x11-electron (UI Enhanced Version)
+# attack-shark-x11-electron
 
 ![Attack Shark X11 Gaming Mouse](assets/shark-x11-electron.png)
 
