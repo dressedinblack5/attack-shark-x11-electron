@@ -3,9 +3,9 @@
 	"version": "1.0.1",
 	"description": "A TypeScript driver for the Attack Shark X11 gaming mouse, supporting Linux and other platforms via Node.js/Bun and USB HID.",
 	"author": {
-		"name": "HarukaYamamoto0",
-		"email": "harukayamamotodev@gmail.com",
-		"url": "https://harukadev.com"
+		"name": "dressedinblack5",
+		"email": "leonvargas4991@gmail.com",
+		"url": ""
 	},
 	"license": "MIT",
 	"homepage": "https://github.com/dressedinblack5/attack-shark-x11-electron#readme",
