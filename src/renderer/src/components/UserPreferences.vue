@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import { Palette, Cpu, Database } from 'lucide-vue-next';
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import BaseSelect from './BaseSelect.vue';
@@ -177,7 +178,10 @@ const applyPreferences = async () => {
 		</div>
 
 		<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)] space-y-4">
-			<h3 class="text-lg font-semibold text-[var(--text-primary)] opacity-70">Stored Profiles</h3>
+			<h3 class="text-lg font-semibold text-[var(--text-primary)] opacity-70 flex items-center gap-3">
+				<Database class="w-6 h-6 text-shark-primary" />
+				Stored Profiles
+			</h3>
 			<div class="flex flex-wrap gap-2">
 				<div
 					v-for="profile in profiles"
@@ -206,8 +210,9 @@ const applyPreferences = async () => {
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 			<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)] space-y-6">
 				<h3
-					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider"
+					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3"
 				>
+					<Palette class="w-6 h-6 text-shark-primary" />
 					Lighting
 				</h3>
 
@@ -274,8 +279,9 @@ const applyPreferences = async () => {
 
 			<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)] space-y-6">
 				<h3
-					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider"
+					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3"
 				>
+					<Cpu class="w-6 h-6 text-shark-primary" />
 					Device Behavior
 				</h3>
 

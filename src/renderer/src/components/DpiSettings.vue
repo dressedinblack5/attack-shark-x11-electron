@@ -88,7 +88,7 @@ const dpiStep = 50;
 			<div class="lg:col-span-1 space-y-6">
 				<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)]">
 					<h3 class="text-lg font-semibold mb-6 flex items-center gap-2 text-[var(--text-primary)]">
-						<Sliders class="w-5 h-5" /> Sensor Options
+						<Sliders class="w-6 h-6" /> Sensor Options
 					</h3>
 
 					<div class="space-y-6">
@@ -164,9 +164,9 @@ const dpiStep = 50;
 							<label class="font-medium text-sm text-[var(--text-primary)] opacity-70 mb-2 flex items-center gap-3">
 								<span
 									:class="[
-										'w-6 h-6 flex items-center justify-center rounded text-xs',
+										'w-8 h-8 flex items-center justify-center rounded-full text-sm transition-all',
 										dpiConfig.activeStage === i
-											? 'bg-shark-primary text-white'
+											? 'bg-shark-primary text-white shadow-lg shadow-shark-primary/50 font-bold ring-2 ring-shark-primary ring-offset-2 ring-offset-[var(--bg-card)]'
 											: 'bg-[var(--border-card)] text-[var(--text-primary)] opacity-50',
 									]"
 								>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Keyboard, Mouse, Save } from 'lucide-vue-next';
+import { Keyboard, Mouse } from 'lucide-vue-next';
 import { macroTemplates, MacroName } from '../../../main/driver/protocols/MacrosBuilder';
 import BaseButton from './BaseButton.vue';
 import BaseSelect from './BaseSelect.vue';
