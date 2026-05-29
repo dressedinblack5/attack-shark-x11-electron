@@ -71,7 +71,6 @@ const applyMacro = async () => {
 				Macro Selector
 			</h2>
 			<BaseButton @click="applyMacro" :disabled="!isConnected || isSaving" variant="green">
-				<Save class="w-4 h-4" />
 				{{ isSaving ? 'Applying...' : 'Apply Macro' }}
 			</BaseButton>
 		</div>
