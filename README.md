@@ -95,6 +95,25 @@ You can find pre-built binaries in the [Releases](https://github.com/dressedinbl
    sudo apt install ./attack-shark-x11-driver_1.0.1_amd64.deb
    ```
 
+## Building from Source
+
+To build the application from the source code, ensure you have [Bun](https://bun.sh/) installed.
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/dressedinblack5/attack-shark-x11-electron.git
+   cd attack-shark-x11-electron
+   ```
+2. Install dependencies:
+   ```bash
+   bun install
+   ```
+3. Build the application:
+   ```bash
+   bun run package
+   ```
+   This will compile the application and generate the distribution files in the `dist` folder.
+
 ## Supported Hardware
 
 | Device           | Mode            | Status     |
