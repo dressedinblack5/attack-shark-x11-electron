@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, reactive } from 'vue';
-import { MousePointer2, Battery, Settings, Zap, Info, ShieldAlert, Keyboard } from 'lucide-vue-next';
+import { ref, onMounted, reactive } from 'vue';
+import { MousePointer2, Settings, Zap, Info, ShieldAlert, Keyboard } from 'lucide-vue-next';
 import UserPreferences from './components/UserPreferences.vue';
 import DpiSettings from './components/DpiSettings.vue';
 import MacroSettings from './components/MacroSettings.vue';
@@ -18,7 +18,6 @@ const preferences = reactive({
 	deepSleepTime: 10,
 	rgb: { r: 255, g: 0, b: 255 },
 });
-const pollingRate = computed(() => preferences.pollingRate);
 const deviceSummary = ref<{
 	ledSpeed: number;
 	lightMode: number;
@@ -26,41 +25,11 @@ const deviceSummary = ref<{
 	rgb: { r: number; g: number; b: number };
 } | null>(null);
 const profiles = ref<string[]>([]);
-const selectedProfile = ref('');
-const newProfileName = ref('');
 const connectionError = ref('');
 const activeTab = ref('preferences');
 
 const updateProfiles = async () => {
 	profiles.value = await window.api.listProfiles();
-};
-
-const deleteProfile = async () => {
-	if (!selectedProfile.value) return;
-	if (!confirm(`Are you sure you want to delete profile "${selectedProfile.value}"?`)) return;
-	await window.api.deleteProfile(selectedProfile.value);
-	selectedProfile.value = '';
-	updateProfiles();
-};
-
-const saveCurrentProfile = async () => {
-	// ...
-};
-
-const loadProfile = async () => {
-	if (!selectedProfile.value) return;
-	try {
-		const settings = await window.api.loadProfile(selectedProfile.value);
-		if (settings) {
-			console.log('Applying settings:', settings);
-			await window.api.setUserPreferences(settings);
-			await fetchSummary();
-			alert(`Profile "${selectedProfile.value}" applied successfully!`);
-		}
-	} catch (err: any) {
-		console.error('Failed to apply profile:', err);
-		alert(`Error applying profile: ${err?.message || String(err)}`);
-	}
 };
 
 const connect = async (mode: number) => {
@@ -186,7 +155,7 @@ onMounted(() => {
 					<div class="relative w-8 h-4 border border-slate-600 rounded-sm p-0.5">
 						<div
 							class="h-full rounded-xs"
-							:class="batteryLevel <= 20 ? 'bg-red-500' : 'bg-shark-accent'"
+							:class="batteryLevel <= 20 ? 'bg-red-500' : 'bg-green-700'"
 							:style="{ width: `${batteryLevel > 0 ? batteryLevel : 0}%` }"
 						></div>
 						<div class="absolute -right-1 top-1 w-1 h-2 bg-slate-600 rounded-r-sm"></div>

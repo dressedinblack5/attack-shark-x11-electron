@@ -61,7 +61,7 @@ const dpiStep = 50;
 			<button
 				@click="applyDpi"
 				:disabled="!isConnected || isSaving"
-				class="bg-shark-primary hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-2 rounded-lg font-bold transition-all shadow-lg shadow-blue-500/20"
+				class="bg-green-600 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-2 rounded-lg font-bold transition-all shadow-blue-500/20"
 			>
 				{{ isSaving ? 'Applying...' : 'Save DPI' }}
 			</button>

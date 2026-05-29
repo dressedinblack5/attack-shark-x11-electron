@@ -1,15 +1,25 @@
-@import 'tailwindcss';
+/* eslint-disable */
+@import "tailwindcss";
 
-@theme {
-	--color-shark-dark: #0f172a;
-	--color-shark-primary: #3b82f6;
-	--color-shark-accent: #10b981;
+
+
+:root {
+  --bg-primary: #0f172a;
+  --bg-card: #1e293b;
+  --text-primary: #f8fafc;
+  --border-card: #334155;
 }
 
 body {
-	@apply bg-shark-dark text-slate-100 font-sans antialiased overflow-hidden;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: sans-serif;
+  overflow: hidden;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 #app {
-	@apply h-screen flex flex-col;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }

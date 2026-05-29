@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'bun:test';
+import { MacrosBuilder } from '../src/main/driver/protocols/MacrosBuilder.js';
 import {
 	Button,
 	ConnectionMode,
 	ParamsError,
 	FirmwareAction,
 	MacroName,
-	MacrosBuilder,
 	macroTemplates,
-} from '../src/index.js';
+} from '../src/main/driver/index.js';
 
 describe('MacrosBuilder', () => {
 	it('should initialize with default buffer', () => {

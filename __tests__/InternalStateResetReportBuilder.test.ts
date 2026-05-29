@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { InternalStateResetReportBuilder } from '../src/protocols/InternalStateResetReportBuilder.js';
-import { ConnectionMode } from '../src/types.js';
+import { InternalStateResetReportBuilder } from '../src/main/driver/protocols/InternalStateResetReportBuilder.js';
+import { ConnectionMode } from '../src/main/driver/types.js';
 
 describe('InternalStateResetReportBuilder', () => {
 	it('should initialize with correct default buffer', () => {

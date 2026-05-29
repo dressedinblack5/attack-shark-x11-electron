@@ -1,10 +1,10 @@
-import { expect, test, describe } from 'bun:test';
-import { CustomMacroBuilder, MouseMacroEvent } from '../src/protocols/CustomMacroBuilder.js';
-import { KeyCode, MacrosBuilder, FirmwareAction } from '../src/protocols/MacrosBuilder.js';
-import { Button, ConnectionMode } from '../src/types.js';
+import { describe, expect, it } from 'bun:test';
+import { CustomMacroBuilder, MouseMacroEvent } from '../src/main/driver/protocols/CustomMacroBuilder.js';
+import { KeyCode, FirmwareAction, MacrosBuilder } from '../src/main/driver/index.js';
+import { Button, ConnectionMode } from '../src/main/driver/types.js';
 
 describe('CustomMacroBuilder Delays', () => {
-	test('Formula 2*floor((ms+5)/20)+1 should match samples', () => {
+	it('Formula 2*floor((ms+5)/20)+1 should match samples', () => {
 		const delays = [
 			{ ms: 10, expected: 1 },
 			{ ms: 15, expected: 3 },
@@ -25,7 +25,7 @@ describe('CustomMacroBuilder Delays', () => {
 		}
 	});
 
-	test('Long delays should use extra units and remainder formula', () => {
+	it('Long delays should use extra units and remainder formula', () => {
 		// 5000ms: extraUnits = 25 (0x19), rem = 0, byte = 1
 		const customMacro = new CustomMacroBuilder().addEvent(KeyCode.A, 5000);
 		const [, secondPacket] = customMacro.build(ConnectionMode.Adapter);
@@ -38,7 +38,7 @@ describe('CustomMacroBuilder Delays', () => {
 		expect(secondPacket[33]).toBe(0x03);
 	});
 
-	test('Mouse events should use the same formula as keyboard', () => {
+	it('Mouse events should use the same formula as keyboard', () => {
 		const customMacro = new CustomMacroBuilder()
 			.addEvent(MouseMacroEvent.LEFT_CLICK, 20)
 			.addEvent(MouseMacroEvent.LEFT_CLICK, 20, true);
@@ -54,7 +54,7 @@ describe('CustomMacroBuilder Delays', () => {
 });
 
 describe('CustomMacroBuilder Configuration', () => {
-	test('should allow providing custom MacrosBuilder to avoid overwriting other buttons', () => {
+	it('should allow providing custom MacrosBuilder to avoid overwriting other buttons', () => {
 		const customMacros = new MacrosBuilder();
 		// Change Forward to Middle-Click (index 21)
 		customMacros.setMacro(Button.FORWARD, [FirmwareAction.MIDDLE_CLICK, 0x00, 0x00]);
@@ -70,7 +70,7 @@ describe('CustomMacroBuilder Configuration', () => {
 		expect(macroPacket[21]).toBe(FirmwareAction.MIDDLE_CLICK);
 	});
 
-	test('should allow providing MacroBuilderOptions to avoid overwriting other buttons', () => {
+	it('should allow providing MacroBuilderOptions to avoid overwriting other buttons', () => {
 		const builder = new CustomMacroBuilder({
 			macrosBuilder: {
 				forward: [FirmwareAction.DISABLE_BUTTON, 0x00, 0x00],
@@ -86,7 +86,7 @@ describe('CustomMacroBuilder Configuration', () => {
 		expect(macroPacket[24]).toBe(FirmwareAction.BACKWARD);
 	});
 
-	test('should allow setting target button with custom MacrosBuilder via method', () => {
+	it('should allow setting target button with custom MacrosBuilder via method', () => {
 		const customMacros = new MacrosBuilder();
 		customMacros.setMacro(Button.FORWARD, [FirmwareAction.DISABLE_BUTTON, 0x00, 0x00]);
 
@@ -101,7 +101,7 @@ describe('CustomMacroBuilder Configuration', () => {
 		expect(macroPacket[24]).toBe(FirmwareAction.CUSTOM_MACRO);
 	});
 
-	test('should allow setting target button with MacroBuilderOptions via method', () => {
+	it('should allow setting target button with MacroBuilderOptions via method', () => {
 		const builder = new CustomMacroBuilder();
 		builder.setTargetButton(Button.BACKWARD, {
 			forward: [FirmwareAction.DISABLE_BUTTON, 0x00, 0x00],
@@ -115,7 +115,7 @@ describe('CustomMacroBuilder Configuration', () => {
 		expect(macroPacket[24]).toBe(FirmwareAction.CUSTOM_MACRO);
 	});
 
-	test('should cap the event counter at 47 even if more events are added', () => {
+	it('should cap the event counter at 47 even if more events are added', () => {
 		const builder = new CustomMacroBuilder();
 		// Add 50 events
 		for (let i = 0; i < 50; i++) {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test';
-import { ConnectionMode } from '../src/index.js';
-import { PollingRateBuilder, Rate } from '../src/protocols/PollingRateBuilder.js';
+import { PollingRateBuilder, Rate } from '../src/main/driver/protocols/PollingRateBuilder.js';
+import { ConnectionMode } from '../src/main/driver/index.js';
 
 describe('PollingRateBuilder', () => {
 	it('should initialize with default buffer', () => {

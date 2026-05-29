@@ -69,7 +69,6 @@ const lightModes = [
 	{ label: 'Breathing DPI', value: 0x60 },
 ];
 
-const ledSpeeds = [1, 2, 3, 4, 5];
 const keyResponses = Array.from({ length: 24 }, (_, i) => 4 + i * 2);
 
 const statusMessage = ref('');
@@ -168,27 +167,27 @@ const applyPreferences = async () => {
 				/>
 				<button
 					@click="saveNewProfile"
-					class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg font-bold transition-all"
+					class="bg-green-600 hover:bg-blue-600 px-4 py-2 rounded-lg font-bold transition-all"
 				>
 					Save
 				</button>
 				<button
 					@click="applyPreferences"
 					:disabled="!isConnected || isSaving"
-					class="bg-shark-primary hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-2 rounded-lg font-bold transition-all shadow-lg shadow-blue-500/20"
+					class="bg-green-600 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-2 rounded-lg font-bold transition-all shadow-blue-500/20"
 				>
 					{{ isSaving ? 'Saving...' : 'Apply Settings' }}
 				</button>
 			</div>
 		</div>
 
-		<div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-4">
-			<h3 class="text-lg font-semibold text-slate-400">Stored Profiles</h3>
+		<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)] space-y-4">
+			<h3 class="text-lg font-semibold text-[var(--text-primary)] opacity-70">Stored Profiles</h3>
 			<div class="flex flex-wrap gap-2">
 				<div
 					v-for="profile in profiles"
 					:key="profile"
-					class="bg-slate-800 p-2 rounded-lg flex items-center gap-2 border border-slate-700"
+					class="bg-[var(--border-card)] p-2 rounded-lg flex items-center gap-2 border border-[var(--border-card)]"
 				>
 					<span>{{ profile }}</span>
 					<button @click="applyProfile(profile)" class="text-blue-400 hover:text-blue-300">Apply</button>
@@ -210,19 +209,19 @@ const applyPreferences = async () => {
 		</div>
 
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-			<div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-6">
+			<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)] space-y-6">
 				<h3
-					class="text-lg font-semibold border-b border-slate-800 pb-2 text-slate-400 uppercase tracking-wider"
+					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider"
 				>
 					Lighting
 				</h3>
 
 				<div class="space-y-4">
 					<div>
-						<label class="block text-sm text-slate-400 mb-2">Effect Mode</label>
+						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2">Effect Mode</label>
 						<select
 							v-model="props.preferences.lightMode"
-							class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 focus:outline-none focus:border-shark-primary"
+							class="w-full bg-[var(--border-card)] border border-[var(--border-card)] rounded-lg p-2 focus:outline-none focus:border-shark-primary"
 						>
 							<option v-for="mode in lightModes" :key="mode.value" :value="mode.value">
 								{{ mode.label }}
@@ -231,7 +230,8 @@ const applyPreferences = async () => {
 					</div>
 
 					<div>
-						<label class="block text-sm text-slate-400 mb-2"
+
+						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2"
 							>LED Speed ({{ props.preferences.ledSpeed }})</label
 						>
 						<input
@@ -242,7 +242,8 @@ const applyPreferences = async () => {
 							step="1"
 							class="w-full accent-shark-primary"
 						/>
-						<div class="flex justify-between text-xs text-slate-500 mt-1">
+
+						<div class="flex justify-between text-xs text-[var(--text-primary)] opacity-50 mt-1">
 							<span>Slow</span>
 							<span>Fast</span>
 						</div>
@@ -250,7 +251,7 @@ const applyPreferences = async () => {
 
 					<div class="grid grid-cols-4 gap-2">
 						<div class="col-span-1">
-							<label class="block text-xs text-slate-500 mb-1">Color</label>
+							<label class="block text-xs text-[var(--text-primary)] opacity-50 mb-1">Color</label>
 							<input
 								type="color"
 								:value="`#${props.preferences.rgb.r.toString(16).padStart(2, '0')}${props.preferences.rgb.g.toString(16).padStart(2, '0')}${props.preferences.rgb.b.toString(16).padStart(2, '0')}`"
@@ -263,56 +264,56 @@ const applyPreferences = async () => {
 										props.preferences.rgb.b = parseInt(hex.slice(5, 7), 16);
 									}
 								"
-								class="w-full h-9 bg-slate-800 border border-slate-700 rounded-lg cursor-pointer p-0.5"
+								class="w-full h-9 bg-[var(--border-card)] border border-[var(--border-card)] rounded-lg cursor-pointer p-0.5"
 							/>
 						</div>
 						<div class="col-span-1">
-							<label class="block text-xs text-slate-500 mb-1">Red</label>
+							<label class="block text-xs text-[var(--text-primary)] opacity-50 mb-1">Red</label>
 							<input
 								type="number"
 								v-model.number="props.preferences.rgb.r"
 								min="0"
 								max="255"
-								class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-sm"
+								class="w-full bg-[var(--border-card)] border border-[var(--border-card)] rounded-lg p-2 text-sm"
 							/>
 						</div>
 						<div class="col-span-1">
-							<label class="block text-xs text-slate-500 mb-1">Green</label>
+							<label class="block text-xs text-[var(--text-primary)] opacity-50 mb-1">Green</label>
 							<input
 								type="number"
 								v-model.number="props.preferences.rgb.g"
 								min="0"
 								max="255"
-								class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-sm"
+								class="w-full bg-[var(--border-card)] border border-[var(--border-card)] rounded-lg p-2 text-sm"
 							/>
 						</div>
 						<div class="col-span-1">
-							<label class="block text-xs text-slate-500 mb-1">Blue</label>
+							<label class="block text-xs text-[var(--text-primary)] opacity-50 mb-1">Blue</label>
 							<input
 								type="number"
 								v-model.number="props.preferences.rgb.b"
 								min="0"
 								max="255"
-								class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-sm"
+								class="w-full bg-[var(--border-card)] border border-[var(--border-card)] rounded-lg p-2 text-sm"
 							/>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-6">
+			<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)] space-y-6">
 				<h3
-					class="text-lg font-semibold border-b border-slate-800 pb-2 text-slate-400 uppercase tracking-wider"
+					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider"
 				>
 					Device Behavior
 				</h3>
 
 				<div class="space-y-4">
 					<div>
-						<label class="block text-sm text-slate-400 mb-2">Polling Rate</label>
+						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2">Polling Rate</label>
 						<select
 							v-model="props.preferences.pollingRate"
-							class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 focus:outline-none focus:border-shark-primary"
+							class="w-full bg-[var(--border-card)] border border-[var(--border-card)] rounded-lg p-2 focus:outline-none focus:border-shark-primary"
 						>
 							<option v-for="rate in pollingRates" :key="rate.value" :value="rate.value">
 								{{ rate.label }}
@@ -321,19 +322,19 @@ const applyPreferences = async () => {
 					</div>
 
 					<div>
-						<label class="block text-sm text-slate-400 mb-2"
+						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2"
 							>Key Response ({{ props.preferences.keyResponse }}ms)</label
 						>
 						<select
 							v-model="props.preferences.keyResponse"
-							class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 focus:outline-none focus:border-shark-primary"
+							class="w-full bg-[var(--border-card)] border border-[var(--border-card)] rounded-lg p-2 focus:outline-none focus:border-shark-primary"
 						>
 							<option v-for="ms in keyResponses" :key="ms" :value="ms">{{ ms }}ms</option>
 						</select>
 					</div>
 
 					<div>
-						<label class="block text-sm text-slate-400 mb-2"
+						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2"
 							>Sleep Timer ({{ props.preferences.sleepTime }} min)</label
 						>
 						<input
@@ -347,7 +348,7 @@ const applyPreferences = async () => {
 					</div>
 
 					<div>
-						<label class="block text-sm text-slate-400 mb-2"
+						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2"
 							>Deep Sleep Timer ({{ props.preferences.deepSleepTime }} min)</label
 						>
 						<input

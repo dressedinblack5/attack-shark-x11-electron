@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'bun:test';
-import { ConnectionMode, LightMode, UserPreferencesBuilder } from '../src/index.js';
-import { DriverError } from '../src/errors.js';
+import { UserPreferencesBuilder } from '../src/main/driver/protocols/UserPreferencesBuilder.js';
+import { ConnectionMode, LightMode } from '../src/main/driver/index.js';
+import { DriverError } from '../src/main/driver/errors.js';
+import { Buffer } from 'buffer';
 
 describe('UserPreferencesBuilder', () => {
 	/**

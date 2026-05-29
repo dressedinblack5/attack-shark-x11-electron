@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
-import { Keyboard, Mouse, Plus, Trash2, Save, Play, Clock, Sliders } from 'lucide-vue-next';
+import { Keyboard, Mouse, Plus, Trash2, Save, Play, Clock, } from 'lucide-vue-next';
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -109,7 +109,7 @@ const saveMacro = async () => {
 			<button
 				@click="saveMacro"
 				:disabled="!isConnected || isSaving"
-				class="bg-shark-primary hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-2 rounded-lg font-bold transition-all shadow-lg shadow-blue-500/20 flex items-center gap-2"
+				class="bg-green-600 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-2 rounded-lg font-bold transition-all shadow-blue-500/20 flex items-center gap-2"
 			>
 				<Save class="w-4 h-4" />
 				{{ isSaving ? 'Saving...' : 'Save & Assign' }}

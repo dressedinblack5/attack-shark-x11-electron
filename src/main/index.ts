@@ -86,6 +86,7 @@ app.whenReady().then(() => {
 				windows.forEach((w) => w.webContents.send('battery-updated', level));
 			});
 
+			// eslint-disable-next-line require-atomic-updates
 			driver = newDriver;
 			console.log('Connection complete.');
 			return { success: true };
