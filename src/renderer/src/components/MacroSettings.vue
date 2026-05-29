@@ -108,12 +108,15 @@ const saveMacro = async () => {
 			</h2>
 			<button
 				@click="saveMacro"
-				:disabled="!isConnected || isSaving"
+				:disabled="!isConnected || isSaving || macroEvents.length === 0"
 				class="bg-green-600 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-2 rounded-lg font-bold transition-all shadow-blue-500/20 flex items-center gap-2"
 			>
 				<Save class="w-4 h-4" />
 				{{ isSaving ? 'Saving...' : 'Save & Assign' }}
 			</button>
+			<p v-if="macroEvents.length === 0" class="text-xs text-red-400 mt-2">
+				Add at least one event to save this macro.
+			</p>
 		</div>
 
 		<div
