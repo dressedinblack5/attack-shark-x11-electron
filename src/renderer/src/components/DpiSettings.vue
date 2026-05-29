@@ -175,14 +175,17 @@ const dpiStep = 50;
 									{{ i }}
 								</span>
 							</label>
-							<BaseInput
-								type="number"
-								v-model.number="dpiConfig.dpiValues[i - 1]"
-								:min="dpiMin"
-								:max="dpiMax"
-								:step="dpiStep"
-								class="w-24"
-							/>
+							<div class="flex items-center gap-2">
+								<BaseInput
+									type="number"
+									v-model.number="dpiConfig.dpiValues[i - 1]"
+									:min="dpiMin"
+									:max="dpiMax"
+									:step="dpiStep"
+									class="w-24"
+								/>
+								<span class="text-xs text-[var(--text-primary)] opacity-50 font-medium">DPI</span>
+							</div>
 						</div>
 
 						<div class="relative">
