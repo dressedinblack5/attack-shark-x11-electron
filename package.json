@@ -55,7 +55,8 @@
 				"AppImage",
 				"deb"
 			],
-			"category": "Settings"
+			"category": "Settings",
+			"icon": "assets/cs-mouse.svg"
 		}
 	},
 	"lint-staged": {
