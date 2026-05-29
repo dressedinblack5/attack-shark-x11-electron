@@ -40,23 +40,25 @@ export class DpiBuilder implements BaseProtocolBuilder {
 		dpiValues: [800, 1600, 2400, 3200, 5000, 22000],
 		activeStage: 2,
 	};
-	readonly buffer: Buffer;
+	readonly buffer: Buffer = Buffer.alloc(56);
 	public readonly bmRequestType: number = 0x21;
 	public readonly bRequest: number = 0x09;
 	public readonly wValue: number = 0x0304;
 	public readonly wIndex: number = 2;
 	private stages: [number, number, number, number, number, number] = [800, 1600, 2400, 3200, 5000, 22000];
 
-	// noinspection FunctionTooLongJS
 	constructor(options?: DpiBuilderOptions) {
-		this.buffer = Buffer.alloc(56);
+		this.reset();
+		if (options) {
+			this.applyOptions(options);
+		}
+	}
 
+	private initializeBuffer(): void {
+		this.buffer.fill(0);
 		this.buffer[0] = 0x04; // header
 		this.buffer[1] = 0x38; // header
 		this.buffer[2] = 0x01; // header
-
-		this.buffer[OFFSET.ANGLE_SNAP] = 0x00; // angle snap
-		this.buffer[OFFSET.RIPPLER_CONTROL] = 0x01; // ripple control
 
 		this.buffer[5] = 0x3f; // fixed
 
@@ -112,18 +114,19 @@ export class DpiBuilder implements BaseProtocolBuilder {
 		this.buffer[49] = 0x02; // fixed
 		this.buffer[50] = 0x0f; // checksum high byte
 		this.buffer[51] = 0x68; // checksum low byte
+	}
 
-		this.buffer[52] = 0x00; // padding wireless mode
-		this.buffer[53] = 0x00; // padding wireless mode
-		this.buffer[54] = 0x00; // padding wireless mode
-		this.buffer[55] = 0x00; // padding wireless mode
+	private applyOptions(options: DpiBuilderOptions): void {
+		if (options.angleSnap !== undefined) this.setAngleSnap(options.angleSnap);
+		if (options.ripplerControl !== undefined) this.setRipplerControl(options.ripplerControl);
+		if (options.dpiValues !== undefined) this.setStages(options.dpiValues);
+		if (options.activeStage !== undefined) this.setCurrentStage(options.activeStage);
+	}
 
-		const config = { ...DpiBuilder.DEFAULT_OPTIONS, ...options };
-
-		if (config.angleSnap !== undefined) this.setAngleSnap(config.angleSnap);
-		if (config.ripplerControl !== undefined) this.setRipplerControl(config.ripplerControl);
-		if (config.dpiValues !== undefined) this.setStages(config.dpiValues);
-		if (config.activeStage !== undefined) this.setCurrentStage(config.activeStage);
+	public reset(): this {
+		this.initializeBuffer();
+		this.applyOptions(DpiBuilder.DEFAULT_OPTIONS);
+		return this;
 	}
 
 	/**

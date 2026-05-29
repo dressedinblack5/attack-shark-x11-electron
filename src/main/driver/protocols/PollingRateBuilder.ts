@@ -20,27 +20,37 @@ export class PollingRateBuilder implements BaseProtocolBuilder {
 	public static readonly DEFAULT_OPTIONS: PollingRateBuilderOptions = {
 		rate: Rate.eSports,
 	};
-	readonly buffer: Buffer = Buffer.alloc(64);
+	readonly buffer: Buffer = Buffer.alloc(9);
 	public readonly bmRequestType: number = 0x21;
 	public readonly bRequest: number = 0x09;
 	public readonly wValue: number = 0x0306;
 	public readonly wIndex: number = 2;
 
-	constructor(options: PollingRateBuilderOptions = { rate: Rate.eSports }) {
-		this.buffer = Buffer.alloc(9);
+	constructor(options?: PollingRateBuilderOptions) {
+		this.reset();
+		if (options) {
+			this.applyOptions(options);
+		}
+	}
+
+	private initializeBuffer(): void {
+		this.buffer.fill(0);
 		this.buffer[0] = 0x06; // header
 		this.buffer[1] = 0x09; // header
 		this.buffer[2] = 0x01; // header
 		this.buffer[3] = 0x01; // polling rate
 		this.buffer[4] = 0xfe; // checksum
-		this.buffer[5] = 0x00; // padding
-		this.buffer[6] = 0x00; // padding
-		this.buffer[7] = 0x00; // padding
-		this.buffer[8] = 0x00; // padding
+		// 5-8 are 0x00 due to fill(0)
+	}
 
-		const config = { ...PollingRateBuilder.DEFAULT_OPTIONS, ...options };
+	private applyOptions(options: PollingRateBuilderOptions): void {
+		if (options.rate !== undefined) this.setRate(options.rate);
+	}
 
-		if (config.rate !== undefined) this.setRate(config.rate);
+	public reset(): this {
+		this.initializeBuffer();
+		this.applyOptions(PollingRateBuilder.DEFAULT_OPTIONS);
+		return this;
 	}
 
 	/**
@@ -48,7 +58,7 @@ export class PollingRateBuilder implements BaseProtocolBuilder {
 	 * @deprecated
 	 */
 	static forRate(rate: Rate): PollingRateBuilder {
-		return new PollingRateBuilder().setRate(rate);
+		return new PollingRateBuilder({ rate });
 	}
 
 	calculateChecksum(): number {

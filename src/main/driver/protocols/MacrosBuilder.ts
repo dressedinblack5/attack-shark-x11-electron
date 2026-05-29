@@ -384,20 +384,21 @@ export class MacrosBuilder implements BaseProtocolBuilder {
 		backward: macroTemplates[MacroName.GLOBAL_BACKWARD],
 	};
 
-	readonly buffer: Buffer;
+	readonly buffer: Buffer = Buffer.alloc(59);
 	public readonly bmRequestType: number = MacrosBuilder.BM_REQUEST_TYPE;
 	public readonly bRequest: number = MacrosBuilder.B_REQUEST;
 	public readonly wValue: number = MacrosBuilder.W_VALUE;
 	public readonly wIndex: number = MacrosBuilder.W_INDEX;
 
-	// noinspection FunctionTooLongJS
-	/**
-	 * Initializes a new MacrosBuilder instance with default button mappings.
-	 *
-	 * @param options Partial macro configurations to override defaults.
-	 */
 	constructor(options?: MacroBuilderOptions) {
-		this.buffer = Buffer.alloc(59);
+		this.reset();
+		if (options) {
+			this.applyOptions(options);
+		}
+	}
+
+	private initializeBuffer(): void {
+		this.buffer.fill(0);
 
 		// Header: Report ID 0x08, Length 0x3b (59), Protocol version 0x01
 		this.buffer[0] = 0x08;
@@ -416,17 +417,23 @@ export class MacrosBuilder implements BaseProtocolBuilder {
 		this.buffer[18] = 0x0d; // Slot 6 (DPI Cycle)
 		this.buffer[51] = 0x09; // Slot 17 (Scroll Up)
 		this.buffer[54] = 0x0a; // Slot 18 (Scroll Down)
+	}
 
-		const config = { ...MacrosBuilder.DEFAULT_MACROS, ...options };
+	private applyOptions(options: MacroBuilderOptions): void {
+		if (options.left !== undefined) this.setMacro(Button.LEFT, options.left);
+		if (options.right !== undefined) this.setMacro(Button.RIGHT, options.right);
+		if (options.middle !== undefined) this.setMacro(Button.MIDDLE, options.middle);
+		if (options.forward !== undefined) this.setMacro(Button.FORWARD, options.forward);
+		if (options.backward !== undefined) this.setMacro(Button.BACKWARD, options.backward);
+		if (options.dpi !== undefined) this.setMacro(Button.DPI, options.dpi);
+		if (options.scrollUp !== undefined) this.setMacro(Button.SCROLL_UP, options.scrollUp);
+		if (options.scrollDown !== undefined) this.setMacro(Button.SCROLL_DOWN, options.scrollDown);
+	}
 
-		if (config.left !== undefined) this.setMacro(Button.LEFT, config.left);
-		if (config.right !== undefined) this.setMacro(Button.RIGHT, config.right);
-		if (config.middle !== undefined) this.setMacro(Button.MIDDLE, config.middle);
-		if (config.forward !== undefined) this.setMacro(Button.FORWARD, config.forward);
-		if (config.backward !== undefined) this.setMacro(Button.BACKWARD, config.backward);
-		if (config.dpi !== undefined) this.setMacro(Button.DPI, config.dpi);
-		if (config.scrollUp !== undefined) this.setMacro(Button.SCROLL_UP, config.scrollUp);
-		if (config.scrollDown !== undefined) this.setMacro(Button.SCROLL_DOWN, config.scrollDown);
+	public reset(): this {
+		this.initializeBuffer();
+		this.applyOptions(MacrosBuilder.DEFAULT_MACROS);
+		return this;
 	}
 
 	/**
