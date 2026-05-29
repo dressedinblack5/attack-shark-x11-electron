@@ -156,7 +156,7 @@ const dpiStep = 50;
 					SENSITIVITY STAGES (1-6)
 				</h3>
 
-				<div class="space-y-3 overflow-y-auto pr-2" style="min-height: 400px">
+				<div class="mt-6 space-y-3 overflow-y-auto pr-2" style="min-height: 400px">
 					<div
 						v-for="i in 6"
 						:key="i"
