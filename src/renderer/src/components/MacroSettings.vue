@@ -33,10 +33,24 @@ const applyMacro = async () => {
 	statusMessage.value = 'Applying macro...';
 
 	try {
-		await window.api.setMacro({
-			targetButton: selectedButton.value,
-			templateName: selectedTemplate.value,
-		});
+		// Map the selected button to the template macro
+		const macroConfig: Record<string, any> = {};
+		
+		// Button mapping: 0=LEFT, 1=RIGHT, 2=MIDDLE, 3=FORWARD, 4=BACKWARD, 5=DPI
+		// The MacroBuilderOptions expects keys like 'left', 'right', 'forward', 'backward'
+		const buttonMap: Record<number, string> = {
+			0: 'left',
+			1: 'right',
+			2: 'middle',
+			3: 'forward',
+			4: 'backward',
+			5: 'dpi',
+		};
+		
+		const buttonKey = buttonMap[selectedButton.value];
+		macroConfig[buttonKey] = macroTemplates[selectedTemplate.value];
+
+		await window.api.setMacro(macroConfig);
 		statusMessage.value = 'Macro assigned!';
 		setTimeout(() => (statusMessage.value = ''), 3000);
 	} catch (err: any) {
