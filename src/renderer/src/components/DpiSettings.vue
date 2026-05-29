@@ -101,7 +101,7 @@ const dpiStep = 50;
 								@click="dpiConfig.angleSnap = !dpiConfig.angleSnap"
 								:class="[
 									'w-12 h-6 rounded-full p-1 transition-colors',
-									dpiConfig.angleSnap ? 'bg-shark-primary' : 'bg-[var(--border-card)]',
+									dpiConfig.angleSnap ? 'bg-blue-600' : 'bg-[var(--border-card)]',
 								]"
 							>
 								<div
@@ -122,7 +122,7 @@ const dpiStep = 50;
 								@click="dpiConfig.ripplerControl = !dpiConfig.ripplerControl"
 								:class="[
 									'w-12 h-6 rounded-full p-1 transition-colors',
-									dpiConfig.ripplerControl ? 'bg-shark-primary' : 'bg-[var(--border-card)]',
+									dpiConfig.ripplerControl ? 'bg-blue-600' : 'bg-[var(--border-card)]',
 								]"
 							>
 								<div
