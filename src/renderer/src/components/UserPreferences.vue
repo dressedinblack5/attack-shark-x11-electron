@@ -248,7 +248,7 @@ const applyPreferences = async () => {
 
 					<div class="grid grid-cols-4 gap-2">
 						<div class="col-span-1">
-							<label class="block text-xs text-[var(--text-primary)] opacity-70 mb-2">Color</label>
+							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">Color</label>
 							<input
 								type="color"
 								:value="`#${props.preferences.rgb.r.toString(16).padStart(2, '0')}${props.preferences.rgb.g.toString(16).padStart(2, '0')}${props.preferences.rgb.b.toString(16).padStart(2, '0')}`"
@@ -261,7 +261,7 @@ const applyPreferences = async () => {
 										props.preferences.rgb.b = parseInt(hex.slice(5, 7), 16);
 									}
 								"
-								class="w-full h-9 bg-[var(--border-card)] border border-[var(--border-card)] rounded-lg cursor-pointer p-0.5"
+								class="w-full h-[46px] bg-[var(--border-card)]/20 border border-transparent focus:border-[var(--shark-primary)] focus:bg-[var(--border-card)]/40 rounded-lg cursor-pointer p-1 transition-all"
 							/>
 						</div>
 						<div class="col-span-1">
