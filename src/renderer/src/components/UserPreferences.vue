@@ -167,7 +167,7 @@ const applyPreferences = async () => {
 				<Settings class="w-8 h-8 text-shark-primary" />
 				User Preferences
 			</h2>
-			<div class="flex gap-2">
+			<div class="flex items-center gap-2">
 				<BaseInput v-model="newProfileName" placeholder="New profile name" />
 				<BaseButton @click="saveNewProfile"> Save </BaseButton>
 				<BaseButton
