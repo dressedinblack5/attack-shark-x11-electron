@@ -61,7 +61,7 @@ const dpiStep = 50;
 			<button
 				@click="applyDpi"
 				:disabled="!isConnected || isSaving"
-				class="bg-transparent border border-[var(--border-card)] hover:bg-[var(--border-card)]/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all rounded-lg px-6 py-2"
+				class="bg-transparent border border-[var(--border-card)] text-[var(--text-primary)] hover:bg-[var(--border-card)]/50 hover:border-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-all rounded-lg px-6 py-2"
 			>
 				{{ isSaving ? 'Applying...' : 'Save DPI' }}
 			</button>

@@ -71,7 +71,7 @@ const applyMacro = async () => {
 			<button
 				@click="applyMacro"
 				:disabled="!isConnected || isSaving"
-				class="bg-transparent border border-[var(--border-card)] hover:bg-[var(--border-card)]/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all rounded-lg px-6 py-2 flex items-center gap-2"
+				class="bg-transparent border border-[var(--border-card)] text-[var(--text-primary)] hover:bg-[var(--border-card)]/50 hover:border-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-all rounded-lg px-6 py-2 flex items-center gap-2"
 			>
 				<Save class="w-4 h-4" />
 				{{ isSaving ? 'Applying...' : 'Apply Macro' }}
