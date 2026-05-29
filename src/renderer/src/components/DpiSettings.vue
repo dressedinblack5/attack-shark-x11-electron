@@ -82,7 +82,7 @@ const dpiStep = 50;
 		<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 			<!-- Sensor Settings -->
 			<div class="lg:col-span-1 space-y-6">
-				<div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+				<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)]">
 					<h3 class="text-lg font-semibold mb-6 flex items-center gap-2 text-slate-300">
 						<Sliders class="w-5 h-5" /> Sensor Options
 					</h3>
@@ -132,7 +132,7 @@ const dpiStep = 50;
 					</div>
 				</div>
 
-				<div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+				<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)]">
 					<h3 class="text-lg font-semibold mb-4 text-slate-300">Active Stage</h3>
 					<div class="grid grid-cols-3 gap-2">
 						<button
@@ -143,7 +143,7 @@ const dpiStep = 50;
 								'py-2 rounded-lg font-bold border transition-all',
 								dpiConfig.activeStage === i
 									? 'bg-shark-primary border-shark-primary text-white'
-									: 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-500',
+									: 'bg-[var(--border-card)] border-[var(--border-card)] text-slate-400 hover:border-slate-500',
 							]"
 						>
 							{{ i }}
@@ -156,31 +156,31 @@ const dpiStep = 50;
 			</div>
 
 			<!-- DPI Stages -->
-			<div class="lg:col-span-2 bg-slate-900 p-6 rounded-2xl border border-slate-800">
-				<h3 class="text-lg font-bold mb-6 flex items-center gap-2">
-					<Zap class="w-5 h-5 text-shark-primary" />
+			<div class="lg:col-span-2 bg-[var(--bg-card)] p-8 rounded-2xl border border-[var(--border-card)]">
+				<h3 class="text-xl font-bold mb-8 flex items-center gap-3">
+					<Zap class="w-6 h-6 text-shark-primary" />
 					Sensitivity Stages (1-6)
 				</h3>
 
-				<div class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
-					<div v-for="i in 6" :key="i" class="space-y-1">
+				<div class="space-y-6 overflow-y-auto pr-2" style="min-height: 400px;">
+					<div v-for="i in 6" :key="i" class="p-4 rounded-xl bg-[var(--border-card)]/30 border border-[var(--border-card)] space-y-3">
 						<div class="flex justify-between items-center">
-							<label class="font-semibold text-sm text-slate-300 flex items-center gap-2">
+							<label class="font-semibold text-base text-[var(--text-primary)] flex items-center gap-3">
 								<span
 									:class="[
-										'w-5 h-5 flex items-center justify-center rounded text-[10px]',
+										'w-6 h-6 flex items-center justify-center rounded text-xs',
 										dpiConfig.activeStage === i
 											? 'bg-shark-primary text-white'
-											: 'bg-slate-800 text-slate-500',
+											: 'bg-[var(--border-card)] text-[var(--text-primary)] opacity-50',
 									]"
 								>
 									{{ i }}
 								</span>
 								Stage {{ i }}
 							</label>
-							<div class="text-lg font-bold text-shark-primary">
+							<div class="text-xl font-bold text-shark-primary">
 								{{ dpiConfig.dpiValues[i - 1] }}
-								<span class="text-[10px] font-normal text-slate-500">DPI</span>
+								<span class="text-xs font-normal text-[var(--text-primary)] opacity-50">DPI</span>
 							</div>
 						</div>
 
@@ -191,7 +191,7 @@ const dpiStep = 50;
 								:min="dpiMin"
 								:max="dpiMax"
 								:step="dpiStep"
-								class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-shark-primary"
+								class="w-full h-2 bg-[var(--border-card)] rounded-lg appearance-none cursor-pointer accent-shark-primary"
 							/>
 						</div>
 					</div>

@@ -90,22 +90,22 @@ const applyMacro = async () => {
 			{{ statusMessage }}
 		</div>
 
-		<div class="bg-slate-900 p-8 rounded-2xl border border-slate-800 space-y-6">
+		<div class="bg-[var(--bg-card)] p-8 rounded-2xl border border-[var(--border-card)] space-y-6">
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 				<div>
-					<label class="block text-sm font-medium text-slate-400 mb-2">Target Button</label>
+					<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">Target Button</label>
 					<select
 						v-model="selectedButton"
-						class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-slate-200 focus:ring-2 focus:ring-shark-primary outline-none"
+						class="w-full bg-[var(--border-card)] border border-[var(--border-card)] rounded-lg p-3 text-[var(--text-primary)] focus:ring-2 focus:ring-shark-primary outline-none"
 					>
 						<option v-for="btn in buttons" :key="btn.value" :value="btn.value">{{ btn.label }}</option>
 					</select>
 				</div>
 				<div>
-					<label class="block text-sm font-medium text-slate-400 mb-2">Macro Template</label>
+					<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">Macro Template</label>
 					<select
 						v-model="selectedTemplate"
-						class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-slate-200 focus:ring-2 focus:ring-shark-primary outline-none"
+						class="w-full bg-[var(--border-card)] border border-[var(--border-card)] rounded-lg p-3 text-[var(--text-primary)] focus:ring-2 focus:ring-shark-primary outline-none"
 					>
 						<option v-for="opt in templateOptions" :key="opt.value" :value="opt.value">
 							{{ opt.label }}
