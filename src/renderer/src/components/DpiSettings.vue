@@ -4,6 +4,7 @@ import { Zap, Target, Sliders } from 'lucide-vue-next';
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import BaseSelect from './BaseSelect.vue';
+import BaseSlider from './BaseSlider.vue';
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -184,13 +185,11 @@ const dpiStep = 50;
 						</div>
 
 						<div class="relative">
-							<input
-								type="range"
-								v-model.number="dpiConfig.dpiValues[i - 1]"
+							<BaseSlider
+								v-model="dpiConfig.dpiValues[i - 1]"
 								:min="dpiMin"
 								:max="dpiMax"
 								:step="dpiStep"
-								class="w-full h-2 bg-[var(--border-card)] rounded-lg appearance-none cursor-pointer accent-shark-primary"
 							/>
 						</div>
 					</div>
@@ -199,30 +198,3 @@ const dpiStep = 50;
 		</div>
 	</div>
 </template>
-
-<style scoped>
-input[type='range']::-webkit-slider-thumb {
-	-webkit-appearance: none;
-	appearance: none;
-	width: 18px;
-	height: 18px;
-	background: white;
-	border: 4px solid #3b82f6;
-	border-radius: 50%;
-	cursor: pointer;
-	box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-}
-
-input[type='range']::-moz-range-thumb {
-	width: 18px;
-	height: 18px;
-	background: white;
-	border: 4px solid #3b82f6;
-	border-radius: 50%;
-	cursor: pointer;
-	box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
-}
-</style>
-: 0 0 10px rgba(59, 130, 246, 0.5);
-}
-</style>

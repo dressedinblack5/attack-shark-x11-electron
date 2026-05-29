@@ -3,6 +3,7 @@ import { ref, watch } from 'vue';
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import BaseSelect from './BaseSelect.vue';
+import BaseSlider from './BaseSlider.vue';
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -224,13 +225,11 @@ const applyPreferences = async () => {
 						<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
 							>LED Speed ({{ props.preferences.ledSpeed }})</label
 						>
-						<input
-							type="range"
-							v-model.number="props.preferences.ledSpeed"
+						<BaseSlider
+							v-model="props.preferences.ledSpeed"
 							min="1"
 							max="5"
 							step="1"
-							class="w-full accent-shark-primary"
 						/>
 
 						<div class="flex justify-between text-xs text-[var(--text-primary)] opacity-50 mt-1">
@@ -303,13 +302,11 @@ const applyPreferences = async () => {
 						<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
 							>Sleep Timer ({{ props.preferences.sleepTime }} min)</label
 						>
-						<input
-							type="range"
-							v-model.number="props.preferences.sleepTime"
+						<BaseSlider
+							v-model="props.preferences.sleepTime"
 							min="0.5"
 							max="30"
 							step="0.5"
-							class="w-full accent-shark-primary"
 						/>
 					</div>
 
@@ -317,13 +314,11 @@ const applyPreferences = async () => {
 						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2"
 							>Deep Sleep Timer ({{ props.preferences.deepSleepTime }} min)</label
 						>
-						<input
-							type="range"
-							v-model.number="props.preferences.deepSleepTime"
+						<BaseSlider
+							v-model="props.preferences.deepSleepTime"
 							min="1"
 							max="60"
 							step="1"
-							class="w-full accent-shark-primary"
 						/>
 					</div>
 				</div>

@@ -19,7 +19,30 @@ body {
 }
 
 #app {
-	height: 100vh;
-	display: flex;
-	flex-direction: column;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
+
+input[type='range']::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 18px;
+	height: 18px;
+	background: white;
+	border: 4px solid #3b82f6;
+	border-radius: 50%;
+	cursor: pointer;
+	box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+input[type='range']::-moz-range-thumb {
+	width: 18px;
+	height: 18px;
+	background: white;
+	border: 4px solid #3b82f6;
+	border-radius: 50%;
+	cursor: pointer;
+	box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
