@@ -61,7 +61,11 @@ const dpiStep = 50;
 				<Target class="w-8 h-8 text-shark-primary" />
 				DPI Configuration
 			</h2>
-			<BaseButton @click="applyDpi" :disabled="!isConnected || isSaving">
+			<BaseButton
+				@click="applyDpi"
+				:disabled="!isConnected || isSaving"
+				variant="green"
+			>
 				{{ isSaving ? 'Applying...' : 'Save DPI' }}
 			</BaseButton>
 		</div>
@@ -82,7 +86,7 @@ const dpiStep = 50;
 			<!-- Sensor Settings -->
 			<div class="lg:col-span-1 space-y-6">
 				<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)]">
-					<h3 class="text-lg font-semibold mb-6 flex items-center gap-2 text-slate-300">
+					<h3 class="text-lg font-semibold mb-6 flex items-center gap-2 text-[var(--text-primary)]">
 						<Sliders class="w-5 h-5" /> Sensor Options
 					</h3>
 
@@ -90,13 +94,13 @@ const dpiStep = 50;
 						<div class="flex items-center justify-between">
 							<div>
 								<div class="font-medium">Angle Snapping</div>
-								<div class="text-xs text-slate-500">Corrects mouse movement to straight lines</div>
+								<div class="text-xs text-[var(--text-primary)] opacity-50">Corrects mouse movement to straight lines</div>
 							</div>
 							<button
 								@click="dpiConfig.angleSnap = !dpiConfig.angleSnap"
 								:class="[
 									'w-12 h-6 rounded-full p-1 transition-colors',
-									dpiConfig.angleSnap ? 'bg-shark-primary' : 'bg-slate-700',
+									dpiConfig.angleSnap ? 'bg-shark-primary' : 'bg-[var(--border-card)]',
 								]"
 							>
 								<div
@@ -111,13 +115,13 @@ const dpiStep = 50;
 						<div class="flex items-center justify-between">
 							<div>
 								<div class="font-medium">Ripple Control</div>
-								<div class="text-xs text-slate-500">Smooths out jitter at high DPI levels</div>
+								<div class="text-xs text-[var(--text-primary)] opacity-50">Smooths out jitter at high DPI levels</div>
 							</div>
 							<button
 								@click="dpiConfig.ripplerControl = !dpiConfig.ripplerControl"
 								:class="[
 									'w-12 h-6 rounded-full p-1 transition-colors',
-									dpiConfig.ripplerControl ? 'bg-shark-primary' : 'bg-slate-700',
+									dpiConfig.ripplerControl ? 'bg-shark-primary' : 'bg-[var(--border-card)]',
 								]"
 							>
 								<div
@@ -132,11 +136,11 @@ const dpiStep = 50;
 				</div>
 
 				<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)]">
-					<h3 class="text-lg font-semibold mb-4 text-slate-300">Active Stage</h3>
+					<h3 class="text-lg font-semibold mb-4 text-[var(--text-primary)]">Active Stage</h3>
 					<BaseSelect v-model.number="dpiConfig.activeStage">
 						<option v-for="i in 6" :key="i" :value="i">Stage {{ i }}</option>
 					</BaseSelect>
-					<p class="text-xs text-slate-500 mt-4 text-center">
+					<p class="text-xs text-[var(--text-primary)] opacity-50 mt-4 text-center">
 						Selected stage is active immediately after saving.
 					</p>
 				</div>
@@ -217,5 +221,8 @@ input[type='range']::-moz-range-thumb {
 	border-radius: 50%;
 	cursor: pointer;
 	box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+</style>
+: 0 0 10px rgba(59, 130, 246, 0.5);
 }
 </style>

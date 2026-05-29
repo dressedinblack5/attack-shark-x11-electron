@@ -165,7 +165,11 @@ const applyPreferences = async () => {
 			<div class="flex gap-2">
 				<BaseInput v-model="newProfileName" placeholder="New profile name" />
 				<BaseButton @click="saveNewProfile"> Save </BaseButton>
-				<BaseButton @click="applyPreferences" :disabled="!isConnected || isSaving">
+				<BaseButton
+					@click="applyPreferences"
+					:disabled="!isConnected || isSaving"
+					variant="green"
+				>
 					{{ isSaving ? 'Saving...' : 'Apply Settings' }}
 				</BaseButton>
 			</div>

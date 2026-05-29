@@ -70,7 +70,7 @@ const applyMacro = async () => {
 				<Keyboard class="w-8 h-8 text-shark-primary" />
 				Macro Selector
 			</h2>
-			<BaseButton @click="applyMacro" :disabled="!isConnected || isSaving">
+			<BaseButton @click="applyMacro" :disabled="!isConnected || isSaving" variant="green">
 				<Save class="w-4 h-4" />
 				{{ isSaving ? 'Applying...' : 'Apply Macro' }}
 			</BaseButton>
