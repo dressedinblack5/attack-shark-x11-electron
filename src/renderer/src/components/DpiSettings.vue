@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import { Zap, Target, Sliders } from 'lucide-vue-next';
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
@@ -16,6 +16,17 @@ const dpiConfig = reactive({
 	ripplerControl: true,
 	dpiValues: [800, 1600, 2400, 3200, 5000, 22000] as [number, number, number, number, number, number],
 });
+
+let debounceTimer: ReturnType<typeof setTimeout>;
+
+watch(
+	() => dpiConfig,
+	() => {
+		clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(applyDpi, 300);
+	},
+	{ deep: true }
+);
 
 // Removed watch(...) and REVERSE_DPI_MAP logic
 
