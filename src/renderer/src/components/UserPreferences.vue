@@ -237,7 +237,7 @@ const applyPreferences = async () => {
 
 					<div class="grid grid-cols-4 gap-2">
 						<div class="col-span-1">
-							<label class="block text-xs text-[var(--text-primary)] opacity-50 mb-1">Color</label>
+							<label class="block text-xs text-[var(--text-primary)] opacity-70 mb-2">Color</label>
 							<input
 								type="color"
 								:value="`#${props.preferences.rgb.r.toString(16).padStart(2, '0')}${props.preferences.rgb.g.toString(16).padStart(2, '0')}${props.preferences.rgb.b.toString(16).padStart(2, '0')}`"

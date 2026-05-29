@@ -1,25 +1,25 @@
 /* eslint-disable */
-@import "tailwindcss";
-
-
+@import 'tailwindcss';
 
 :root {
-  --bg-primary: #0f172a;
-  --bg-card: #1e293b;
-  --text-primary: #f8fafc;
-  --border-card: #334155;
+	--bg-primary: #0f172a;
+	--bg-card: #1e293b;
+	--text-primary: #f8fafc;
+	--border-card: #334155;
 }
 
 body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: sans-serif;
-  overflow: hidden;
-  transition: background-color 0.3s, color 0.3s;
+	background-color: var(--bg-primary);
+	color: var(--text-primary);
+	font-family: sans-serif;
+	overflow: hidden;
+	transition:
+		background-color 0.3s,
+		color 0.3s;
 }
 
 #app {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
