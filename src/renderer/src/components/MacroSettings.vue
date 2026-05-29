@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue';
 import { Keyboard, Mouse, Plus, Trash2, Save, Play, Clock, } from 'lucide-vue-next';
-import { macroTemplates, MacroName } from '../../../main/driver/protocols/MacrosBuilder';
+import { macroTemplates, MacroName, FirmwareAction, Modifiers, KeyCode } from '../../../main/driver/protocols/MacrosBuilder';
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -82,7 +82,30 @@ const loadTemplate = (templateName: string) => {
 	if (!template) return;
 
 	macroEvents.splice(0, macroEvents.length); // Clear
-	macroEvents.push({ key: template[2], delay: 20, isRelease: false });
+
+	const [action, modifiers, keyCodeOrValue] = template;
+
+	if (action === FirmwareAction.KEYBOARD) {
+		// Handle modifiers
+		if (modifiers & Modifiers.CTRL) macroEvents.push({ key: KeyCode.LCrtl, delay: 20, isRelease: false });
+		if (modifiers & Modifiers.SHIFT) macroEvents.push({ key: KeyCode.LShift, delay: 20, isRelease: false });
+		if (modifiers & Modifiers.ALT) macroEvents.push({ key: KeyCode.LAlt, delay: 20, isRelease: false });
+		if (modifiers & Modifiers.WIN) macroEvents.push({ key: KeyCode.LWin, delay: 20, isRelease: false });
+
+		// Press key
+		macroEvents.push({ key: keyCodeOrValue as number, delay: 20, isRelease: false });
+		// Release key
+		macroEvents.push({ key: keyCodeOrValue as number, delay: 20, isRelease: true });
+
+		// Release modifiers (in reverse order)
+		if (modifiers & Modifiers.WIN) macroEvents.push({ key: KeyCode.LWin, delay: 20, isRelease: true });
+		if (modifiers & Modifiers.ALT) macroEvents.push({ key: KeyCode.LAlt, delay: 20, isRelease: true });
+		if (modifiers & Modifiers.SHIFT) macroEvents.push({ key: KeyCode.LShift, delay: 20, isRelease: true });
+		if (modifiers & Modifiers.CTRL) macroEvents.push({ key: KeyCode.LCrtl, delay: 20, isRelease: true });
+	} else {
+		// Assume single event for others
+		macroEvents.push({ key: keyCodeOrValue as number, delay: 20, isRelease: false });
+	}
 };
 
 const removeEvent = (index: number) => {
