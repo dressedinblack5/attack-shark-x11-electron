@@ -163,7 +163,7 @@ const applyPreferences = async () => {
 <template>
 	<div class="space-y-8">
 		<div class="flex items-center justify-between">
-			<h2 class="text-3xl font-bold flex items-center gap-3">
+			<h2 class="text-3xl font-bold flex items-center gap-3 text-[var(--text-primary)]">
 				<Settings class="w-8 h-8 text-shark-primary" />
 				User Preferences
 			</h2>
