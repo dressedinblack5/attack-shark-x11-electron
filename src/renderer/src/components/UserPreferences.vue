@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { Palette, Cpu, Database } from 'lucide-vue-next';
+import { Palette, Cpu, Database, Settings } from 'lucide-vue-next';
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import BaseSelect from './BaseSelect.vue';
@@ -163,7 +163,10 @@ const applyPreferences = async () => {
 <template>
 	<div class="space-y-8">
 		<div class="flex items-center justify-between">
-			<h2 class="text-3xl font-bold">User Preferences</h2>
+			<h2 class="text-3xl font-bold flex items-center gap-3">
+				<Settings class="w-8 h-8 text-shark-primary" />
+				User Preferences
+			</h2>
 			<div class="flex gap-2">
 				<BaseInput v-model="newProfileName" placeholder="New profile name" />
 				<BaseButton @click="saveNewProfile"> Save </BaseButton>
