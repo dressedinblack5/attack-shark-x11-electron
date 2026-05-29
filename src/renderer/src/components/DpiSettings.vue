@@ -151,7 +151,7 @@ const dpiStep = 50;
 
 			<!-- DPI Stages -->
 			<div class="lg:col-span-2 bg-[var(--bg-card)] p-8 rounded-2xl border border-[var(--border-card)]">
-				<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3">
+			<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3">
 					<Zap class="w-6 h-6 text-shark-primary" />
 					SENSITIVITY STAGES (1-6)
 				</h3>
@@ -174,7 +174,6 @@ const dpiStep = 50;
 								>
 									{{ i }}
 								</span>
-								Stage {{ i }}
 							</label>
 							<BaseInput
 								type="number"
