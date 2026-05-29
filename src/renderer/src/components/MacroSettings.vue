@@ -1,10 +1,16 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { Keyboard, Mouse, Plus, Trash2, Save, Play, Clock, } from 'lucide-vue-next';
+import { macroTemplates, MacroName } from '../../../main/driver/protocols/MacrosBuilder';
 
 const props = defineProps<{
 	isConnected: boolean;
 }>();
+
+const templateOptions = Object.keys(macroTemplates).map((name) => ({
+	label: name.replace(/-/g, ' ').toUpperCase(),
+	value: name as MacroName,
+}));
 
 const statusMessage = ref('');
 const isSaving = ref(false);
@@ -69,6 +75,14 @@ const repeatTimes = ref(1);
 
 const addEvent = () => {
 	macroEvents.push({ key: 0x00, delay: 20, isRelease: false });
+};
+
+const loadTemplate = (templateName: string) => {
+	const template = macroTemplates[templateName as MacroName];
+	if (!template) return;
+
+	macroEvents.splice(0, macroEvents.length); // Clear
+	macroEvents.push({ key: template[2], delay: 20, isRelease: false });
 };
 
 const removeEvent = (index: number) => {
@@ -184,12 +198,23 @@ const saveMacro = async () => {
 						<Keyboard class="w-6 h-6 text-shark-primary" />
 						Macro Sequence
 					</h3>
+				<div class="flex items-center gap-2">
+					<select
+						@change="loadTemplate(($event.target as HTMLSelectElement).value)"
+						class="bg-slate-800 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 outline-none"
+					>
+						<option value="" disabled selected>Load Template</option>
+						<option v-for="template in templateOptions" :key="template.value" :value="template.value">
+							{{ template.label }}
+						</option>
+					</select>
 					<button
 						@click="addEvent"
 						class="bg-slate-800 hover:bg-slate-700 p-2 rounded-lg text-shark-primary transition-colors flex items-center gap-1 text-sm font-bold"
 					>
 						<Plus class="w-4 h-4" /> Add Event
 					</button>
+				</div>
 				</div>
 
 				<div class="flex-1 space-y-3 overflow-y-auto max-h-[400px] pr-2 custom-scrollbar">
