@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import BaseButton from './BaseButton.vue';
+import BaseInput from './BaseInput.vue';
+import BaseSelect from './BaseSelect.vue';
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -161,20 +163,9 @@ const applyPreferences = async () => {
 		<div class="flex items-center justify-between">
 			<h2 class="text-3xl font-bold">User Preferences</h2>
 			<div class="flex gap-2">
-				<input
-					v-model="newProfileName"
-					placeholder="New profile name"
-					class="bg-[var(--border-card)]/20 border border-transparent focus:border-[var(--shark-primary)] focus:bg-[var(--border-card)]/40 rounded-lg p-3 transition-all"
-				/>
-				<BaseButton
-					@click="saveNewProfile"
-				>
-					Save
-				</BaseButton>
-				<BaseButton
-					@click="applyPreferences"
-					:disabled="!isConnected || isSaving"
-				>
+				<BaseInput v-model="newProfileName" placeholder="New profile name" />
+				<BaseButton @click="saveNewProfile"> Save </BaseButton>
+				<BaseButton @click="applyPreferences" :disabled="!isConnected || isSaving">
 					{{ isSaving ? 'Saving...' : 'Apply Settings' }}
 				</BaseButton>
 			</div>
@@ -218,18 +209,14 @@ const applyPreferences = async () => {
 				<div class="space-y-4">
 					<div>
 						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2">Effect Mode</label>
-						<select
-							v-model="props.preferences.lightMode"
-							class="w-full bg-[var(--border-card)]/20 border border-transparent focus:border-[var(--shark-primary)] focus:bg-[var(--border-card)]/40 rounded-lg p-3 transition-all"
-						>
+						<BaseSelect v-model="props.preferences.lightMode">
 							<option v-for="mode in lightModes" :key="mode.value" :value="mode.value">
 								{{ mode.label }}
 							</option>
-						</select>
+						</BaseSelect>
 					</div>
 
 					<div>
-
 						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2"
 							>LED Speed ({{ props.preferences.ledSpeed }})</label
 						>
@@ -268,33 +255,15 @@ const applyPreferences = async () => {
 						</div>
 						<div class="col-span-1">
 							<label class="block text-xs text-[var(--text-primary)] opacity-50 mb-1">Red</label>
-							<input
-								type="number"
-								v-model.number="props.preferences.rgb.r"
-								min="0"
-								max="255"
-								class="w-full bg-[var(--border-card)]/20 border border-transparent focus:border-[var(--shark-primary)] focus:bg-[var(--border-card)]/40 rounded-lg p-3 transition-all"
-							/>
+							<BaseInput type="number" v-model.number="props.preferences.rgb.r" min="0" max="255" />
 						</div>
 						<div class="col-span-1">
 							<label class="block text-xs text-[var(--text-primary)] opacity-50 mb-1">Green</label>
-							<input
-								type="number"
-								v-model.number="props.preferences.rgb.g"
-								min="0"
-								max="255"
-								class="w-full bg-[var(--border-card)]/20 border border-transparent focus:border-[var(--shark-primary)] focus:bg-[var(--border-card)]/40 rounded-lg p-3 transition-all"
-							/>
+							<BaseInput type="number" v-model.number="props.preferences.rgb.g" min="0" max="255" />
 						</div>
 						<div class="col-span-1">
 							<label class="block text-xs text-[var(--text-primary)] opacity-50 mb-1">Blue</label>
-							<input
-								type="number"
-								v-model.number="props.preferences.rgb.b"
-								min="0"
-								max="255"
-								class="w-full bg-[var(--border-card)]/20 border border-transparent focus:border-[var(--shark-primary)] focus:bg-[var(--border-card)]/40 rounded-lg p-3 transition-all"
-							/>
+							<BaseInput type="number" v-model.number="props.preferences.rgb.b" min="0" max="255" />
 						</div>
 					</div>
 				</div>
@@ -310,26 +279,20 @@ const applyPreferences = async () => {
 				<div class="space-y-4">
 					<div>
 						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2">Polling Rate</label>
-						<select
-							v-model="props.preferences.pollingRate"
-							class="w-full bg-[var(--border-card)]/20 border border-transparent focus:border-[var(--shark-primary)] focus:bg-[var(--border-card)]/40 rounded-lg p-3 transition-all"
-						>
+						<BaseSelect v-model="props.preferences.pollingRate">
 							<option v-for="rate in pollingRates" :key="rate.value" :value="rate.value">
 								{{ rate.label }}
 							</option>
-						</select>
+						</BaseSelect>
 					</div>
 
 					<div>
 						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2"
 							>Key Response ({{ props.preferences.keyResponse }}ms)</label
 						>
-						<select
-							v-model="props.preferences.keyResponse"
-							class="w-full bg-[var(--border-card)]/20 border border-transparent focus:border-[var(--shark-primary)] focus:bg-[var(--border-card)]/40 rounded-lg p-3 transition-all"
-						>
+						<BaseSelect v-model="props.preferences.keyResponse">
 							<option v-for="ms in keyResponses" :key="ms" :value="ms">{{ ms }}ms</option>
-						</select>
+						</BaseSelect>
 					</div>
 
 					<div>

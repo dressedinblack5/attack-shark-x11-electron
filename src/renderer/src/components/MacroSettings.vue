@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Keyboard, Mouse, Save, } from 'lucide-vue-next';
+import { Keyboard, Mouse, Save } from 'lucide-vue-next';
 import { macroTemplates, MacroName } from '../../../main/driver/protocols/MacrosBuilder';
 import BaseButton from './BaseButton.vue';
+import BaseSelect from './BaseSelect.vue';
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -36,7 +37,7 @@ const applyMacro = async () => {
 	try {
 		// Map the selected button to the template macro
 		const macroConfig: Record<string, any> = {};
-		
+
 		// Button mapping: 0=LEFT, 1=RIGHT, 2=MIDDLE, 3=FORWARD, 4=BACKWARD, 5=DPI
 		// The MacroBuilderOptions expects keys like 'left', 'right', 'forward', 'backward'
 		const buttonMap: Record<number, string> = {
@@ -47,7 +48,7 @@ const applyMacro = async () => {
 			4: 'backward',
 			5: 'dpi',
 		};
-		
+
 		const buttonKey = buttonMap[selectedButton.value];
 		macroConfig[buttonKey] = macroTemplates[selectedTemplate.value];
 
@@ -69,10 +70,7 @@ const applyMacro = async () => {
 				<Keyboard class="w-8 h-8 text-shark-primary" />
 				Macro Selector
 			</h2>
-			<BaseButton
-				@click="applyMacro"
-				:disabled="!isConnected || isSaving"
-			>
+			<BaseButton @click="applyMacro" :disabled="!isConnected || isSaving">
 				<Save class="w-4 h-4" />
 				{{ isSaving ? 'Applying...' : 'Apply Macro' }}
 			</BaseButton>
@@ -93,24 +91,22 @@ const applyMacro = async () => {
 		<div class="bg-[var(--bg-card)] p-8 rounded-2xl border border-[var(--border-card)] space-y-6">
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 				<div>
-					<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">Target Button</label>
-					<select
-						v-model="selectedButton"
-						class="w-full bg-[var(--border-card)]/20 border border-transparent focus:border-[var(--shark-primary)] focus:bg-[var(--border-card)]/40 rounded-lg p-3 transition-all"
+					<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
+						>Target Button</label
 					>
+					<BaseSelect v-model="selectedButton">
 						<option v-for="btn in buttons" :key="btn.value" :value="btn.value">{{ btn.label }}</option>
-					</select>
+					</BaseSelect>
 				</div>
 				<div>
-					<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">Macro Template</label>
-					<select
-						v-model="selectedTemplate"
-						class="w-full bg-[var(--border-card)]/20 border border-transparent focus:border-[var(--shark-primary)] focus:bg-[var(--border-card)]/40 rounded-lg p-3 transition-all"
+					<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
+						>Macro Template</label
 					>
+					<BaseSelect v-model="selectedTemplate">
 						<option v-for="opt in templateOptions" :key="opt.value" :value="opt.value">
 							{{ opt.label }}
 						</option>
-					</select>
+					</BaseSelect>
 				</div>
 			</div>
 		</div>

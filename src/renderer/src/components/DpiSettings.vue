@@ -2,6 +2,8 @@
 import { ref, reactive } from 'vue';
 import { Zap, Target, Sliders } from 'lucide-vue-next';
 import BaseButton from './BaseButton.vue';
+import BaseInput from './BaseInput.vue';
+import BaseSelect from './BaseSelect.vue';
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -59,10 +61,7 @@ const dpiStep = 50;
 				<Target class="w-8 h-8 text-shark-primary" />
 				DPI Configuration
 			</h2>
-			<BaseButton
-				@click="applyDpi"
-				:disabled="!isConnected || isSaving"
-			>
+			<BaseButton @click="applyDpi" :disabled="!isConnected || isSaving">
 				{{ isSaving ? 'Applying...' : 'Save DPI' }}
 			</BaseButton>
 		</div>
@@ -134,21 +133,9 @@ const dpiStep = 50;
 
 				<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)]">
 					<h3 class="text-lg font-semibold mb-4 text-slate-300">Active Stage</h3>
-					<div class="grid grid-cols-3 gap-2">
-						<button
-							v-for="i in 6"
-							:key="i"
-							@click="dpiConfig.activeStage = i"
-							:class="[
-								'py-2 rounded-lg font-bold border transition-all',
-								dpiConfig.activeStage === i
-									? 'bg-shark-primary border-shark-primary text-white'
-									: 'bg-[var(--border-card)] border-[var(--border-card)] text-slate-400 hover:border-slate-500',
-							]"
-						>
-							{{ i }}
-						</button>
-					</div>
+					<BaseSelect v-model.number="dpiConfig.activeStage">
+						<option v-for="i in 6" :key="i" :value="i">Stage {{ i }}</option>
+					</BaseSelect>
 					<p class="text-xs text-slate-500 mt-4 text-center">
 						Selected stage is active immediately after saving.
 					</p>
@@ -162,8 +149,12 @@ const dpiStep = 50;
 					Sensitivity Stages (1-6)
 				</h3>
 
-				<div class="space-y-6 overflow-y-auto pr-2" style="min-height: 400px;">
-					<div v-for="i in 6" :key="i" class="p-4 rounded-xl bg-[var(--border-card)]/30 border border-[var(--border-card)] space-y-3">
+				<div class="space-y-6 overflow-y-auto pr-2" style="min-height: 400px">
+					<div
+						v-for="i in 6"
+						:key="i"
+						class="p-4 rounded-xl bg-[var(--border-card)]/30 border border-[var(--border-card)] space-y-3"
+					>
 						<div class="flex justify-between items-center">
 							<label class="font-semibold text-base text-[var(--text-primary)] flex items-center gap-3">
 								<span
@@ -178,10 +169,14 @@ const dpiStep = 50;
 								</span>
 								Stage {{ i }}
 							</label>
-							<div class="text-xl font-bold text-shark-primary">
-								{{ dpiConfig.dpiValues[i - 1] }}
-								<span class="text-xs font-normal text-[var(--text-primary)] opacity-50">DPI</span>
-							</div>
+							<BaseInput
+								type="number"
+								v-model.number="dpiConfig.dpiValues[i - 1]"
+								:min="dpiMin"
+								:max="dpiMax"
+								:step="dpiStep"
+								class="w-24"
+							/>
 						</div>
 
 						<div class="relative">
