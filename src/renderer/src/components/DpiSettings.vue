@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 import { Zap, Target, Sliders } from 'lucide-vue-next';
+import BaseButton from './BaseButton.vue';
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -58,13 +59,12 @@ const dpiStep = 50;
 				<Target class="w-8 h-8 text-shark-primary" />
 				DPI Configuration
 			</h2>
-			<button
+			<BaseButton
 				@click="applyDpi"
 				:disabled="!isConnected || isSaving"
-				class="bg-transparent border border-[var(--border-card)] text-[var(--text-primary)] hover:bg-[var(--border-card)]/50 hover:border-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-all rounded-lg px-6 py-2"
 			>
 				{{ isSaving ? 'Applying...' : 'Save DPI' }}
-			</button>
+			</BaseButton>
 		</div>
 
 		<div

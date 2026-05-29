@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { Keyboard, Mouse, Save, } from 'lucide-vue-next';
 import { macroTemplates, MacroName } from '../../../main/driver/protocols/MacrosBuilder';
+import BaseButton from './BaseButton.vue';
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -68,14 +69,13 @@ const applyMacro = async () => {
 				<Keyboard class="w-8 h-8 text-shark-primary" />
 				Macro Selector
 			</h2>
-			<button
+			<BaseButton
 				@click="applyMacro"
 				:disabled="!isConnected || isSaving"
-				class="bg-transparent border border-[var(--border-card)] text-[var(--text-primary)] hover:bg-[var(--border-card)]/50 hover:border-transparent disabled:opacity-50 disabled:cursor-not-allowed transition-all rounded-lg px-6 py-2 flex items-center gap-2"
 			>
 				<Save class="w-4 h-4" />
 				{{ isSaving ? 'Applying...' : 'Apply Macro' }}
-			</button>
+			</BaseButton>
 		</div>
 
 		<div
@@ -96,7 +96,7 @@ const applyMacro = async () => {
 					<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">Target Button</label>
 					<select
 						v-model="selectedButton"
-						class="w-full bg-[var(--border-card)] border border-[var(--border-card)] rounded-lg p-3 text-[var(--text-primary)] focus:ring-2 focus:ring-shark-primary outline-none"
+						class="w-full bg-[var(--border-card)]/20 border border-transparent focus:border-[var(--shark-primary)] focus:bg-[var(--border-card)]/40 rounded-lg p-3 transition-all"
 					>
 						<option v-for="btn in buttons" :key="btn.value" :value="btn.value">{{ btn.label }}</option>
 					</select>
@@ -105,7 +105,7 @@ const applyMacro = async () => {
 					<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">Macro Template</label>
 					<select
 						v-model="selectedTemplate"
-						class="w-full bg-[var(--border-card)] border border-[var(--border-card)] rounded-lg p-3 text-[var(--text-primary)] focus:ring-2 focus:ring-shark-primary outline-none"
+						class="w-full bg-[var(--border-card)]/20 border border-transparent focus:border-[var(--shark-primary)] focus:bg-[var(--border-card)]/40 rounded-lg p-3 transition-all"
 					>
 						<option v-for="opt in templateOptions" :key="opt.value" :value="opt.value">
 							{{ opt.label }}
