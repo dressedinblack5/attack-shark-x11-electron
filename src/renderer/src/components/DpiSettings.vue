@@ -150,13 +150,13 @@ const dpiStep = 50;
 			</div>
 
 			<!-- DPI Stages -->
-			<div class="lg:col-span-2 bg-[var(--bg-card)] p-8 rounded-2xl border border-[var(--border-card)]">
+			<div class="lg:col-span-2 bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)]">
 			<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3">
 					<Zap class="w-6 h-6 text-shark-primary" />
 					SENSITIVITY STAGES (1-6)
 				</h3>
 
-				<div class="space-y-6 overflow-y-auto pr-2" style="min-height: 400px">
+				<div class="space-y-3 overflow-y-auto pr-2" style="min-height: 400px">
 					<div
 						v-for="i in 6"
 						:key="i"
