@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { Keyboard, Mouse } from 'lucide-vue-next';
 import { macroTemplates, MacroName } from '../../../main/driver/protocols/MacrosBuilder';
+import { useDebounce } from '../composables/useDebounce';
 import BaseButton from './BaseButton.vue';
 import BaseSelect from './BaseSelect.vue';
 
@@ -61,6 +62,10 @@ const applyMacro = async () => {
 		isSaving.value = false;
 	}
 };
+
+const debouncedApplyMacro = useDebounce(applyMacro, 300);
+
+watch([selectedTemplate, selectedButton], () => debouncedApplyMacro());
 </script>
 
 <template>

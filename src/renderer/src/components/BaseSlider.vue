@@ -1,17 +1,23 @@
 <template>
   <input
     type="range"
-    class="w-full h-2 bg-[var(--text-primary)]/50 rounded-lg appearance-none cursor-pointer accent-shark-primary"
+    class="w-full h-2 bg-[var(--text-primary)]/10 rounded-lg appearance-none cursor-pointer accent-shark-primary"
     v-bind="$attrs"
-    :value="modelValue"
-    @input="$emit('update:modelValue', Number(($event.target as HTMLInputElement).value))"
+    v-model="internalValue"
   />
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import { computed } from 'vue';
+
+const props = defineProps<{
   modelValue: string | number;
 }>();
 
-defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue']);
+
+const internalValue = computed({
+  get: () => props.modelValue,
+  set: (val) => emit('update:modelValue', Number(val))
+});
 </script>

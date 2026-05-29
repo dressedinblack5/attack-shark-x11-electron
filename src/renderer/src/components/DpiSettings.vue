@@ -5,6 +5,7 @@ import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import BaseSelect from './BaseSelect.vue';
 import BaseSlider from './BaseSlider.vue';
+import { useDebounce } from '../composables/useDebounce';
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -16,19 +17,6 @@ const dpiConfig = reactive({
 	ripplerControl: true,
 	dpiValues: [800, 1600, 2400, 3200, 5000, 22000] as [number, number, number, number, number, number],
 });
-
-let debounceTimer: ReturnType<typeof setTimeout>;
-
-watch(
-	() => dpiConfig,
-	() => {
-		clearTimeout(debounceTimer);
-		debounceTimer = setTimeout(applyDpi, 300);
-	},
-	{ deep: true }
-);
-
-// Removed watch(...) and REVERSE_DPI_MAP logic
 
 const statusMessage = ref('');
 const isSaving = ref(false);
@@ -59,6 +47,16 @@ const applyDpi = async () => {
 		isSaving.value = false;
 	}
 };
+
+const debouncedApplyDpi = useDebounce(applyDpi, 300);
+
+watch(
+	() => dpiConfig,
+	() => {
+		debouncedApplyDpi();
+	},
+	{ deep: true }
+);
 
 // DPI Steps are generally 50 or 100
 const dpiMin = 50;

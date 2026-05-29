@@ -5,6 +5,7 @@ import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import BaseSelect from './BaseSelect.vue';
 import BaseSlider from './BaseSlider.vue';
+import { useDebounce } from '../composables/useDebounce';
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -19,42 +20,16 @@ const props = defineProps<{
 	};
 }>();
 
-let debounceTimer: ReturnType<typeof setTimeout>;
-
-const sendLightingUpdate = async () => {
-	if (!props.isConnected) return;
-
-	try {
-		const plainPrefs = {
-			lightMode: props.preferences.lightMode,
-			ledSpeed: props.preferences.ledSpeed,
-			keyResponse: props.preferences.keyResponse,
-			sleepTime: props.preferences.sleepTime,
-			deepSleepTime: props.preferences.deepSleepTime,
-			rgb: {
-				r: props.preferences.rgb.r,
-				g: props.preferences.rgb.g,
-				b: props.preferences.rgb.b,
-			},
-		};
-		await window.api.setUserPreferences(plainPrefs);
-	} catch (err) {
-		console.error('Live update failed:', err);
-	}
-};
+const debouncedApplyPreferences = useDebounce(async () => {
+	await applyPreferences(false);
+}, 300);
 
 watch(
-	[
-		() => props.preferences.lightMode,
-		() => props.preferences.rgb.r,
-		() => props.preferences.rgb.g,
-		() => props.preferences.rgb.b,
-		() => props.preferences.ledSpeed,
-	],
+	() => props.preferences,
 	() => {
-		clearTimeout(debounceTimer);
-		debounceTimer = setTimeout(sendLightingUpdate, 300);
+		debouncedApplyPreferences();
 	},
+	{ deep: true },
 );
 
 const pollingRates = [
@@ -125,11 +100,13 @@ const deleteProfile = async (name: string) => {
 
 loadProfilesList();
 
-const applyPreferences = async () => {
+async function applyPreferences(showUi = true) {
 	if (!props.isConnected) return;
 
-	isSaving.value = true;
-	statusMessage.value = 'Applying settings...';
+	if (showUi) {
+		isSaving.value = true;
+		statusMessage.value = 'Applying settings...';
+	}
 
 	try {
 		const plainPrefs = {
@@ -148,16 +125,24 @@ const applyPreferences = async () => {
 		await window.api.setUserPreferences(plainPrefs);
 		await window.api.setPollingRate(props.preferences.pollingRate);
 
-		statusMessage.value = 'Settings applied successfully!';
-		setTimeout(() => {
-			statusMessage.value = '';
-		}, 3000);
+		if (showUi) {
+			statusMessage.value = 'Settings applied successfully!';
+			setTimeout(() => {
+				statusMessage.value = '';
+			}, 3000);
+		}
 	} catch (err: any) {
-		statusMessage.value = `Error: ${err.message}`;
+		if (showUi) {
+			statusMessage.value = `Error: ${err.message}`;
+		} else {
+			console.error('Auto-save failed:', err);
+		}
 	} finally {
-		isSaving.value = false;
+		if (showUi) {
+			isSaving.value = false;
+		}
 	}
-};
+}
 </script>
 
 <template>
