@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue';
+import { ref, reactive } from 'vue';
 import { Zap, Target, Sliders } from 'lucide-vue-next';
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import BaseSelect from './BaseSelect.vue';
 import BaseSlider from './BaseSlider.vue';
-import { useDebounce } from '../composables/useDebounce';
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -48,15 +47,7 @@ const applyDpi = async () => {
 	}
 };
 
-const debouncedApplyDpi = useDebounce(applyDpi, 300);
 
-watch(
-	() => dpiConfig,
-	() => {
-		debouncedApplyDpi();
-	},
-	{ deep: true }
-);
 
 // DPI Steps are generally 50 or 100
 const dpiMin = 50;
