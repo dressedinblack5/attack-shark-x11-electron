@@ -215,7 +215,7 @@ const applyPreferences = async () => {
 				<h3
 					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3"
 				>
-					<Cpu class="w-6 h-6 text-shark-primary" />
+					<Palette class="w-6 h-6 text-shark-primary" />
 					LIGHTING
 				</h3>
 
