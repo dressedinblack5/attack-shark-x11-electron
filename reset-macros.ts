@@ -6,16 +6,9 @@ try {
 	await driver.open();
 	console.log('Connected!');
 
-	// Read Macros (Report 0x0308)
-	console.log('Reading Macros...');
-	const macroBuffer = await driver.controlTransfer({
-		bmRequestType: 0xa1,
-		bRequest: 0x01,
-		wValue: 0x0308,
-		wIndex: 2,
-		data: 59,
-	});
-	console.log('Macro Buffer:', macroBuffer.toString('hex'));
+	console.log('Resetting Mouse Internal State...');
+	await driver.sendInternalStateResetReportBuilder();
+	console.log('Reset command sent!');
 } catch (e) {
 	console.error('Error:', e);
 } finally {
