@@ -58,7 +58,7 @@ const dpiStep = 50;
 <template>
 	<div class="space-y-8">
 		<div class="flex items-center justify-between">
-			<h2 class="text-3xl font-bold flex items-center gap-3">
+			<h2 class="text-3xl font-bold flex items-center gap-3 text-[var(--text-primary)]">
 				<Target class="w-8 h-8 text-shark-primary" />
 				DPI Configuration
 			</h2>
@@ -87,8 +87,8 @@ const dpiStep = 50;
 			<!-- Sensor Settings -->
 			<div class="lg:col-span-1 space-y-6">
 				<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)]">
-					<h3 class="text-lg font-semibold mb-6 flex items-center gap-2 text-[var(--text-primary)]">
-						<Sliders class="w-6 h-6" /> Sensor Options
+					<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3">
+						<Sliders class="w-6 h-6 text-shark-primary" /> SENSOR OPTIONS
 					</h3>
 
 					<div class="space-y-6">
@@ -137,7 +137,9 @@ const dpiStep = 50;
 				</div>
 
 				<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)]">
-					<h3 class="text-lg font-semibold mb-4 text-[var(--text-primary)]">Active Stage</h3>
+					<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3">
+						<Target class="w-6 h-6 text-shark-primary" /> ACTIVE STAGE
+					</h3>
 					<BaseSelect v-model.number="dpiConfig.activeStage">
 						<option v-for="i in 6" :key="i" :value="i">Stage {{ i }}</option>
 					</BaseSelect>
@@ -149,9 +151,9 @@ const dpiStep = 50;
 
 			<!-- DPI Stages -->
 			<div class="lg:col-span-2 bg-[var(--bg-card)] p-8 rounded-2xl border border-[var(--border-card)]">
-				<h3 class="text-xl font-bold mb-8 flex items-center gap-3">
+				<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3">
 					<Zap class="w-6 h-6 text-shark-primary" />
-					Sensitivity Stages (1-6)
+					SENSITIVITY STAGES (1-6)
 				</h3>
 
 				<div class="space-y-6 overflow-y-auto pr-2" style="min-height: 400px">

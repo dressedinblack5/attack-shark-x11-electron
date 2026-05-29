@@ -181,7 +181,7 @@ const applyPreferences = async () => {
 		</div>
 
 		<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)] space-y-4">
-			<h3 class="text-lg font-semibold text-[var(--text-primary)] opacity-70 flex items-center gap-3">
+			<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3">
 				<Database class="w-6 h-6 text-shark-primary" />
 				Stored Profiles
 			</h3>
@@ -215,8 +215,8 @@ const applyPreferences = async () => {
 				<h3
 					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3"
 				>
-					<Palette class="w-6 h-6 text-shark-primary" />
-					Lighting
+					<Cpu class="w-6 h-6 text-shark-primary" />
+					LIGHTING
 				</h3>
 
 				<div class="space-y-4">
@@ -285,7 +285,7 @@ const applyPreferences = async () => {
 					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3"
 				>
 					<Cpu class="w-6 h-6 text-shark-primary" />
-					Device Behavior
+					DEVICE BEHAVIOR
 				</h3>
 
 				<div class="space-y-4">
