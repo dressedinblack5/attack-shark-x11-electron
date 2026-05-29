@@ -156,7 +156,7 @@ const dpiStep = 50;
 						class="p-4 rounded-xl bg-[var(--border-card)]/30 border border-[var(--border-card)] space-y-3"
 					>
 						<div class="flex justify-between items-center">
-							<label class="font-semibold text-base text-[var(--text-primary)] flex items-center gap-3">
+							<label class="font-medium text-sm text-[var(--text-primary)] opacity-70 mb-2 flex items-center gap-3">
 								<span
 									:class="[
 										'w-6 h-6 flex items-center justify-center rounded text-xs',

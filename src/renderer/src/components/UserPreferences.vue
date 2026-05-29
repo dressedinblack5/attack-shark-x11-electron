@@ -217,7 +217,7 @@ const applyPreferences = async () => {
 					</div>
 
 					<div>
-						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2"
+						<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
 							>LED Speed ({{ props.preferences.ledSpeed }})</label
 						>
 						<input
@@ -254,15 +254,15 @@ const applyPreferences = async () => {
 							/>
 						</div>
 						<div class="col-span-1">
-							<label class="block text-xs text-[var(--text-primary)] opacity-50 mb-1">Red</label>
+							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">Red</label>
 							<BaseInput type="number" v-model.number="props.preferences.rgb.r" min="0" max="255" />
 						</div>
 						<div class="col-span-1">
-							<label class="block text-xs text-[var(--text-primary)] opacity-50 mb-1">Green</label>
+							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">Green</label>
 							<BaseInput type="number" v-model.number="props.preferences.rgb.g" min="0" max="255" />
 						</div>
 						<div class="col-span-1">
-							<label class="block text-xs text-[var(--text-primary)] opacity-50 mb-1">Blue</label>
+							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">Blue</label>
 							<BaseInput type="number" v-model.number="props.preferences.rgb.b" min="0" max="255" />
 						</div>
 					</div>
@@ -296,7 +296,7 @@ const applyPreferences = async () => {
 					</div>
 
 					<div>
-						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2"
+						<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
 							>Sleep Timer ({{ props.preferences.sleepTime }} min)</label
 						>
 						<input
