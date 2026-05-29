@@ -87,12 +87,12 @@ const dpiStep = 50;
 			<!-- Sensor Settings -->
 			<div class="lg:col-span-1 space-y-6">
 				<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)]">
-					<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3">
+					<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3 mb-6">
 						<Sliders class="w-6 h-6 text-shark-primary" /> SENSOR OPTIONS
 					</h3>
 
 					<div class="space-y-6">
-						<div class="flex items-center justify-between">
+						<div class="flex items-center justify-between gap-4">
 							<div>
 								<div class="font-medium">Angle Snapping</div>
 								<div class="text-xs text-[var(--text-primary)] opacity-50">Corrects mouse movement to straight lines</div>
@@ -113,7 +113,7 @@ const dpiStep = 50;
 							</button>
 						</div>
 
-						<div class="flex items-center justify-between">
+						<div class="flex items-center justify-between gap-4">
 							<div>
 								<div class="font-medium">Ripple Control</div>
 								<div class="text-xs text-[var(--text-primary)] opacity-50">Smooths out jitter at high DPI levels</div>
@@ -137,7 +137,7 @@ const dpiStep = 50;
 				</div>
 
 				<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)]">
-					<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3">
+					<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3 mb-4">
 						<Target class="w-6 h-6 text-shark-primary" /> ACTIVE STAGE
 					</h3>
 					<BaseSelect v-model.number="dpiConfig.activeStage">
@@ -150,7 +150,7 @@ const dpiStep = 50;
 			</div>
 
 			<!-- DPI Stages -->
-			<div class="lg:col-span-2 bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)]">
+			<div class="lg:col-span-2 bg-[var(--bg-card)] p-8 rounded-2xl border border-[var(--border-card)]">
 			<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3">
 					<Zap class="w-6 h-6 text-shark-primary" />
 					SENSITIVITY STAGES (1-6)
