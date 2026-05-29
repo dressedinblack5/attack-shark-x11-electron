@@ -22,7 +22,7 @@ export async function listProfiles(): Promise<string[]> {
 export async function saveProfile(name: string, data: unknown): Promise<void> {
 	const profiles = await getAllProfiles();
 	const index = profiles.findIndex((p) => p.name === name);
-	if (index !== -1) {
+	if (index !== -1 && profiles[index]) {
 		profiles[index].data = data;
 	} else {
 		profiles.push({ name, data });
