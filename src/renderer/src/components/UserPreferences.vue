@@ -168,14 +168,14 @@ const applyPreferences = async () => {
 				User Preferences
 			</h2>
 			<div class="flex items-center gap-2">
-				<BaseInput v-model="newProfileName" placeholder="New profile name" />
+				<BaseInput v-model="newProfileName" placeholder="New profile name" class="w-48" />
 				<BaseButton @click="saveNewProfile"> Save </BaseButton>
 				<BaseButton
 					@click="applyPreferences"
 					:disabled="!isConnected || isSaving"
 					variant="green"
 				>
-					{{ isSaving ? 'Saving...' : 'Apply Settings' }}
+					{{ isSaving ? 'Saving...' : 'Apply' }}
 				</BaseButton>
 			</div>
 		</div>
