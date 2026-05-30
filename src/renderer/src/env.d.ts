@@ -17,6 +17,7 @@ interface Window {
 		loadProfile: (name: string) => Promise<unknown>;
 		deleteProfile: (name: string) => Promise<void>;
 		getSummary: () => Promise<unknown>;
+		getDeviceInfo: () => Promise<unknown>;
 		onBatteryUpdated: (callback: (level: number) => void) => void;
 	};
 }

@@ -6,6 +6,7 @@ import { ConnectionMode } from './driver/types.js';
 import { validateDpiConfig } from './utils/validation.js';
 import { sanitizePreferences } from './utils/preferenceSanitizer.js';
 import * as profileManager from './storage/profileManager.js';
+import * as settingsManager from './storage/settingsManager.js';
 
 import type { CustomMacroBuilderOptions } from './driver/protocols/CustomMacroBuilder.js';
 import type { UserPreferencesBuilderOptions } from './driver/protocols/UserPreferencesBuilder.js';
@@ -164,6 +165,11 @@ app.whenReady().then(() => {
 		}
 	});
 
+	ipcMain.handle('get-device-info', () => {
+		if (!driver) throw new Error('Device not connected');
+		return driver.getDeviceInfo();
+	});
+
 	ipcMain.handle('reset-device', async () => {
 		if (!driver) throw new Error('Device not connected');
 		await driver.reset();
@@ -188,6 +194,9 @@ app.whenReady().then(() => {
 	ipcMain.handle('save-profile', (_, name: string, data: unknown) => profileManager.saveProfile(name, data));
 	ipcMain.handle('load-profile', (_, name: string) => profileManager.loadProfile(name));
 	ipcMain.handle('delete-profile', (_, name: string) => profileManager.deleteProfile(name));
+
+	ipcMain.handle('get-settings', () => settingsManager.getSettings());
+	ipcMain.handle('save-settings', (_, settings) => settingsManager.saveSettings(settings));
 
 	createWindow();
 

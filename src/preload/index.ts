@@ -19,6 +19,7 @@ const api = {
 	loadProfile: (name: string): Promise<unknown> => ipcRenderer.invoke('load-profile', name),
 	deleteProfile: (name: string): Promise<void> => ipcRenderer.invoke('delete-profile', name),
 	getSummary: (): Promise<unknown> => ipcRenderer.invoke('get-summary'),
+	getDeviceInfo: (): Promise<unknown> => ipcRenderer.invoke('get-device-info'),
 	onBatteryUpdated: (callback: (level: number) => void): void => {
 		ipcRenderer.on('battery-updated', (_event, value) => callback(value));
 	},

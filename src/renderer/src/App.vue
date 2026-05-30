@@ -4,6 +4,7 @@ import { MousePointer2, Settings, Zap, Info, ShieldAlert, Keyboard } from 'lucid
 import UserPreferences from './components/UserPreferences.vue';
 import DpiSettings from './components/DpiSettings.vue';
 import MacroSettings from './components/MacroSettings.vue';
+import DeviceInfo from './components/DeviceInfo.vue';
 import packageInfo from '../../../package.json';
 
 const version = packageInfo.version;
@@ -138,15 +139,15 @@ onMounted(() => {
 					<Keyboard class="w-5 h-5" /> Macros
 				</button>
 				<button
-					@click="activeTab = 'about'"
+					@click="activeTab = 'device-info'"
 					:class="[
 						'w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-colors',
-						activeTab === 'about'
+						activeTab === 'device-info'
 							? 'bg-shark-primary/20 text-shark-primary'
 							: 'hover:bg-slate-800 text-slate-400',
 					]"
 				>
-					<Info class="w-5 h-5" /> About
+					<ShieldAlert class="w-5 h-5" /> Device Info
 				</button>
 			</nav>
 
@@ -230,28 +231,11 @@ onMounted(() => {
 					<MacroSettings :isConnected="isConnected" />
 				</div>
 
-				<!-- About Content -->
-				<div v-if="activeTab === 'about'">
-					<h2 class="text-3xl font-bold mb-8">About Attack Shark Driver</h2>
-					<div class="bg-slate-900 p-8 rounded-2xl border border-slate-800 space-y-6">
-						<p class="text-slate-300">
-							A community-driven, open-source driver for the Attack Shark X11 gaming mouse.
-						</p>
-
-						<div class="pt-6 border-t border-slate-800">
-							<h4 class="font-bold text-red-400 mb-2">Emergency Reset</h4>
-							<p class="text-sm text-slate-500 mb-4">
-								Restore factory settings if the device becomes unresponsive.
-							</p>
-							<button
-								@click="reset"
-								class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-6 py-2 rounded-lg font-bold transition-all"
-							>
-								Factory Reset Device
-							</button>
-						</div>
-					</div>
+				<!-- Device Info Content -->
+				<div v-if="activeTab === 'device-info'">
+					<DeviceInfo :isConnected="isConnected" />
 				</div>
+
 			</div>
 		</main>
 	</div>

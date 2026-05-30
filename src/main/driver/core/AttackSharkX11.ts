@@ -385,6 +385,34 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 	}
 
 	/**
+	 * Retrieves device information from USB descriptors.
+	 * @returns Device info object with manufacturer, product name, and USB details
+	 */
+	getDeviceInfo(): {
+		manufacturer: string;
+		product: string;
+		serialNumber: string;
+		vendorId: string;
+		productId: string;
+		bcdDevice: string;
+		connectionMode: string;
+		interfaces: number;
+	} {
+		const descriptor = this.device.deviceDescriptor;
+
+		return {
+			manufacturer: 'Beken',
+			product: 'Attack Shark X11',
+			serialNumber: 'N/A',
+			vendorId: `0x${descriptor.idVendor.toString(16).padStart(4, '0')}`,
+			productId: `0x${descriptor.idProduct.toString(16).padStart(4, '0')}`,
+			bcdDevice: `${(descriptor.bcdDevice >> 8) & 0xff}.${descriptor.bcdDevice & 0xff}`,
+			connectionMode: this.connectionMode === ConnectionMode.Adapter ? 'Wireless (2.4GHz)' : 'Wired (USB)',
+			interfaces: descriptor.bNumConfigurations,
+		};
+	}
+
+	/**
 	 * Sets the polling rate of the mouse.
 	 *
 	 * @param rate A value from the Rate enum or a PollingRateBuilder instance.
