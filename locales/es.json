@@ -98,5 +98,24 @@
 			"backward": "Botón Atrás",
 			"dpi": "Botón DPI"
 		}
+	},
+	"deviceInfo": {
+		"title": "Información del Dispositivo",
+		"refresh": "Actualizar",
+		"loading": "Cargando...",
+		"fetchError": "Error al obtener información del dispositivo: ",
+		"loadingInfo": "Cargando información del dispositivo...",
+		"deviceTitle": "Dispositivo",
+		"manufacturer": "Fabricante",
+		"productName": "Nombre del Producto",
+		"connectionMode": "Modo de Conexión",
+		"technicalDetails": "Detalles Técnicos",
+		"vendorId": "ID del Vendedor",
+		"productId": "ID del Producto",
+		"deviceVersion": "Versión del Dispositivo",
+		"interfaces": "Interfaces",
+		"serialNumber": "Número de Serie",
+		"refreshHint": "Haz clic en \"Actualizar\" para cargar la información del dispositivo",
+		"connectHint": "Conecta un dispositivo para ver información"
 	}
 }

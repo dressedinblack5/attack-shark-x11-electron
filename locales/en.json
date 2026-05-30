@@ -98,5 +98,24 @@
 			"backward": "Backward Button",
 			"dpi": "DPI Button"
 		}
+	},
+	"deviceInfo": {
+		"title": "Device Information",
+		"refresh": "Refresh",
+		"loading": "Loading...",
+		"fetchError": "Failed to fetch device info: ",
+		"loadingInfo": "Loading device information...",
+		"deviceTitle": "Device",
+		"manufacturer": "Manufacturer",
+		"productName": "Product Name",
+		"connectionMode": "Connection Mode",
+		"technicalDetails": "Technical Details",
+		"vendorId": "Vendor ID",
+		"productId": "Product ID",
+		"deviceVersion": "Device Version",
+		"interfaces": "Interfaces",
+		"serialNumber": "Serial Number",
+		"refreshHint": "Click \"Refresh\" to load device information",
+		"connectHint": "Connect a device to view information"
 	}
 }
