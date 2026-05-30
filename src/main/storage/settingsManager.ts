@@ -8,12 +8,30 @@ export interface AppSettings {
 	lastTab: string;
 	connectionMode: 'Adapter' | 'Wired' | 'Bluetooth';
 	language: string;
+	preferences: {
+		lightMode: number;
+		ledSpeed: number;
+		keyResponse: number;
+		pollingRate: number;
+		sleepTime: number;
+		deepSleepTime: number;
+		rgb: { r: number; g: number; b: number };
+	};
 }
 
 const DEFAULT_SETTINGS: AppSettings = {
-	lastTab: 'dashboard',
+	lastTab: 'preferences',
 	connectionMode: 'Adapter',
 	language: 'en',
+	preferences: {
+		lightMode: 0x20, // Breathing
+		ledSpeed: 2,
+		keyResponse: 4,
+		pollingRate: 1000,
+		sleepTime: 2,
+		deepSleepTime: 10,
+		rgb: { r: 255, g: 0, b: 255 },
+	},
 };
 
 export async function getSettings(): Promise<AppSettings> {

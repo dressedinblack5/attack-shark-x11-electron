@@ -92,15 +92,22 @@ onMounted(async () => {
 	});
 
 	const settings: any = await window.api.getSettings();
-	if (settings && settings.lastTab) {
-		activeTab.value = settings.lastTab;
+	if (settings) {
+		if (settings.lastTab) activeTab.value = settings.lastTab;
+		if (settings.preferences) {
+			Object.assign(preferences, settings.preferences);
+		}
 	}
 });
 
-watch(activeTab, async (newTab) => {
+watch([activeTab, preferences], async () => {
 	const settings: any = await window.api.getSettings();
-	await window.api.saveSettings({ ...settings, lastTab: newTab });
-});
+	await window.api.saveSettings({
+		...settings,
+		lastTab: activeTab.value,
+		preferences: { ...preferences }
+	});
+}, { deep: true });
 </script>
 
 <template>
