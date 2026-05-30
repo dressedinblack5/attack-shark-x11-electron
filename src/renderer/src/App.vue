@@ -121,7 +121,7 @@ watch(
 			<div class="p-6">
 				<h1 class="text-xl font-bold flex items-center gap-2 text-shark-primary">
 					<MousePointer2 class="w-6 h-6" />
-					Attack Shark X11
+					{{ $t('sidebar.deviceName') }}
 				</h1>
 			</div>
 
@@ -135,7 +135,7 @@ watch(
 							: 'hover:bg-slate-800 text-slate-400',
 					]"
 				>
-					<Settings class="w-5 h-5" /> Preferences
+					<Settings class="w-5 h-5" /> {{ $t('sidebar.preferences') }}
 				</button>
 				<button
 					@click="activeTab = 'dpi'"
@@ -146,7 +146,7 @@ watch(
 							: 'hover:bg-slate-800 text-slate-400',
 					]"
 				>
-					<Zap class="w-5 h-5" /> DPI Config
+					<Zap class="w-5 h-5" /> {{ $t('sidebar.dpi') }}
 				</button>
 				<button
 					@click="activeTab = 'macros'"
@@ -157,7 +157,7 @@ watch(
 							: 'hover:bg-slate-800 text-slate-400',
 					]"
 				>
-					<Keyboard class="w-5 h-5" /> Macros
+					<Keyboard class="w-5 h-5" /> {{ $t('sidebar.macros') }}
 				</button>
 				<button
 					@click="activeTab = 'device-info'"
@@ -168,7 +168,7 @@ watch(
 							: 'hover:bg-slate-800 text-slate-400',
 					]"
 				>
-					<ShieldAlert class="w-5 h-5" /> Device Info
+					<ShieldAlert class="w-5 h-5" /> {{ $t('sidebar.deviceInfo') }}
 				</button>
 			</nav>
 
@@ -183,10 +183,10 @@ watch(
 						<div class="absolute -right-1 top-1 w-1 h-2 bg-slate-600 rounded-r-sm"></div>
 					</div>
 					<span class="text-slate-300 font-medium">{{
-						batteryLevel >= 0 ? `${batteryLevel}%` : 'Wired'
+						batteryLevel >= 0 ? `${batteryLevel}%` : $t('connection.wiredDisplay')
 					}}</span>
 				</div>
-				<div v-else class="text-xs text-slate-500 italic">Device Disconnected</div>
+				<div v-else class="text-xs text-slate-500 italic">{{ $t('connection.disconnected') }}</div>
 				<div class="text-[10px] text-slate-600 mt-2">v{{ version }}</div>
 			</div>
 		</div>
@@ -200,8 +200,8 @@ watch(
 				<div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mb-6">
 					<MousePointer2 class="w-10 h-10 text-slate-600" />
 				</div>
-				<h2 class="text-2xl font-bold mb-2">Connect your X11</h2>
-				<p class="text-slate-400 mb-8">Please select the connection mode to start configuring your device.</p>
+				<h2 class="text-2xl font-bold mb-2">{{ $t('connection.title') }}</h2>
+				<p class="text-slate-400 mb-8">{{ $t('connection.description') }}</p>
 
 				<div class="grid grid-cols-2 gap-4 w-full">
 					<button
@@ -209,14 +209,14 @@ watch(
 						class="bg-slate-800 hover:bg-slate-700 p-4 rounded-xl border border-slate-700 transition-all group"
 					>
 						<Zap class="w-8 h-8 mx-auto mb-2 text-slate-400 group-hover:text-shark-primary" />
-						<span class="block font-semibold">2.4G Adapter</span>
+						<span class="block font-semibold">{{ $t('connection.adapter') }}</span>
 					</button>
 					<button
 						@click="connect(0xfa55)"
 						class="bg-slate-800 hover:bg-slate-700 p-4 rounded-xl border border-slate-700 transition-all group"
 					>
 						<ShieldAlert class="w-8 h-8 mx-auto mb-2 text-slate-400 group-hover:text-shark-primary" />
-						<span class="block font-semibold">Wired Mode</span>
+						<span class="block font-semibold">{{ $t('connection.wired') }}</span>
 					</button>
 				</div>
 
@@ -224,7 +224,7 @@ watch(
 					@click="window.location.reload()"
 					class="mt-8 text-xs text-slate-600 hover:text-slate-400 flex items-center gap-1 transition-colors"
 				>
-					<Info class="w-3 h-3" /> Force App Refresh
+					<Info class="w-3 h-3" /> {{ $t('connection.forceRefresh') }}
 				</button>
 
 				<div
