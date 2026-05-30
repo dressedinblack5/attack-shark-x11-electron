@@ -179,18 +179,16 @@ async function applyPreferences(showUi = true) {
 				</BaseSelect>
 				<BaseInput v-model="newProfileName" placeholder="New profile name" class="w-48" />
 				<BaseButton @click="saveNewProfile"> Save </BaseButton>
-				<BaseButton
-					@click="applyPreferences"
-					:disabled="!isConnected || isSaving"
-					variant="green"
-				>
+				<BaseButton @click="applyPreferences" :disabled="!isConnected || isSaving" variant="green">
 					{{ isSaving ? 'Saving...' : 'Apply' }}
 				</BaseButton>
 			</div>
 		</div>
 
 		<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)] space-y-4">
-			<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3">
+			<h3
+				class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3"
+			>
 				<Database class="w-6 h-6 text-shark-primary" />
 				Stored Profiles
 			</h3>
@@ -242,12 +240,7 @@ async function applyPreferences(showUi = true) {
 						<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
 							>LED Speed ({{ props.preferences.ledSpeed }})</label
 						>
-						<BaseSlider
-							v-model="props.preferences.ledSpeed"
-							min="1"
-							max="5"
-							step="1"
-						/>
+						<BaseSlider v-model="props.preferences.ledSpeed" min="1" max="5" step="1" />
 
 						<div class="flex justify-between text-xs text-[var(--text-primary)] opacity-50 mt-1">
 							<span>Slow</span>
@@ -257,7 +250,9 @@ async function applyPreferences(showUi = true) {
 
 					<div class="grid grid-cols-4 gap-2">
 						<div class="col-span-1">
-							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">Color</label>
+							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
+								>Color</label
+							>
 							<input
 								type="color"
 								:value="`#${props.preferences.rgb.r.toString(16).padStart(2, '0')}${props.preferences.rgb.g.toString(16).padStart(2, '0')}${props.preferences.rgb.b.toString(16).padStart(2, '0')}`"
@@ -274,15 +269,21 @@ async function applyPreferences(showUi = true) {
 							/>
 						</div>
 						<div class="col-span-1">
-							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">Red</label>
+							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
+								>Red</label
+							>
 							<BaseInput type="number" v-model.number="props.preferences.rgb.r" min="0" max="255" />
 						</div>
 						<div class="col-span-1">
-							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">Green</label>
+							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
+								>Green</label
+							>
 							<BaseInput type="number" v-model.number="props.preferences.rgb.g" min="0" max="255" />
 						</div>
 						<div class="col-span-1">
-							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">Blue</label>
+							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
+								>Blue</label
+							>
 							<BaseInput type="number" v-model.number="props.preferences.rgb.b" min="0" max="255" />
 						</div>
 					</div>
@@ -320,24 +321,14 @@ async function applyPreferences(showUi = true) {
 						<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
 							>Sleep Timer ({{ props.preferences.sleepTime }} min)</label
 						>
-						<BaseSlider
-							v-model="props.preferences.sleepTime"
-							min="0.5"
-							max="30"
-							step="0.5"
-						/>
+						<BaseSlider v-model="props.preferences.sleepTime" min="0.5" max="30" step="0.5" />
 					</div>
 
 					<div>
 						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2"
 							>Deep Sleep Timer ({{ props.preferences.deepSleepTime }} min)</label
 						>
-						<BaseSlider
-							v-model="props.preferences.deepSleepTime"
-							min="1"
-							max="60"
-							step="1"
-						/>
+						<BaseSlider v-model="props.preferences.deepSleepTime" min="1" max="60" step="1" />
 					</div>
 				</div>
 			</div>

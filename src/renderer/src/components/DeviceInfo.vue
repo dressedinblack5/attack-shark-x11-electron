@@ -59,7 +59,10 @@ onMounted(() => {
 		</div>
 
 		<!-- Error Message -->
-		<div v-if="errorMessage" :class="['p-3 rounded-lg text-sm border', 'bg-red-500/10 border-red-500/20 text-red-400']">
+		<div
+			v-if="errorMessage"
+			:class="['p-3 rounded-lg text-sm border', 'bg-red-500/10 border-red-500/20 text-red-400']"
+		>
 			{{ errorMessage }}
 		</div>
 
@@ -67,7 +70,9 @@ onMounted(() => {
 		<div v-if="deviceInfo" class="grid grid-cols-1 md:grid-cols-2 gap-6">
 			<!-- Manufacturer & Product -->
 			<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)] space-y-4">
-				<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3 mb-6">
+				<h3
+					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3 mb-6"
+				>
 					<HardDrive class="w-5 h-5 text-shark-primary" />
 					Device
 				</h3>
@@ -89,19 +94,29 @@ onMounted(() => {
 
 			<!-- USB & Firmware Details -->
 			<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)] space-y-4">
-				<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3 mb-6">Technical Details</h3>
+				<h3
+					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3 mb-6"
+				>
+					Technical Details
+				</h3>
 				<div class="space-y-4">
 					<div>
 						<p class="text-xs text-[var(--text-tertiary)] mb-1">Vendor ID</p>
-						<p class="text-lg font-medium text-[var(--text-primary)] font-mono">{{ deviceInfo.vendorId }}</p>
+						<p class="text-lg font-medium text-[var(--text-primary)] font-mono">
+							{{ deviceInfo.vendorId }}
+						</p>
 					</div>
 					<div>
 						<p class="text-xs text-[var(--text-tertiary)] mb-1">Product ID</p>
-						<p class="text-lg font-medium text-[var(--text-primary)] font-mono">{{ deviceInfo.productId }}</p>
+						<p class="text-lg font-medium text-[var(--text-primary)] font-mono">
+							{{ deviceInfo.productId }}
+						</p>
 					</div>
 					<div>
 						<p class="text-xs text-[var(--text-tertiary)] mb-1">Device Version</p>
-						<p class="text-lg font-medium text-[var(--text-primary)] font-mono">{{ deviceInfo.bcdDevice }}</p>
+						<p class="text-lg font-medium text-[var(--text-primary)] font-mono">
+							{{ deviceInfo.bcdDevice }}
+						</p>
 					</div>
 					<div>
 						<p class="text-xs text-[var(--text-tertiary)] mb-1">Interfaces</p>
@@ -128,13 +143,17 @@ onMounted(() => {
 		<div v-else-if="!isLoading" class="flex flex-col items-center justify-center py-12 text-center">
 			<HardDrive class="w-12 h-12 text-[var(--text-tertiary)] mb-4 opacity-50" />
 			<p class="text-[var(--text-tertiary)]">
-				{{ isConnected ? 'Click "Refresh" to load device information' : 'Connect a device to view information' }}
+				{{
+					isConnected ? 'Click "Refresh" to load device information' : 'Connect a device to view information'
+				}}
 			</p>
 		</div>
 
 		<!-- Loading State -->
 		<div v-else class="flex flex-col items-center justify-center py-12">
-			<div class="w-8 h-8 border-2 border-shark-primary border-t-transparent rounded-full animate-spin mb-4"></div>
+			<div
+				class="w-8 h-8 border-2 border-shark-primary border-t-transparent rounded-full animate-spin mb-4"
+			></div>
 			<p class="text-[var(--text-tertiary)]">Loading device information...</p>
 		</div>
 	</div>

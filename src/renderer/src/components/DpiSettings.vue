@@ -47,8 +47,6 @@ const applyDpi = async () => {
 	}
 };
 
-
-
 // DPI Steps are generally 50 or 100
 const dpiMin = 50;
 const dpiMax = 22000;
@@ -62,11 +60,7 @@ const dpiStep = 50;
 				<Target class="w-8 h-8 text-shark-primary" />
 				DPI Configuration
 			</h2>
-			<BaseButton
-				@click="applyDpi"
-				:disabled="!isConnected || isSaving"
-				variant="green"
-			>
+			<BaseButton @click="applyDpi" :disabled="!isConnected || isSaving" variant="green">
 				{{ isSaving ? 'Applying...' : 'Save DPI' }}
 			</BaseButton>
 		</div>
@@ -87,7 +81,9 @@ const dpiStep = 50;
 			<!-- Sensor Settings -->
 			<div class="lg:col-span-1 space-y-6">
 				<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)]">
-					<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3 mb-6">
+					<h3
+						class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3 mb-6"
+					>
 						<Sliders class="w-6 h-6 text-shark-primary" /> SENSOR OPTIONS
 					</h3>
 
@@ -95,7 +91,9 @@ const dpiStep = 50;
 						<div class="flex items-center justify-between gap-4">
 							<div>
 								<div class="font-medium">Angle Snapping</div>
-								<div class="text-xs text-[var(--text-primary)] opacity-50">Corrects mouse movement to straight lines</div>
+								<div class="text-xs text-[var(--text-primary)] opacity-50">
+									Corrects mouse movement to straight lines
+								</div>
 							</div>
 							<button
 								@click="dpiConfig.angleSnap = !dpiConfig.angleSnap"
@@ -116,7 +114,9 @@ const dpiStep = 50;
 						<div class="flex items-center justify-between gap-4">
 							<div>
 								<div class="font-medium">Ripple Control</div>
-								<div class="text-xs text-[var(--text-primary)] opacity-50">Smooths out jitter at high DPI levels</div>
+								<div class="text-xs text-[var(--text-primary)] opacity-50">
+									Smooths out jitter at high DPI levels
+								</div>
 							</div>
 							<button
 								@click="dpiConfig.ripplerControl = !dpiConfig.ripplerControl"
@@ -137,7 +137,9 @@ const dpiStep = 50;
 				</div>
 
 				<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)]">
-					<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3 mb-4">
+					<h3
+						class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3 mb-4"
+					>
 						<Target class="w-6 h-6 text-shark-primary" /> ACTIVE STAGE
 					</h3>
 					<BaseSelect v-model.number="dpiConfig.activeStage">
@@ -151,7 +153,9 @@ const dpiStep = 50;
 
 			<!-- DPI Stages -->
 			<div class="lg:col-span-2 bg-[var(--bg-card)] p-8 rounded-2xl border border-[var(--border-card)]">
-			<h3 class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3">
+				<h3
+					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3"
+				>
 					<Zap class="w-6 h-6 text-shark-primary" />
 					SENSITIVITY STAGES (1-6)
 				</h3>
@@ -163,7 +167,9 @@ const dpiStep = 50;
 						class="p-4 rounded-xl bg-[var(--border-card)]/30 border border-[var(--border-card)] space-y-3"
 					>
 						<div class="flex justify-between items-center">
-							<label class="font-medium text-sm text-[var(--text-primary)] opacity-70 mb-2 flex items-center gap-3">
+							<label
+								class="font-medium text-sm text-[var(--text-primary)] opacity-70 mb-2 flex items-center gap-3"
+							>
 								<span
 									:class="[
 										'w-8 h-8 flex items-center justify-center rounded-full text-sm transition-all',

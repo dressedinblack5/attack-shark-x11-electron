@@ -19,9 +19,9 @@ body {
 }
 
 #app {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
 
 input[type='range']::-webkit-slider-thumb {
@@ -45,4 +45,3 @@ input[type='range']::-moz-range-thumb {
 	cursor: pointer;
 	box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
 }
-

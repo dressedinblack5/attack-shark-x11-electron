@@ -100,14 +100,18 @@ onMounted(async () => {
 	}
 });
 
-watch([activeTab, preferences], async () => {
-	const settings: any = await window.api.getSettings();
-	await window.api.saveSettings({
-		...settings,
-		lastTab: activeTab.value,
-		preferences: JSON.parse(JSON.stringify(toRaw(preferences)))
-	});
-}, { deep: true });
+watch(
+	[activeTab, preferences],
+	async () => {
+		const settings: any = await window.api.getSettings();
+		await window.api.saveSettings({
+			...settings,
+			lastTab: activeTab.value,
+			preferences: JSON.parse(JSON.stringify(toRaw(preferences))),
+		});
+	},
+	{ deep: true },
+);
 </script>
 
 <template>
@@ -252,7 +256,6 @@ watch([activeTab, preferences], async () => {
 				<div v-if="activeTab === 'device-info'">
 					<DeviceInfo :isConnected="isConnected" />
 				</div>
-
 			</div>
 		</main>
 	</div>

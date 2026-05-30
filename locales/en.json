@@ -8,7 +8,8 @@
 		"preferences": "Preferences",
 		"dpi": "DPI Config",
 		"macros": "Macros",
-		"deviceInfo": "Device Info"
+		"deviceInfo": "Device Info",
+		"deviceName": "Attack Shark X11"
 	},
 	"connection": {
 		"title": "Connect your X11",
@@ -16,6 +17,8 @@
 		"adapter": "2.4G Adapter",
 		"wired": "Wired Mode",
 		"forceRefresh": "Force App Refresh",
-		"disconnected": "Device Disconnected"
+		"disconnected": "Device Disconnected",
+		"wiredDisplay": "Wired",
+		"errorTip": "Tip: If device is busy, try unplugging and replugging it."
 	}
 }
