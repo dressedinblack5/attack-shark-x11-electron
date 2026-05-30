@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, reactive, watch } from 'vue';
+import { ref, onMounted, reactive, watch, toRaw } from 'vue';
 import { MousePointer2, Settings, Zap, Info, ShieldAlert, Keyboard } from 'lucide-vue-next';
 import UserPreferences from './components/UserPreferences.vue';
 import DpiSettings from './components/DpiSettings.vue';
@@ -105,7 +105,7 @@ watch([activeTab, preferences], async () => {
 	await window.api.saveSettings({
 		...settings,
 		lastTab: activeTab.value,
-		preferences: { ...preferences }
+		preferences: JSON.parse(JSON.stringify(toRaw(preferences)))
 	});
 }, { deep: true });
 </script>
