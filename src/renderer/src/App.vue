@@ -85,11 +85,21 @@ const updateBattery = async () => {
 	}
 };
 
-onMounted(() => {
+onMounted(async () => {
 	window.api.onBatteryUpdated((level: number) => {
 		console.log('Received battery update:', level);
 		batteryLevel.value = level;
 	});
+
+	const settings: any = await window.api.getSettings();
+	if (settings && settings.lastTab) {
+		activeTab.value = settings.lastTab;
+	}
+});
+
+watch(activeTab, async (newTab) => {
+	const settings: any = await window.api.getSettings();
+	await window.api.saveSettings({ ...settings, lastTab: newTab });
 });
 </script>
 
