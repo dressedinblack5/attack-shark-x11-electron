@@ -80,5 +80,23 @@
 			"staticDpi": "Static DPI",
 			"breathingDpi": "Breathing DPI"
 		}
+	},
+	"macros": {
+		"title": "Macro Selector",
+		"apply": "Apply Macro",
+		"applying": "Applying...",
+		"macroAssigned": "Macro assigned!",
+		"errorPrefix": "Error: ",
+		"configTitle": "Macro Configuration",
+		"targetButton": "Target Button",
+		"macroTemplate": "Macro Template",
+		"buttons": {
+			"left": "Left Button",
+			"right": "Right Button",
+			"middle": "Middle Button",
+			"forward": "Forward Button",
+			"backward": "Backward Button",
+			"dpi": "DPI Button"
+		}
 	}
 }

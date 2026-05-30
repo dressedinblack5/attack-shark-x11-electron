@@ -80,5 +80,23 @@
 			"staticDpi": "DPI Estático",
 			"breathingDpi": "Respiración DPI"
 		}
+	},
+	"macros": {
+		"title": "Selector de Macros",
+		"apply": "Aplicar Macro",
+		"applying": "Aplicando...",
+		"macroAssigned": "¡Macro asignado!",
+		"errorPrefix": "Error: ",
+		"configTitle": "Configuración de Macros",
+		"targetButton": "Botón Objetivo",
+		"macroTemplate": "Plantilla de Macro",
+		"buttons": {
+			"left": "Botón Izquierdo",
+			"right": "Botón Derecho",
+			"middle": "Botón Central",
+			"forward": "Botón Adelante",
+			"backward": "Botón Atrás",
+			"dpi": "Botón DPI"
+		}
 	}
 }
