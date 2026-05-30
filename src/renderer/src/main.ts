@@ -8,6 +8,7 @@ import es from '../../../locales/es.json';
 
 const i18n = createI18n({
 	legacy: false,
+	globalInjection: true, // Enable global $t usage
 	locale: 'en', // Default, will be updated via settings
 	messages: { en, es },
 });

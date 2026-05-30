@@ -1,5 +1,7 @@
 {
 	"dashboard": "Panel",
 	"settings": "Configuración",
-	"language": "Idioma"
+	"language": "Idioma",
+	"english": "Inglés",
+	"spanish": "Español"
 }

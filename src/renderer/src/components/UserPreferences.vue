@@ -174,8 +174,8 @@ async function applyPreferences(showUi = true) {
 			<div class="flex items-center gap-2">
 				<label class="text-sm text-[var(--text-primary)] opacity-70">{{ $t('language') }}</label>
 				<BaseSelect :modelValue="currentLanguage" @update:modelValue="updateLanguage" class="w-32">
-					<option value="en">English</option>
-					<option value="es">Español</option>
+					<option value="en">{{ $t('english') }}</option>
+					<option value="es">{{ $t('spanish') }}</option>
 				</BaseSelect>
 				<BaseInput v-model="newProfileName" placeholder="New profile name" class="w-48" />
 				<BaseButton @click="saveNewProfile"> Save </BaseButton>

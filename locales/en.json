@@ -1,5 +1,7 @@
 {
 	"dashboard": "Dashboard",
 	"settings": "Settings",
-	"language": "Language"
+	"language": "Language",
+	"english": "English",
+	"spanish": "Spanish"
 }
