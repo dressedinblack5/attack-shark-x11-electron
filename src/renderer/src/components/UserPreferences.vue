@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, computed } from 'vue';
 import { Palette, Cpu, Database, Settings } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 import BaseButton from './BaseButton.vue';
@@ -8,7 +8,7 @@ import BaseSelect from './BaseSelect.vue';
 import BaseSlider from './BaseSlider.vue';
 import { useDebounce } from '../composables/useDebounce';
 
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const currentLanguage = ref('en');
 
 onMounted(async () => {
@@ -58,15 +58,15 @@ const pollingRates = [
 	{ label: '1000Hz (eSports)', value: 1000 },
 ];
 
-const lightModes = [
-	{ label: 'Off', value: 0x00 },
-	{ label: 'Static', value: 0x10 },
-	{ label: 'Breathing', value: 0x20 },
-	{ label: 'Neon', value: 0x30 },
-	{ label: 'Color Breathing', value: 0x40 },
-	{ label: 'Static DPI', value: 0x50 },
-	{ label: 'Breathing DPI', value: 0x60 },
-];
+const lightModes = computed(() => [
+	{ label: t('preferences.lightModes.off'), value: 0x00 },
+	{ label: t('preferences.lightModes.static'), value: 0x10 },
+	{ label: t('preferences.lightModes.breathing'), value: 0x20 },
+	{ label: t('preferences.lightModes.neon'), value: 0x30 },
+	{ label: t('preferences.lightModes.colorBreathing'), value: 0x40 },
+	{ label: t('preferences.lightModes.staticDpi'), value: 0x50 },
+	{ label: t('preferences.lightModes.breathingDpi'), value: 0x60 },
+]);
 
 const keyResponses = Array.from({ length: 24 }, (_, i) => 4 + i * 2);
 
@@ -169,7 +169,7 @@ async function applyPreferences(showUi = true) {
 		<div class="flex items-center justify-between">
 			<h2 class="text-3xl font-bold flex items-center gap-3 text-[var(--text-primary)]">
 				<Settings class="w-8 h-8 text-shark-primary" />
-				User Preferences
+				{{ $t('preferences.title') }}
 			</h2>
 			<div class="flex items-center gap-2">
 				<label class="text-sm text-[var(--text-primary)] opacity-70">{{ $t('language') }}</label>
@@ -177,10 +177,14 @@ async function applyPreferences(showUi = true) {
 					<option value="en">{{ $t('english') }}</option>
 					<option value="es">{{ $t('spanish') }}</option>
 				</BaseSelect>
-				<BaseInput v-model="newProfileName" placeholder="New profile name" class="w-48" />
-				<BaseButton @click="saveNewProfile"> Save </BaseButton>
+				<BaseInput
+					v-model="newProfileName"
+					:placeholder="$t('preferences.newProfilePlaceholder')"
+					class="w-48"
+				/>
+				<BaseButton @click="saveNewProfile"> {{ $t('preferences.saveProfile') }} </BaseButton>
 				<BaseButton @click="applyPreferences" :disabled="!isConnected || isSaving" variant="green">
-					{{ isSaving ? 'Saving...' : 'Apply' }}
+					{{ isSaving ? $t('preferences.saving') : $t('preferences.applyAction') }}
 				</BaseButton>
 			</div>
 		</div>
@@ -190,7 +194,7 @@ async function applyPreferences(showUi = true) {
 				class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3"
 			>
 				<Database class="w-6 h-6 text-shark-primary" />
-				Stored Profiles
+				{{ $t('preferences.storedProfiles') }}
 			</h3>
 			<div class="flex flex-wrap gap-2">
 				<div
@@ -199,8 +203,12 @@ async function applyPreferences(showUi = true) {
 					class="bg-[var(--border-card)] p-2 rounded-lg flex items-center gap-2 border border-[var(--border-card)]"
 				>
 					<span>{{ profile }}</span>
-					<button @click="applyProfile(profile)" class="text-blue-400 hover:text-blue-300">Apply</button>
-					<button @click="deleteProfile(profile)" class="text-red-400 hover:text-red-300">Delete</button>
+					<button @click="applyProfile(profile)" class="text-blue-400 hover:text-blue-300">
+						{{ $t('preferences.applyAction') }}
+					</button>
+					<button @click="deleteProfile(profile)" class="text-red-400 hover:text-red-300">
+						{{ $t('preferences.deleteAction') }}
+					</button>
 				</div>
 			</div>
 		</div>
@@ -223,12 +231,14 @@ async function applyPreferences(showUi = true) {
 					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3"
 				>
 					<Palette class="w-6 h-6 text-shark-primary" />
-					LIGHTING
+					{{ $t('preferences.lighting') }}
 				</h3>
 
 				<div class="space-y-4">
 					<div>
-						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2">Effect Mode</label>
+						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2">{{
+							$t('preferences.effectMode')
+						}}</label>
 						<BaseSelect v-model="props.preferences.lightMode">
 							<option v-for="mode in lightModes" :key="mode.value" :value="mode.value">
 								{{ mode.label }}
@@ -238,21 +248,21 @@ async function applyPreferences(showUi = true) {
 
 					<div>
 						<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
-							>LED Speed ({{ props.preferences.ledSpeed }})</label
+							>{{ $t('preferences.ledSpeed') }} ({{ props.preferences.ledSpeed }})</label
 						>
 						<BaseSlider v-model="props.preferences.ledSpeed" min="1" max="5" step="1" />
 
 						<div class="flex justify-between text-xs text-[var(--text-primary)] opacity-50 mt-1">
-							<span>Slow</span>
-							<span>Fast</span>
+							<span>{{ $t('preferences.slow') }}</span>
+							<span>{{ $t('preferences.fast') }}</span>
 						</div>
 					</div>
 
 					<div class="grid grid-cols-4 gap-2">
 						<div class="col-span-1">
-							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
-								>Color</label
-							>
+							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">{{
+								$t('preferences.color')
+							}}</label>
 							<input
 								type="color"
 								:value="`#${props.preferences.rgb.r.toString(16).padStart(2, '0')}${props.preferences.rgb.g.toString(16).padStart(2, '0')}${props.preferences.rgb.b.toString(16).padStart(2, '0')}`"
@@ -269,21 +279,21 @@ async function applyPreferences(showUi = true) {
 							/>
 						</div>
 						<div class="col-span-1">
-							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
-								>Red</label
-							>
+							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">{{
+								$t('preferences.red')
+							}}</label>
 							<BaseInput type="number" v-model.number="props.preferences.rgb.r" min="0" max="255" />
 						</div>
 						<div class="col-span-1">
-							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
-								>Green</label
-							>
+							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">{{
+								$t('preferences.green')
+							}}</label>
 							<BaseInput type="number" v-model.number="props.preferences.rgb.g" min="0" max="255" />
 						</div>
 						<div class="col-span-1">
-							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
-								>Blue</label
-							>
+							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">{{
+								$t('preferences.blue')
+							}}</label>
 							<BaseInput type="number" v-model.number="props.preferences.rgb.b" min="0" max="255" />
 						</div>
 					</div>
@@ -295,12 +305,14 @@ async function applyPreferences(showUi = true) {
 					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3"
 				>
 					<Cpu class="w-6 h-6 text-shark-primary" />
-					DEVICE BEHAVIOR
+					{{ $t('preferences.deviceBehavior') }}
 				</h3>
 
 				<div class="space-y-4">
 					<div>
-						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2">Polling Rate</label>
+						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2">{{
+							$t('preferences.pollingRate')
+						}}</label>
 						<BaseSelect v-model="props.preferences.pollingRate">
 							<option v-for="rate in pollingRates" :key="rate.value" :value="rate.value">
 								{{ rate.label }}
@@ -310,7 +322,7 @@ async function applyPreferences(showUi = true) {
 
 					<div>
 						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2"
-							>Key Response ({{ props.preferences.keyResponse }}ms)</label
+							>{{ $t('preferences.keyResponse') }} ({{ props.preferences.keyResponse }}ms)</label
 						>
 						<BaseSelect v-model="props.preferences.keyResponse">
 							<option v-for="ms in keyResponses" :key="ms" :value="ms">{{ ms }}ms</option>
@@ -319,14 +331,14 @@ async function applyPreferences(showUi = true) {
 
 					<div>
 						<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
-							>Sleep Timer ({{ props.preferences.sleepTime }} min)</label
+							>{{ $t('preferences.sleepTimer') }} ({{ props.preferences.sleepTime }} min)</label
 						>
 						<BaseSlider v-model="props.preferences.sleepTime" min="0.5" max="30" step="0.5" />
 					</div>
 
 					<div>
 						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2"
-							>Deep Sleep Timer ({{ props.preferences.deepSleepTime }} min)</label
+							>{{ $t('preferences.deepSleepTimer') }} ({{ props.preferences.deepSleepTime }} min)</label
 						>
 						<BaseSlider v-model="props.preferences.deepSleepTime" min="1" max="60" step="1" />
 					</div>

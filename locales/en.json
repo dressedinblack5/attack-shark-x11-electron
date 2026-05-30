@@ -60,6 +60,16 @@
 		"pollingRate": "Polling Rate",
 		"keyResponse": "Key Response",
 		"sleepTimer": "Sleep Timer",
-		"deepSleepTimer": "Deep Sleep Timer"
+		"deepSleepTimer": "Deep Sleep Timer",
+		"newProfilePlaceholder": "New profile name",
+		"lightModes": {
+			"off": "Off",
+			"static": "Static",
+			"breathing": "Breathing",
+			"neon": "Neon",
+			"colorBreathing": "Color Breathing",
+			"staticDpi": "Static DPI",
+			"breathingDpi": "Breathing DPI"
+		}
 	}
 }

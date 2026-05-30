@@ -60,6 +60,16 @@
 		"pollingRate": "Tasa de Sondeo",
 		"keyResponse": "Respuesta de Tecla",
 		"sleepTimer": "Temporizador de Reposo",
-		"deepSleepTimer": "Temporizador de Reposo Profundo"
+		"deepSleepTimer": "Temporizador de Reposo Profundo",
+		"newProfilePlaceholder": "Nombre del nuevo perfil",
+		"lightModes": {
+			"off": "Apagado",
+			"static": "Estático",
+			"breathing": "Respiración",
+			"neon": "Neón",
+			"colorBreathing": "Respiración de color",
+			"staticDpi": "DPI Estático",
+			"breathingDpi": "DPI de Respiración"
+		}
 	}
 }
