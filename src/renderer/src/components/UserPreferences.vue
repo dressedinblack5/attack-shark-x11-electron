@@ -1,11 +1,30 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { Palette, Cpu, Database, Settings } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import BaseSelect from './BaseSelect.vue';
 import BaseSlider from './BaseSlider.vue';
 import { useDebounce } from '../composables/useDebounce';
+
+const { locale } = useI18n();
+const currentLanguage = ref('en');
+
+onMounted(async () => {
+	const settings: any = await window.api.getSettings();
+	if (settings && settings.language) {
+		currentLanguage.value = settings.language;
+		locale.value = settings.language;
+	}
+});
+
+const updateLanguage = async (lang: string) => {
+	currentLanguage.value = lang;
+	locale.value = lang;
+	const settings: any = await window.api.getSettings();
+	await window.api.saveSettings({ ...settings, language: lang });
+};
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -153,6 +172,11 @@ async function applyPreferences(showUi = true) {
 				User Preferences
 			</h2>
 			<div class="flex items-center gap-2">
+				<label class="text-sm text-[var(--text-primary)] opacity-70">{{ $t('language') }}</label>
+				<BaseSelect :modelValue="currentLanguage" @update:modelValue="updateLanguage" class="w-32">
+					<option value="en">English</option>
+					<option value="es">Español</option>
+				</BaseSelect>
 				<BaseInput v-model="newProfileName" placeholder="New profile name" class="w-48" />
 				<BaseButton @click="saveNewProfile"> Save </BaseButton>
 				<BaseButton
