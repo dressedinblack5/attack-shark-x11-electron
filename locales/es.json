@@ -61,7 +61,16 @@
 		"keyResponse": "Respuesta de Tecla",
 		"sleepTimer": "Temporizador de Reposo",
 		"deepSleepTimer": "Temporizador de Reposo Profundo",
-		"newProfilePlaceholder": "Nombre del nuevo perfil",
+		"newProfilePlaceholder": "Nuevo nombre de perfil",
+		"applyingSettings": "Aplicando ajustes...",
+		"settingsApplied": "¡Ajustes aplicados correctamente!",
+		"errorPrefix": "Error: ",
+		"pollingRates": {
+			"powerSaving": "125Hz (Ahorro de energía)",
+			"office": "250Hz (Oficina)",
+			"gaming": "500Hz (Juegos)",
+			"esports": "1000Hz (eSports)"
+		},
 		"lightModes": {
 			"off": "Apagado",
 			"static": "Estático",
@@ -69,7 +78,7 @@
 			"neon": "Neón",
 			"colorBreathing": "Respiración de color",
 			"staticDpi": "DPI Estático",
-			"breathingDpi": "DPI de Respiración"
+			"breathingDpi": "Respiración DPI"
 		}
 	}
 }

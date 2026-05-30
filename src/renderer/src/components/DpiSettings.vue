@@ -193,7 +193,9 @@ const dpiStep = 50;
 									:step="dpiStep"
 									class="w-24"
 								/>
-								<span class="text-xs text-[var(--text-primary)] opacity-50 font-medium">{{ $t('dpi.dpiUnit') }}</span>
+								<span class="text-xs text-[var(--text-primary)] opacity-50 font-medium">{{
+									$t('dpi.dpiUnit')
+								}}</span>
 							</div>
 						</div>
 

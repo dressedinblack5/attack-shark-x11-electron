@@ -62,6 +62,15 @@
 		"sleepTimer": "Sleep Timer",
 		"deepSleepTimer": "Deep Sleep Timer",
 		"newProfilePlaceholder": "New profile name",
+		"applyingSettings": "Applying settings...",
+		"settingsApplied": "Settings applied successfully!",
+		"errorPrefix": "Error: ",
+		"pollingRates": {
+			"powerSaving": "125Hz (Power Saving)",
+			"office": "250Hz (Office)",
+			"gaming": "500Hz (Gaming)",
+			"esports": "1000Hz (eSports)"
+		},
 		"lightModes": {
 			"off": "Off",
 			"static": "Static",
