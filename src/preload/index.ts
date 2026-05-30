@@ -18,6 +18,8 @@ const api = {
 	saveProfile: (name: string, data: unknown): Promise<void> => ipcRenderer.invoke('save-profile', name, data),
 	loadProfile: (name: string): Promise<unknown> => ipcRenderer.invoke('load-profile', name),
 	deleteProfile: (name: string): Promise<void> => ipcRenderer.invoke('delete-profile', name),
+	getSettings: (): Promise<unknown> => ipcRenderer.invoke('get-settings'),
+	saveSettings: (settings: unknown): Promise<void> => ipcRenderer.invoke('save-settings', settings),
 	getSummary: (): Promise<unknown> => ipcRenderer.invoke('get-summary'),
 	getDeviceInfo: (): Promise<unknown> => ipcRenderer.invoke('get-device-info'),
 	onBatteryUpdated: (callback: (level: number) => void): void => {
