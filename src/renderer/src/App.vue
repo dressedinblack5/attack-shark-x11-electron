@@ -5,6 +5,7 @@ import UserPreferences from './components/UserPreferences.vue';
 import DpiSettings from './components/DpiSettings.vue';
 import MacroSettings from './components/MacroSettings.vue';
 import DeviceInfo from './components/DeviceInfo.vue';
+import LanguageSelector from './components/LanguageSelector.vue';
 import packageInfo from '../../../package.json';
 
 const version = packageInfo.version;
@@ -172,7 +173,8 @@ watch(
 				</button>
 			</nav>
 
-			<div class="p-4 bg-slate-950 border-t border-slate-800">
+			<div class="p-4 bg-slate-950 border-t border-slate-800 space-y-2">
+				<LanguageSelector />
 				<div v-if="isConnected" class="flex items-center gap-3 text-sm">
 					<div class="relative w-8 h-4 border border-slate-600 rounded-sm p-0.5">
 						<div
