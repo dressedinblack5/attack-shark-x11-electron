@@ -8,23 +8,7 @@ import BaseSelect from './BaseSelect.vue';
 import BaseSlider from './BaseSlider.vue';
 import { useDebounce } from '../composables/useDebounce';
 
-const { locale, t } = useI18n();
-const currentLanguage = ref('en');
-
-onMounted(async () => {
-	const settings: any = await window.api.getSettings();
-	if (settings && settings.language) {
-		currentLanguage.value = settings.language;
-		locale.value = settings.language;
-	}
-});
-
-const updateLanguage = async (lang: string) => {
-	currentLanguage.value = lang;
-	locale.value = lang;
-	const settings: any = await window.api.getSettings();
-	await window.api.saveSettings({ ...settings, language: lang });
-};
+const { t } = useI18n();
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -172,11 +156,6 @@ async function applyPreferences(showUi = true) {
 				{{ $t('preferences.title') }}
 			</h2>
 			<div class="flex items-center gap-2">
-				<label class="text-sm text-[var(--text-primary)] opacity-70">{{ $t('language') }}</label>
-				<BaseSelect :modelValue="currentLanguage" @update:modelValue="updateLanguage" class="w-32">
-					<option value="en">{{ $t('english') }}</option>
-					<option value="es">{{ $t('spanish') }}</option>
-				</BaseSelect>
 				<BaseInput
 					v-model="newProfileName"
 					:placeholder="$t('preferences.newProfilePlaceholder')"
