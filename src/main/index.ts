@@ -8,7 +8,7 @@ import { sanitizePreferences } from './utils/preferenceSanitizer.js';
 import * as profileManager from './storage/profileManager.js';
 import * as settingsManager from './storage/settingsManager.js';
 
-import type { CustomMacroBuilderOptions } from './driver/protocols/CustomMacroBuilder.js';
+import { CustomMacroBuilder, type CustomMacroBuilderOptions } from './driver/protocols/CustomMacroBuilder.js';
 import type { UserPreferencesBuilderOptions } from './driver/protocols/UserPreferencesBuilder.js';
 import type { MacroBuilderOptions } from './driver/protocols/MacrosBuilder.js';
 
@@ -181,10 +181,9 @@ app.whenReady().then(() => {
 		return driver.setMacro(config);
 	});
 
-	ipcMain.handle('set-custom-macro', async (_, options: CustomMacroBuilderOptions) => {
+	ipcMain.handle('set-custom-macro', (_, options: CustomMacroBuilderOptions) => {
 		if (!driver) throw new Error('Device not connected');
 
-		const { CustomMacroBuilder } = await import('./driver/protocols/CustomMacroBuilder.js');
 		const builder = new CustomMacroBuilder(options);
 
 		return driver.setCustomMacro(builder);
