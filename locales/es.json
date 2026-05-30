@@ -38,5 +38,28 @@
 		"disconnected": "Dispositivo Desconectado",
 		"wiredDisplay": "Cable",
 		"errorTip": "Consejo: Si el dispositivo está ocupado, intenta desconectarlo y volver a conectarlo."
+	},
+	"preferences": {
+		"title": "Preferencias de Usuario",
+		"saveProfile": "Guardar",
+		"apply": "Aplicar",
+		"saving": "Guardando...",
+		"storedProfiles": "Perfiles Guardados",
+		"applyAction": "Aplicar",
+		"deleteAction": "Eliminar",
+		"lighting": "ILUMINACIÓN",
+		"effectMode": "Modo de Efecto",
+		"ledSpeed": "Velocidad LED",
+		"slow": "Lento",
+		"fast": "Rápido",
+		"color": "Color",
+		"red": "Rojo",
+		"green": "Verde",
+		"blue": "Azul",
+		"deviceBehavior": "COMPORTAMIENTO DEL DISPOSITIVO",
+		"pollingRate": "Tasa de Sondeo",
+		"keyResponse": "Respuesta de Tecla",
+		"sleepTimer": "Temporizador de Reposo",
+		"deepSleepTimer": "Temporizador de Reposo Profundo"
 	}
 }
