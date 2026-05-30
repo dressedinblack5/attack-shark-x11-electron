@@ -3,5 +3,19 @@
 	"settings": "Settings",
 	"language": "Language",
 	"english": "English",
-	"spanish": "Spanish"
+	"spanish": "Spanish",
+	"sidebar": {
+		"preferences": "Preferences",
+		"dpi": "DPI Config",
+		"macros": "Macros",
+		"deviceInfo": "Device Info"
+	},
+	"connection": {
+		"title": "Connect your X11",
+		"description": "Please select the connection mode to start configuring your device.",
+		"adapter": "2.4G Adapter",
+		"wired": "Wired Mode",
+		"forceRefresh": "Force App Refresh",
+		"disconnected": "Device Disconnected"
+	}
 }
