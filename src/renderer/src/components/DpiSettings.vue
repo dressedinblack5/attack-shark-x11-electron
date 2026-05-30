@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Zap, Target, Sliders } from 'lucide-vue-next';
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import BaseSelect from './BaseSelect.vue';
 import BaseSlider from './BaseSlider.vue';
+
+const { t } = useI18n();
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -24,7 +27,7 @@ const applyDpi = async () => {
 	if (!props.isConnected) return;
 
 	isSaving.value = true;
-	statusMessage.value = 'Updating DPI configuration...';
+	statusMessage.value = t('dpi.updating');
 
 	try {
 		// Ensure we send a plain object and valid stage index
@@ -36,12 +39,12 @@ const applyDpi = async () => {
 		};
 
 		await window.api.setDpi(config);
-		statusMessage.value = 'DPI settings applied!';
+		statusMessage.value = t('dpi.applied');
 		setTimeout(() => {
 			statusMessage.value = '';
 		}, 3000);
 	} catch (err: any) {
-		statusMessage.value = `Error: ${err.message}`;
+		statusMessage.value = `${t('dpi.error')}: ${err.message}`;
 	} finally {
 		isSaving.value = false;
 	}
@@ -58,10 +61,10 @@ const dpiStep = 50;
 		<div class="flex items-center justify-between">
 			<h2 class="text-3xl font-bold flex items-center gap-3 text-[var(--text-primary)]">
 				<Target class="w-8 h-8 text-shark-primary" />
-				DPI Configuration
+				{{ $t('dpi.title') }}
 			</h2>
 			<BaseButton @click="applyDpi" :disabled="!isConnected || isSaving" variant="green">
-				{{ isSaving ? 'Applying...' : 'Save DPI' }}
+				{{ isSaving ? $t('dpi.applying') : $t('dpi.save') }}
 			</BaseButton>
 		</div>
 
@@ -69,7 +72,7 @@ const dpiStep = 50;
 			v-if="statusMessage"
 			:class="[
 				'p-3 rounded-lg text-sm border',
-				statusMessage.includes('Error')
+				statusMessage.includes($t('dpi.error'))
 					? 'bg-red-500/10 border-red-500/20 text-red-400'
 					: 'bg-shark-accent/10 border-shark-accent/20 text-shark-accent',
 			]"
@@ -84,15 +87,15 @@ const dpiStep = 50;
 					<h3
 						class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3 mb-6"
 					>
-						<Sliders class="w-6 h-6 text-shark-primary" /> SENSOR OPTIONS
+						<Sliders class="w-6 h-6 text-shark-primary" /> {{ $t('dpi.sensorOptions') }}
 					</h3>
 
 					<div class="space-y-6">
 						<div class="flex items-center justify-between gap-4">
 							<div>
-								<div class="font-medium">Angle Snapping</div>
+								<div class="font-medium">{{ $t('dpi.angleSnap') }}</div>
 								<div class="text-xs text-[var(--text-primary)] opacity-50">
-									Corrects mouse movement to straight lines
+									{{ $t('dpi.angleSnapDesc') }}
 								</div>
 							</div>
 							<button
@@ -113,9 +116,9 @@ const dpiStep = 50;
 
 						<div class="flex items-center justify-between gap-4">
 							<div>
-								<div class="font-medium">Ripple Control</div>
+								<div class="font-medium">{{ $t('dpi.rippleControl') }}</div>
 								<div class="text-xs text-[var(--text-primary)] opacity-50">
-									Smooths out jitter at high DPI levels
+									{{ $t('dpi.rippleControlDesc') }}
 								</div>
 							</div>
 							<button
@@ -140,13 +143,13 @@ const dpiStep = 50;
 					<h3
 						class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3 mb-4"
 					>
-						<Target class="w-6 h-6 text-shark-primary" /> ACTIVE STAGE
+						<Target class="w-6 h-6 text-shark-primary" /> {{ $t('dpi.activeStage') }}
 					</h3>
 					<BaseSelect v-model.number="dpiConfig.activeStage">
-						<option v-for="i in 6" :key="i" :value="i">Stage {{ i }}</option>
+						<option v-for="i in 6" :key="i" :value="i">{{ $t('dpi.stage') }} {{ i }}</option>
 					</BaseSelect>
 					<p class="text-xs text-[var(--text-primary)] opacity-50 mt-4 text-center">
-						Selected stage is active immediately after saving.
+						{{ $t('dpi.activeImmediately') }}
 					</p>
 				</div>
 			</div>
@@ -157,7 +160,7 @@ const dpiStep = 50;
 					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3"
 				>
 					<Zap class="w-6 h-6 text-shark-primary" />
-					SENSITIVITY STAGES (1-6)
+					{{ $t('dpi.sensitivityStages') }}
 				</h3>
 
 				<div class="mt-6 space-y-3 overflow-y-auto pr-2" style="min-height: 400px">
@@ -190,7 +193,7 @@ const dpiStep = 50;
 									:step="dpiStep"
 									class="w-24"
 								/>
-								<span class="text-xs text-[var(--text-primary)] opacity-50 font-medium">DPI</span>
+								<span class="text-xs text-[var(--text-primary)] opacity-50 font-medium">{{ $t('dpi.dpiUnit') }}</span>
 							</div>
 						</div>
 
