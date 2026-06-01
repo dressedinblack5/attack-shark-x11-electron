@@ -22,37 +22,6 @@ This repository is an enhanced version of the original driver created by [Haruka
 - ✅ **Battery Status**: Real-time battery monitoring.
 - ✅ **Cross-platform**: Works on Linux, macOS, and Windows.
 
-## Quick Start
-
-```typescript
-import { AttackSharkX11, ConnectionMode, Rate } from 'attack-shark-x11-driver';
-
-const driver = new AttackSharkX11({
-	connectionMode: ConnectionMode.Adapter, // or Wired
-	delayMs: 300, // Recommended safe delay between packets
-});
-
-try {
-	await driver.open();
-
-	// Set Polling Rate to 1000Hz (eSports)
-	await driver.setPollingRate(Rate.eSports);
-
-	// Configure DPI Stages
-	await driver.setDpi({
-		dpiValues: [800, 1600, 2400, 3200, 5000, 22000],
-		activeStage: 2,
-	});
-
-	// Get Battery Level
-	const battery = await driver.getBatteryLevel();
-	console.log(`Battery: ${battery}%`);
-} catch (error) {
-	console.error('Driver error:', error);
-} finally {
-	await driver.close();
-}
-```
 
 ## Linux Setup (udev)
 
