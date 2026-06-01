@@ -43,8 +43,18 @@ To access the device without root permissions on Linux, you need to create an ud
     sudo udevadm trigger
     ```
 
-## Installation from Binaries
+## Installation
 
+You can install this application using pre-built binaries or the AUR.
+
+### AUR Installation (Arch Linux)
+If you are using Arch Linux or an Arch-based distribution, you can install the package directly from the AUR using an AUR helper like `yay`:
+
+```bash
+yay -S attack-shark-x11-electron
+```
+
+### Installation from Binaries
 You can find pre-built binaries in the [Releases](https://github.com/dressedinblack5/attack-shark-x11-electron/releases) section.
 
 ### AppImage (Portable)
