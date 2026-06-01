@@ -13,13 +13,14 @@ This repository is an enhanced version of the original driver created by [Haruka
 ## Features Added
 - 🖥️ **Modern User Interface**: Intuitive management of device settings.
 
-## Original Features
-- ✅ **DPI Configuration**: Set stages and active stage.
+## Core Features
+- ✅ **DPI Configuration**: Customizable stages and active stage selection.
 - ✅ **Button Remapping**: Fully customizable button behavior.
-- ✅ **Macros**: Support for custom macros and templates.
-- ✅ **Lighting Control**: Change modes and speeds.
-- ✅ **Polling Rate**: Support for 125 Hz to 1000 Hz.
+- ✅ **Macros**: Support for custom macros and templates with timing control.
+- ✅ **Lighting Control**: Adjustable modes, speeds, and colors.
+- ✅ **Polling Rate**: Configurable from 125 Hz to 1000 Hz.
 - ✅ **Battery Status**: Real-time battery monitoring.
+- ✅ **Device Reset**: Ability to reset internal device state.
 - ✅ **Cross-platform**: Works on Linux, macOS, and Windows.
 
 
@@ -47,21 +48,21 @@ To access the device without root permissions on Linux, you need to create an ud
 You can find pre-built binaries in the [Releases](https://github.com/dressedinblack5/attack-shark-x11-electron/releases) section.
 
 ### AppImage (Portable)
-1. Download the `Attack Shark X11 Driver-1.0.1.AppImage` file.
+1. Download the `attack-shark-x11-driver-1.2.0.AppImage` file.
 2. Make it executable:
    ```bash
-   chmod +x attack-shark-x11-driver_1.0.1.AppImage
+   chmod +x attack-shark-x11-driver-1.2.0.AppImage
    ```
 3. Run it:
    ```bash
-   ./attack-shark-x11-driver_1.0.1.AppImage
+   ./attack-shark-x11-driver-1.2.0.AppImage
    ```
 
 ### .deb Package (Debian/Ubuntu/Pop!_OS)
-1. Download the `attack-shark-x11-driver_1.0.1_amd64.deb` file.
+1. Download the `attack-shark-x11-driver_1.2.0_amd64.deb` file.
 2. Install it using `apt`:
    ```bash
-   sudo apt install ./attack-shark-x11-driver_1.0.1_amd64.deb
+   sudo apt install ./attack-shark-x11-driver_1.2.0_amd64.deb
    ```
 
 ## Building from Source
