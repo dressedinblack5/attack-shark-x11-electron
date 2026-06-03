@@ -44,6 +44,3 @@ package-lock.json
 
 .gemini/
 gha-creds-*.json
-aur/*.tar.gz
-aur/*.desktop*
-aur/
