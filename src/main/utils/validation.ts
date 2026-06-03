@@ -1,5 +1,4 @@
-import type { StageIndex } from '../driver/protocols/DpiBuilder.js';
-import { DpiBuilder } from '../driver/protocols/DpiBuilder.js';
+import { DpiBuilder, type StageIndex } from '../driver/protocols/DpiBuilder.js';
 import type { AppSettings } from '../storage/settingsManager.js'; // Import AppSettings
 
 export const validateDpiConfig = (config: unknown): AppSettings['dpiConfig'] => {
@@ -9,21 +8,17 @@ export const validateDpiConfig = (config: unknown): AppSettings['dpiConfig'] => 
 	}
 
 	const configObj = config as Record<string, unknown>;
-	const validated: AppSettings['dpiConfig'] = { ...DpiBuilder.DEFAULT_OPTIONS } as AppSettings['dpiConfig']; // Start with defaults, assert type
+	const validated: AppSettings['dpiConfig'] = { ...DpiBuilder.DEFAULT_OPTIONS } as AppSettings['dpiConfig'];
 
 	if (configObj['angleSnap'] !== undefined) {
 		if (typeof configObj['angleSnap'] !== 'boolean') throw new Error('Invalid angleSnap: must be a boolean');
 		validated.angleSnap = configObj['angleSnap'];
-	} else {
-		validated.angleSnap = DpiBuilder.DEFAULT_OPTIONS.angleSnap!; // Non-null assertion
 	}
 
 	if (configObj['ripplerControl'] !== undefined) {
 		if (typeof configObj['ripplerControl'] !== 'boolean')
 			throw new Error('Invalid ripplerControl: must be a boolean');
 		validated.ripplerControl = configObj['ripplerControl'];
-	} else {
-		validated.ripplerControl = DpiBuilder.DEFAULT_OPTIONS.ripplerControl!; // Non-null assertion
 	}
 
 	if (configObj['dpiValues'] !== undefined) {
@@ -36,8 +31,6 @@ export const validateDpiConfig = (config: unknown): AppSettings['dpiConfig'] => 
 			throw new Error('Invalid dpiValues: must be an array of 6 positive numbers');
 		}
 		validated.dpiValues = dpiValues as [number, number, number, number, number, number];
-	} else {
-		validated.dpiValues = DpiBuilder.DEFAULT_OPTIONS.dpiValues!; // Non-null assertion
 	}
 
 	if (configObj['activeStage'] !== undefined) {
@@ -46,8 +39,6 @@ export const validateDpiConfig = (config: unknown): AppSettings['dpiConfig'] => 
 			throw new Error('Invalid activeStage: must be between 1 and 6');
 		}
 		validated.activeStage = activeStage as StageIndex;
-	} else {
-		validated.activeStage = DpiBuilder.DEFAULT_OPTIONS.activeStage!; // Non-null assertion
 	}
 
 	return validated;
