@@ -109,10 +109,16 @@ app.whenReady().then(() => {
 		}
 	});
 
-	ipcMain.handle('set-dpi', (_, config: unknown) => {
+        ipcMain.handle('set-dpi', async (_, config: unknown) => {
 		if (!driver) throw new Error('Device not connected');
 		const validated = validateDpiConfig(config);
-		return driver.setDpi(validated);
+		const result = await driver.setDpi(validated);
+
+		// Persist DPI config
+		const settings = await settingsManager.getSettings();
+		await settingsManager.saveSettings({ ...settings, dpiConfig: validated as any });
+
+		return result;
 	});
 
 	ipcMain.handle('set-polling-rate', (_, rate: number) => {

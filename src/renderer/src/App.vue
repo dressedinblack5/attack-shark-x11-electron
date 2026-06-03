@@ -11,7 +11,7 @@ import packageInfo from '../../../package.json';
 const version = packageInfo.version;
 const isConnected = ref(false);
 const batteryLevel = ref(-1);
-const preferences = reactive({
+const preferences = ref({
 	lightMode: 0x20, // Breathing
 	ledSpeed: 2,
 	keyResponse: 4,
@@ -96,19 +96,19 @@ onMounted(async () => {
 	if (settings) {
 		if (settings.lastTab) activeTab.value = settings.lastTab;
 		if (settings.preferences) {
-			Object.assign(preferences, settings.preferences);
+			Object.assign(preferences.value, settings.preferences);
 		}
 	}
 });
 
 watch(
-	[activeTab, preferences],
+	() => [activeTab.value, preferences.value],
 	async () => {
 		const settings: any = await window.api.getSettings();
 		await window.api.saveSettings({
 			...settings,
 			lastTab: activeTab.value,
-			preferences: JSON.parse(JSON.stringify(toRaw(preferences))),
+			preferences: JSON.parse(JSON.stringify(toRaw(preferences.value))),
 		});
 	},
 	{ deep: true },
@@ -241,7 +241,7 @@ watch(
 			<div v-else>
 				<!-- Preferences Content -->
 				<div v-if="activeTab === 'preferences'">
-					<UserPreferences :preferences="preferences" :isConnected="isConnected" />
+					<UserPreferences v-model="preferences" :isConnected="isConnected" />
 				</div>
 
 				<!-- DPI Content -->

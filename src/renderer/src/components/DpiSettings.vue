@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Zap, Target, Sliders } from 'lucide-vue-next';
 import BaseButton from './BaseButton.vue';
@@ -20,6 +20,12 @@ const dpiConfig = reactive({
 	dpiValues: [800, 1600, 2400, 3200, 5000, 22000] as [number, number, number, number, number, number],
 });
 
+onMounted(async () => {
+	const settings: any = await window.api.getSettings();
+	if (settings && settings.dpiConfig) {
+		Object.assign(dpiConfig, settings.dpiConfig);
+	}
+});
 const statusMessage = ref('');
 const isSaving = ref(false);
 

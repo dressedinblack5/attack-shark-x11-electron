@@ -24,15 +24,26 @@ const { t } = useI18n();
 
 const props = defineProps<{
 	isConnected: boolean;
-	preferences: UserPreferences;
+	modelValue: UserPreferences;
 }>();
 
-const form = reactive<UserPreferences>({ ...props.preferences });
+const emit = defineEmits(['update:modelValue']);
+
+const form = reactive<UserPreferences>({ ...props.modelValue });
 
 watch(
-	() => props.preferences,
+	() => props.modelValue,
 	(newVal) => {
 		Object.assign(form, newVal);
+	},
+	{ deep: true },
+);
+
+// Watch form changes to sync with parent
+watch(
+	form,
+	(newVal) => {
+		emit('update:modelValue', { ...newVal });
 	},
 	{ deep: true },
 );
@@ -40,14 +51,6 @@ watch(
 const debouncedApplyPreferences = useDebounce(async () => {
 	await applyPreferences(false);
 }, 300);
-
-watch(
-	() => props.preferences,
-	() => {
-		debouncedApplyPreferences();
-	},
-	{ deep: true },
-);
 
 const pollingRates = [
 	{ label: '125Hz (Power Saving)', value: 125 },
