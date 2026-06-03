@@ -2,7 +2,8 @@ import type { StageIndex } from '../driver/protocols/DpiBuilder.js';
 import { DpiBuilder } from '../driver/protocols/DpiBuilder.js';
 import type { AppSettings } from '../storage/settingsManager.js'; // Import AppSettings
 
-export const validateDpiConfig = (config: unknown): AppSettings['dpiConfig'] => { // Change return type
+export const validateDpiConfig = (config: unknown): AppSettings['dpiConfig'] => {
+	// Change return type
 	if (typeof config !== 'object' || config === null) {
 		throw new Error('Invalid DPI configuration: must be an object');
 	}
