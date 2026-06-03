@@ -1,6 +1,6 @@
 {
 	"name": "attack-shark-x11-driver",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "A TypeScript driver for the Attack Shark X11 gaming mouse, supporting Linux and other platforms via Node.js/Bun and USB HID.",
 	"author": {
 		"name": "dressedinblack5",
