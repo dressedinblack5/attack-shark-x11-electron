@@ -1,3 +1,4 @@
+import type { StageIndex } from '../driver/protocols/DpiBuilder.js';
 import fs from 'fs/promises';
 import path from 'path';
 import { getUserDataPath } from '../utils/platformUtils';
@@ -17,6 +18,12 @@ export interface AppSettings {
 		deepSleepTime: number;
 		rgb: { r: number; g: number; b: number };
 	};
+	dpiConfig: {
+		activeStage: StageIndex;
+		angleSnap: boolean;
+		ripplerControl: boolean;
+		dpiValues: [number, number, number, number, number, number];
+	};
 }
 
 const DEFAULT_SETTINGS: AppSettings = {
@@ -31,6 +38,12 @@ const DEFAULT_SETTINGS: AppSettings = {
 		sleepTime: 2,
 		deepSleepTime: 10,
 		rgb: { r: 255, g: 0, b: 255 },
+	},
+	dpiConfig: {
+		activeStage: 2,
+		angleSnap: false,
+		ripplerControl: true,
+		dpiValues: [800, 1600, 2400, 3200, 5000, 22000],
 	},
 };
 
