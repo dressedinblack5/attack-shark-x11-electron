@@ -1,6 +1,6 @@
 # Maintainer: YourName <your-email@example.com>
 pkgname=attack-shark-x11-electron
-pkgver=1.2.0
+pkgver=1.2.1
 pkgrel=1
 pkgdesc="Cross-platform driver for the Attack Shark X11 gaming mouse with Electron GUI"
 arch=('x86_64')
@@ -9,7 +9,7 @@ license=('MIT')
 depends=('electron' 'libusb')
 makedepends=('npm' 'typescript')
 options=('!strip')
-source=("-.tar.gz::$url/archive/refs/tags/$pkgver.tar.gz" "attack-shark-x11-driver.desktop")
+source=("-.tar.gz::$url/archive/refs/tags/$pkgver.tar.gz" "attack-shark-x11-electron.desktop")
 sha256sums=('SKIP' 'SKIP')
 
 prepare() {
@@ -44,7 +44,7 @@ package() {
   install -Dm644 "$srcdir/$pkgname-$pkgver/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   # Install desktop entry
-  install -Dm644 "$srcdir/attack-shark-x11-driver.desktop" "$pkgdir/usr/share/applications/attack-shark-x11-driver.desktop"
+  install -Dm644 "$srcdir/attack-shark-x11-electron.desktop" "$pkgdir/usr/share/applications/attack-shark-x11-electron.desktop"
 
   # Install icon (assuming cs-mouse.svg is the icon)
   install -Dm644 "$srcdir/$pkgname-$pkgver/assets/cs-mouse.svg" "$pkgdir/usr/share/icons/hicolor/scalable/apps/attack-shark-x11.svg"
