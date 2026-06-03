@@ -68,6 +68,7 @@
 	"dependencies": {
 		"@electron-toolkit/preload": "^3.0.2",
 		"@electron-toolkit/utils": "^4.0.0",
+		"electron": "^28.0.0",
 		"lucide-vue-next": "^1.0.0",
 		"pinia": "^3.0.4",
 		"pino": "10.3.1",
@@ -82,7 +83,6 @@
 		"@types/node": "^25.9.1",
 		"@vitejs/plugin-vue": "^6.0.7",
 		"autoprefixer": "^10.5.0",
-		"electron": "^42.3.0",
 		"electron-builder": "^26.8.1",
 		"electron-vite": "^5.0.0",
 		"eslint": "^10.4.1",
