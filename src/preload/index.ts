@@ -38,8 +38,6 @@ if (process.contextIsolated) {
 		console.error(error);
 	}
 } else {
-	// @ts-expect-error (define in d.ts)
 	window.electron = electronAPI;
-	// @ts-expect-error (define in d.ts)
 	window.api = api;
 }
