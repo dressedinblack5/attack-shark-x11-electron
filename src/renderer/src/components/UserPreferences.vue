@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, computed } from 'vue';
+import { ref, watch, computed, reactive } from 'vue';
 import { Palette, Cpu, Database, Settings } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 import BaseButton from './BaseButton.vue';
@@ -10,20 +10,32 @@ import Card from './Card.vue';
 import AppInput from './AppInput.vue';
 import { useDebounce } from '../composables/useDebounce';
 
+export interface UserPreferences {
+	lightMode: number;
+	ledSpeed: number;
+	keyResponse: number;
+	pollingRate: number;
+	sleepTime: number;
+	deepSleepTime: number;
+	rgb: { r: number; g: number; b: number };
+}
+
 const { t } = useI18n();
 
 const props = defineProps<{
 	isConnected: boolean;
-	preferences: {
-		lightMode: number;
-		ledSpeed: number;
-		keyResponse: number;
-		pollingRate: number;
-		sleepTime: number;
-		deepSleepTime: number;
-		rgb: { r: number; g: number; b: number };
-	};
+	preferences: UserPreferences;
 }>();
+
+const form = reactive<UserPreferences>({ ...props.preferences });
+
+watch(
+	() => props.preferences,
+	(newVal) => {
+		Object.assign(form, newVal);
+	},
+	{ deep: true },
+);
 
 const debouncedApplyPreferences = useDebounce(async () => {
 	await applyPreferences(false);
@@ -43,6 +55,8 @@ const pollingRates = [
 	{ label: '500Hz (Gaming)', value: 500 },
 	{ label: '1000Hz (eSports)', value: 1000 },
 ];
+
+const rgb = computed(() => form.rgb);
 
 const lightModes = computed(() => [
 	{ label: t('preferences.lightModes.off'), value: 0x00 },
@@ -68,13 +82,13 @@ const loadProfilesList = async () => {
 const saveNewProfile = async () => {
 	if (!newProfileName.value) return;
 	const plainPrefs = {
-		lightMode: props.preferences.lightMode,
-		ledSpeed: props.preferences.ledSpeed,
-		keyResponse: props.preferences.keyResponse,
-		pollingRate: props.preferences.pollingRate,
-		sleepTime: props.preferences.sleepTime,
-		deepSleepTime: props.preferences.deepSleepTime,
-		rgb: { ...props.preferences.rgb },
+		lightMode: form.lightMode,
+		ledSpeed: form.ledSpeed,
+		keyResponse: form.keyResponse,
+		pollingRate: form.pollingRate,
+		sleepTime: form.sleepTime,
+		deepSleepTime: form.deepSleepTime,
+		rgb: { ...form.rgb },
 	};
 	await window.api.saveProfile(newProfileName.value, plainPrefs);
 	newProfileName.value = '';
@@ -84,16 +98,8 @@ const saveNewProfile = async () => {
 const applyProfile = async (name: string) => {
 	const data = await window.api.loadProfile(name);
 	if (data) {
-		props.preferences.lightMode = data.lightMode;
-		props.preferences.ledSpeed = data.ledSpeed;
-		props.preferences.keyResponse = data.keyResponse;
-		props.preferences.pollingRate = data.pollingRate;
-		props.preferences.sleepTime = data.sleepTime;
-		props.preferences.deepSleepTime = data.deepSleepTime;
-		props.preferences.rgb.r = data.rgb.r;
-		props.preferences.rgb.g = data.rgb.g;
-		props.preferences.rgb.b = data.rgb.b;
-
+		const prefs = data as UserPreferences;
+		Object.assign(form, prefs);
 		await applyPreferences();
 	}
 };
@@ -115,20 +121,20 @@ async function applyPreferences(showUi = true) {
 
 	try {
 		const plainPrefs = {
-			lightMode: props.preferences.lightMode,
-			ledSpeed: props.preferences.ledSpeed,
-			keyResponse: props.preferences.keyResponse,
-			sleepTime: props.preferences.sleepTime,
-			deepSleepTime: props.preferences.deepSleepTime,
+			lightMode: form.lightMode,
+			ledSpeed: form.ledSpeed,
+			keyResponse: form.keyResponse,
+			sleepTime: form.sleepTime,
+			deepSleepTime: form.deepSleepTime,
 			rgb: {
-				r: props.preferences.rgb.r,
-				g: props.preferences.rgb.g,
-				b: props.preferences.rgb.b,
+				r: form.rgb.r,
+				g: form.rgb.g,
+				b: form.rgb.b,
 			},
 		};
 
 		await window.api.setUserPreferences(plainPrefs);
-		await window.api.setPollingRate(props.preferences.pollingRate);
+		await window.api.setPollingRate(form.pollingRate);
 
 		if (showUi) {
 			statusMessage.value = 'Settings applied successfully!';
@@ -184,7 +190,7 @@ async function applyPreferences(showUi = true) {
 					class="bg-[var(--bg-primary)] p-2 rounded-lg flex items-center gap-2 border border-[var(--border-card)]"
 				>
 					<span>{{ profile }}</span>
-					<button @click="applyProfile(profile)" class="text-[var(--color-accent)] hover:brightness-125">
+					<button @click="applyProfile(profile)" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm transition-all">
 						{{ $t('preferences.applyAction') }}
 					</button>
 					<button @click="deleteProfile(profile)" class="text-red-400 hover:text-red-300">
@@ -220,7 +226,7 @@ async function applyPreferences(showUi = true) {
 						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2">{{
 							$t('preferences.effectMode')
 						}}</label>
-						<BaseSelect v-model="props.preferences.lightMode">
+						<BaseSelect v-model="form.lightMode">
 							<option v-for="mode in lightModes" :key="mode.value" :value="mode.value">
 								{{ mode.label }}
 							</option>
@@ -229,9 +235,9 @@ async function applyPreferences(showUi = true) {
 
 					<div>
 						<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
-							>{{ $t('preferences.ledSpeed') }} ({{ props.preferences.ledSpeed }})</label
+							>{{ $t('preferences.ledSpeed') }} ({{ form.ledSpeed }})</label
 						>
-						<BaseSlider v-model="props.preferences.ledSpeed" min="1" max="5" step="1" />
+						<BaseSlider v-model="form.ledSpeed" min="1" max="5" step="1" />
 
 						<div class="flex justify-between text-xs text-[var(--text-primary)] opacity-50 mt-1">
 							<span>{{ $t('preferences.slow') }}</span>
@@ -246,14 +252,14 @@ async function applyPreferences(showUi = true) {
 							}}</label>
 							<input
 								type="color"
-								:value="`#${props.preferences.rgb.r.toString(16).padStart(2, '0')}${props.preferences.rgb.g.toString(16).padStart(2, '0')}${props.preferences.rgb.b.toString(16).padStart(2, '0')}`"
+								:value="`#${rgb.r.toString(16).padStart(2, '0')}${rgb.g.toString(16).padStart(2, '0')}${rgb.b.toString(16).padStart(2, '0')}`"
 								@input="
 									(e: Event) => {
 										const target = e.target as HTMLInputElement;
 										const hex = target.value;
-										props.preferences.rgb.r = parseInt(hex.slice(1, 3), 16);
-										props.preferences.rgb.g = parseInt(hex.slice(3, 5), 16);
-										props.preferences.rgb.b = parseInt(hex.slice(5, 7), 16);
+										form.rgb.r = parseInt(hex.slice(1, 3), 16);
+										form.rgb.g = parseInt(hex.slice(3, 5), 16);
+										form.rgb.b = parseInt(hex.slice(5, 7), 16);
 									}
 								"
 								class="w-full h-[46px] bg-[var(--bg-primary)] border border-[var(--border-card)] rounded-lg cursor-pointer p-1 transition-all"
@@ -263,19 +269,19 @@ async function applyPreferences(showUi = true) {
 							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">{{
 								$t('preferences.red')
 							}}</label>
-							<AppInput type="number" v-model.number="props.preferences.rgb.r" min="0" max="255" />
+							<AppInput type="number" v-model.number="rgb.r" min="0" max="255" />
 						</div>
 						<div class="col-span-1">
 							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">{{
 								$t('preferences.green')
 							}}</label>
-							<AppInput type="number" v-model.number="props.preferences.rgb.g" min="0" max="255" />
+							<AppInput type="number" v-model.number="rgb.g" min="0" max="255" />
 						</div>
 						<div class="col-span-1">
 							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">{{
 								$t('preferences.blue')
 							}}</label>
-							<AppInput type="number" v-model.number="props.preferences.rgb.b" min="0" max="255" />
+							<AppInput type="number" v-model.number="rgb.b" min="0" max="255" />
 						</div>
 					</div>
 				</div>
@@ -294,7 +300,7 @@ async function applyPreferences(showUi = true) {
 						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2">{{
 							$t('preferences.pollingRate')
 						}}</label>
-						<BaseSelect v-model="props.preferences.pollingRate">
+						<BaseSelect v-model="form.pollingRate">
 							<option v-for="rate in pollingRates" :key="rate.value" :value="rate.value">
 								{{ rate.label }}
 							</option>
@@ -303,29 +309,27 @@ async function applyPreferences(showUi = true) {
 
 					<div>
 						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2"
-							>{{ $t('preferences.keyResponse') }} ({{ props.preferences.keyResponse }}ms)</label
+							>{{ $t('preferences.keyResponse') }} ({{ form.keyResponse }}ms)</label
 						>
-						<BaseSelect v-model="props.preferences.keyResponse">
+						<BaseSelect v-model="form.keyResponse">
 							<option v-for="ms in keyResponses" :key="ms" :value="ms">{{ ms }}ms</option>
 						</BaseSelect>
 					</div>
 
 					<div>
 						<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2"
-							>{{ $t('preferences.sleepTimer') }} ({{ props.preferences.sleepTime }} min)</label
+							>{{ $t('preferences.sleepTimer') }} ({{ form.sleepTime }} min)</label
 						>
-						<BaseSlider v-model="props.preferences.sleepTime" min="0.5" max="30" step="0.5" />
+						<BaseSlider v-model="form.sleepTime" min="0.5" max="30" step="0.5" />
 					</div>
-
 					<div>
 						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2"
-							>{{ $t('preferences.deepSleepTimer') }} ({{ props.preferences.deepSleepTime }} min)</label
+							>{{ $t('preferences.deepSleepTimer') }} ({{ form.deepSleepTime }} min)</label
 						>
-						<BaseSlider v-model="props.preferences.deepSleepTime" min="1" max="60" step="1" />
+						<BaseSlider v-model="form.deepSleepTime" min="1" max="60" step="1" />
 					</div>
 				</div>
 			</Card>
 		</div>
 	</div>
 </template>
-
