@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { getUserDataPath } from '../utils/platformUtils';
 
-const getSettingsPath = () => path.join(getUserDataPath(), 'settings.json');
+const getSettingsPath = (): string => path.join(getUserDataPath(), 'settings.json');
 
 export interface AppSettings {
 	lastTab: string;

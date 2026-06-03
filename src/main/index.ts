@@ -116,7 +116,7 @@ app.whenReady().then(() => {
 
 		// Persist DPI config
 		const settings = await settingsManager.getSettings();
-		await settingsManager.saveSettings({ ...settings, dpiConfig: validated as any });
+		await settingsManager.saveSettings({ ...settings, dpiConfig: validated });
 
 		return result;
 	});
