@@ -9,6 +9,7 @@ declare module '@vue/runtime-core' {
 
 declare global {
 	interface Window {
+		electron: unknown;
 		api: {
 			connectDevice: (mode: number) => Promise<{ success: boolean; error?: string }>;
 			getBattery: () => Promise<number>;
