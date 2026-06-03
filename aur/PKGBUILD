@@ -9,13 +9,12 @@ license=('MIT')
 depends=('electron' 'libusb')
 makedepends=('npm' 'typescript')
 options=('!strip')
-source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/$pkgver.tar.gz" "attack-shark-x11-driver.desktop""$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/$pkgver.tar.gz")
-sha256sums=('9d727db0f4a87513f7997d23caeac51d6a59bbcd6e816f9755ed5a1478977dfc'
-            '9d727db0f4a87513f7997d23caeac51d6a59bbcd6e816f9755ed5a1478977dfc')
+source=("-.tar.gz::$url/archive/refs/tags/$pkgver.tar.gz" "attack-shark-x11-driver.desktop")
+sha256sums=('SKIP' 'SKIP')
 
 prepare() {
   cd "$pkgname-$pkgver"
-  npm install --legacy-peer-deps
+  npm install --legacy-peer-deps --ignore-scripts
 }
 
 build() {
@@ -37,9 +36,9 @@ package() {
 
   # Create a wrapper script to run the app
   install -d "$pkgdir/usr/bin"
-  echo '#!/bin/sh' > "$pkgdir/usr/bin/attack-shark-x11-driver"
-  echo 'exec electron /usr/lib/attack-shark-x11-electron/main/index.js "$@"' >> "$pkgdir/usr/bin/attack-shark-x11-driver"
-  chmod +x "$pkgdir/usr/bin/attack-shark-x11-driver"
+  echo '#!/bin/sh' > "$pkgdir/usr/bin/attack-shark-x11-electron"
+  echo 'exec electron /usr/lib/attack-shark-x11-electron/main/index.js "$@"' >> "$pkgdir/usr/bin/attack-shark-x11-electron"
+  chmod +x "$pkgdir/usr/bin/attack-shark-x11-electron"
 
   # Install license
   install -Dm644 "$srcdir/$pkgname-$pkgver/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
@@ -48,5 +47,5 @@ package() {
   install -Dm644 "$srcdir/attack-shark-x11-driver.desktop" "$pkgdir/usr/share/applications/attack-shark-x11-driver.desktop"
 
   # Install icon (assuming cs-mouse.svg is the icon)
-  install -Dm644 assets/cs-mouse.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/attack-shark-x11.svg"
+  install -Dm644 "$srcdir/$pkgname-$pkgver/assets/cs-mouse.svg" "$pkgdir/usr/share/icons/hicolor/scalable/apps/attack-shark-x11.svg"
 }
