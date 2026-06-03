@@ -6,6 +6,8 @@ import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
 import BaseSelect from './BaseSelect.vue';
 import BaseSlider from './BaseSlider.vue';
+import Card from './Card.vue';
+import AppInput from './AppInput.vue';
 import { useDebounce } from '../composables/useDebounce';
 
 const { t } = useI18n();
@@ -168,21 +170,21 @@ async function applyPreferences(showUi = true) {
 			</div>
 		</div>
 
-		<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)] space-y-4">
+		<Card>
 			<h3
-				class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3"
+				class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3 mb-4"
 			>
-				<Database class="w-6 h-6 text-shark-primary" />
+				<Database class="w-6 h-6 text-[var(--color-accent)]" />
 				{{ $t('preferences.storedProfiles') }}
 			</h3>
 			<div class="flex flex-wrap gap-2">
 				<div
 					v-for="profile in profiles"
 					:key="profile"
-					class="bg-[var(--border-card)] p-2 rounded-lg flex items-center gap-2 border border-[var(--border-card)]"
+					class="bg-[var(--bg-primary)] p-2 rounded-lg flex items-center gap-2 border border-[var(--border-card)]"
 				>
 					<span>{{ profile }}</span>
-					<button @click="applyProfile(profile)" class="text-blue-400 hover:text-blue-300">
+					<button @click="applyProfile(profile)" class="text-[var(--color-accent)] hover:brightness-125">
 						{{ $t('preferences.applyAction') }}
 					</button>
 					<button @click="deleteProfile(profile)" class="text-red-400 hover:text-red-300">
@@ -190,7 +192,7 @@ async function applyPreferences(showUi = true) {
 					</button>
 				</div>
 			</div>
-		</div>
+		</Card>
 
 		<div
 			v-if="statusMessage"
@@ -205,11 +207,11 @@ async function applyPreferences(showUi = true) {
 		</div>
 
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-			<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)] space-y-6">
+			<Card>
 				<h3
-					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3"
+					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3 mb-4"
 				>
-					<Palette class="w-6 h-6 text-shark-primary" />
+					<Palette class="w-6 h-6 text-[var(--color-accent)]" />
 					{{ $t('preferences.lighting') }}
 				</h3>
 
@@ -254,36 +256,36 @@ async function applyPreferences(showUi = true) {
 										props.preferences.rgb.b = parseInt(hex.slice(5, 7), 16);
 									}
 								"
-								class="w-full h-[46px] bg-[var(--border-card)]/20 border border-transparent focus:border-[var(--shark-primary)] focus:bg-[var(--border-card)]/40 rounded-lg cursor-pointer p-1 transition-all"
+								class="w-full h-[46px] bg-[var(--bg-primary)] border border-[var(--border-card)] rounded-lg cursor-pointer p-1 transition-all"
 							/>
 						</div>
 						<div class="col-span-1">
 							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">{{
 								$t('preferences.red')
 							}}</label>
-							<BaseInput type="number" v-model.number="props.preferences.rgb.r" min="0" max="255" />
+							<AppInput type="number" v-model.number="props.preferences.rgb.r" min="0" max="255" />
 						</div>
 						<div class="col-span-1">
 							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">{{
 								$t('preferences.green')
 							}}</label>
-							<BaseInput type="number" v-model.number="props.preferences.rgb.g" min="0" max="255" />
+							<AppInput type="number" v-model.number="props.preferences.rgb.g" min="0" max="255" />
 						</div>
 						<div class="col-span-1">
 							<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-2">{{
 								$t('preferences.blue')
 							}}</label>
-							<BaseInput type="number" v-model.number="props.preferences.rgb.b" min="0" max="255" />
+							<AppInput type="number" v-model.number="props.preferences.rgb.b" min="0" max="255" />
 						</div>
 					</div>
 				</div>
-			</div>
+			</Card>
 
-			<div class="bg-[var(--bg-card)] p-6 rounded-2xl border border-[var(--border-card)] space-y-6">
+			<Card>
 				<h3
-					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3"
+					class="text-lg font-semibold border-b border-[var(--border-card)] pb-2 text-[var(--text-primary)] opacity-70 uppercase tracking-wider flex items-center gap-3 mb-4"
 				>
-					<Cpu class="w-6 h-6 text-shark-primary" />
+					<Cpu class="w-6 h-6 text-[var(--color-accent)]" />
 					{{ $t('preferences.deviceBehavior') }}
 				</h3>
 
@@ -322,7 +324,8 @@ async function applyPreferences(showUi = true) {
 						<BaseSlider v-model="props.preferences.deepSleepTime" min="1" max="60" step="1" />
 					</div>
 				</div>
-			</div>
+			</Card>
 		</div>
 	</div>
 </template>
+
