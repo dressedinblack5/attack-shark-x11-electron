@@ -109,7 +109,7 @@ app.whenReady().then(() => {
 		}
 	});
 
-        ipcMain.handle('set-dpi', async (_, config: unknown) => {
+	ipcMain.handle('set-dpi', async (_, config: unknown) => {
 		if (!driver) throw new Error('Device not connected');
 		const validated = validateDpiConfig(config);
 		const result = await driver.setDpi(validated);

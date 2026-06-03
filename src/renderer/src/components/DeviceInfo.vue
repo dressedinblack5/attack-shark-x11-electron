@@ -133,7 +133,9 @@ onMounted(() => {
 				<div class="flex items-start gap-3">
 					<Info class="w-5 h-5 text-shark-primary flex-shrink-0 mt-1" />
 					<div class="flex-1">
-						<p class="text-xs text-[var(--text-tertiary)] mb-2 uppercase tracking-wide">{{ $t('deviceInfo.serialNumber') }}</p>
+						<p class="text-xs text-[var(--text-tertiary)] mb-2 uppercase tracking-wide">
+							{{ $t('deviceInfo.serialNumber') }}
+						</p>
 						<p class="text-lg font-medium text-[var(--text-primary)] font-mono break-all">
 							{{ deviceInfo.serialNumber }}
 						</p>
@@ -146,9 +148,7 @@ onMounted(() => {
 		<div v-else-if="!isLoading" class="flex flex-col items-center justify-center py-12 text-center">
 			<HardDrive class="w-12 h-12 text-[var(--text-tertiary)] mb-4 opacity-50" />
 			<p class="text-[var(--text-tertiary)]">
-				{{
-					isConnected ? $t('deviceInfo.refreshHint') : $t('deviceInfo.connectHint')
-				}}
+				{{ isConnected ? $t('deviceInfo.refreshHint') : $t('deviceInfo.connectHint') }}
 			</p>
 		</div>
 

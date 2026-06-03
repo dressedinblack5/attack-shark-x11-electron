@@ -5,7 +5,6 @@
 		:value="modelValue"
 		@change="$emit('update:modelValue', ($event.target as HTMLSelectElement).value)"
 	>
-
 		<slot />
 	</select>
 </template>

@@ -193,7 +193,10 @@ async function applyPreferences(showUi = true) {
 					class="bg-[var(--bg-primary)] p-2 rounded-lg flex items-center gap-2 border border-[var(--border-card)]"
 				>
 					<span>{{ profile }}</span>
-					<button @click="applyProfile(profile)" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm transition-all">
+					<button
+						@click="applyProfile(profile)"
+						class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm transition-all"
+					>
 						{{ $t('preferences.applyAction') }}
 					</button>
 					<button @click="deleteProfile(profile)" class="text-red-400 hover:text-red-300">
