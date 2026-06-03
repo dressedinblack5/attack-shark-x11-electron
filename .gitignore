@@ -46,3 +46,4 @@ package-lock.json
 gha-creds-*.json
 aur/*.tar.gz
 aur/*.desktop*
+aur/
