@@ -94,7 +94,7 @@ bun test            # 121+ tests
 
 | Device | Mode | Status |
 |---|---|---|
-| Attack Shark X11 | Wired | ✅ Supported |
+| Attack Shark X11 | Wired | ✅ Supported (lighting H/W limited to wireless) |
 | Attack Shark X11 | 2.4GHz wireless | ✅ Supported |
 | Attack Shark X11 | Bluetooth | ❓ Not tested |
 | Attack Shark R1 | Wired | ✅ Supported |
