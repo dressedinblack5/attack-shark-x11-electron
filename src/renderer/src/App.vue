@@ -115,9 +115,6 @@ const connectWired = async () => {
 const finalizeConnection = async (mode: number) => {
 	isConnected.value = true;
 	connectionMode.value = mode === 0xfa55 || mode === 0xfa61 ? 'Wired' : 'Adapter';
-	if (connectionMode.value === 'Wired' && activeTab.value === 'preferences') {
-		activeTab.value = 'dpi';
-	}
 	const caps = await window.api.getDeviceCapabilities();
 	capabilities.value = caps;
 	const model = await window.api.getDeviceModel();
@@ -271,7 +268,6 @@ watch(
 					<span v-if="!sidebarCollapsed">Overview</span>
 				</button>
 				<button
-					v-if="!(connectionMode === 'Wired' && isConnected)"
 					@click="activeTab = 'preferences'"
 					:class="[
 						'flex items-center gap-3 px-4 py-2 rounded-lg transition-colors',
@@ -482,11 +478,12 @@ watch(
 					</div>
 
 					<!-- Preferences Content -->
-					<div v-if="activeTab === 'preferences' && !(connectionMode === 'Wired' && isConnected)">
+					<div v-if="activeTab === 'preferences'">
 						<UserPreferences
 							v-model="preferences"
 							:isConnected="isConnected"
 							:deviceModel="deviceModel"
+							:connectionMode="connectionMode"
 							@reset-complete="isConnected = false"
 						/>
 					</div>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, computed, reactive } from 'vue';
-import { Palette, Cpu, Database, Settings, AlertTriangle, RotateCcw } from 'lucide-vue-next';
+import { Info, Palette, Cpu, Database, Settings, AlertTriangle, RotateCcw } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 import BaseButton from './BaseButton.vue';
 import BaseInput from './BaseInput.vue';
@@ -36,7 +36,10 @@ const props = defineProps<{
 	isConnected: boolean;
 	modelValue: UserPreferences;
 	deviceModel?: 'X11' | 'X11SE' | 'R1';
+	connectionMode?: string | null;
 }>();
+
+const isWired = computed(() => props.connectionMode === 'Wired');
 
 const emit = defineEmits(['update:modelValue', 'resetComplete']);
 
@@ -156,18 +159,25 @@ async function applyPreferences(showUi = true) {
 	}
 
 	try {
-		const plainPrefs = {
-			lightMode: form.lightMode,
-			ledSpeed: form.ledSpeed,
-			keyResponse: form.keyResponse,
-			sleepTime: form.sleepTime,
-			deepSleepTime: form.deepSleepTime,
-			rgb: {
-				r: form.rgb.r,
-				g: form.rgb.g,
-				b: form.rgb.b,
-			},
-		};
+		// Strip lighting data in wired mode — firmware doesn't accept it
+		const plainPrefs = isWired.value
+			? {
+					keyResponse: form.keyResponse,
+					sleepTime: form.sleepTime,
+					deepSleepTime: form.deepSleepTime,
+				}
+			: {
+					lightMode: form.lightMode,
+					ledSpeed: form.ledSpeed,
+					keyResponse: form.keyResponse,
+					sleepTime: form.sleepTime,
+					deepSleepTime: form.deepSleepTime,
+					rgb: {
+						r: form.rgb.r,
+						g: form.rgb.g,
+						b: form.rgb.b,
+					},
+				};
 
 		await window.api.setUserPreferences(plainPrefs);
 		await window.api.setPollingRate(form.pollingRate);
@@ -240,11 +250,21 @@ async function applyPreferences(showUi = true) {
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 			<Card v-if="deviceModel !== 'R1'">
 				<template #title>
-					<Palette class="w-6 h-6 text-shark-primary" />
-					{{ $t('preferences.lighting') }}
+					<Palette class="w-6 h-6 text-shark-primary" :class="isWired ? 'opacity-40' : ''" />
+					<span :class="isWired ? 'opacity-40' : ''">{{ $t('preferences.lighting') }}</span>
 				</template>
 
-				<div class="space-y-4">
+				<div
+					v-if="isWired"
+					class="flex items-start gap-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 mb-4"
+				>
+					<Info class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+					<p class="text-sm text-amber-300 leading-relaxed">
+						Lighting is not available in wired mode. Connect via the wireless adapter to configure RGB.
+					</p>
+				</div>
+
+				<div class="space-y-4" :class="isWired ? 'pointer-events-none opacity-40' : ''">
 					<div>
 						<label class="block text-sm text-[var(--text-primary)] opacity-70 mb-2">{{
 							$t('preferences.effectMode')
@@ -261,7 +281,6 @@ async function applyPreferences(showUi = true) {
 							>{{ $t('preferences.ledSpeed') }} ({{ form.ledSpeed }})</label
 						>
 						<BaseSlider v-model="form.ledSpeed" min="1" max="5" step="1" />
-
 						<div class="flex justify-between text-xs text-[var(--text-primary)] opacity-50 mt-1">
 							<span>{{ $t('preferences.slow') }}</span>
 							<span>{{ $t('preferences.fast') }}</span>
