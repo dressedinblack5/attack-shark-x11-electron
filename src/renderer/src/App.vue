@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, reactive, watch, toRaw } from 'vue';
+import { ref, computed, onMounted, reactive, watch, toRaw, shallowRef } from 'vue';
 import { Settings, Zap, Info, ShieldAlert, Keyboard, MousePointer2, Menu, LayoutDashboard } from 'lucide-vue-next';
 
 import UserPreferences from './components/UserPreferences.vue';
@@ -188,20 +188,35 @@ onMounted(async () => {
 	}
 });
 
+// Cache the last-saved settings so we never need to re-read from disk to merge
+let cachedSettings: AppSettings | null = null;
+
+// Snapshot preferences for watcher comparison (avoids reactive proxy identity churn)
+const preferencesSnapshot = shallowRef(JSON.parse(JSON.stringify(toRaw(preferences.value))));
 watch(
-	() => [activeTab.value, preferences.value, connectionMode.value, deviceModel.value],
-	async () => {
-		const settings = await window.api.getSettings();
-		await window.api.saveSettings({
-			...settings,
-			lastTab: activeTab.value,
-			connectionMode: connectionMode.value,
-			deviceModel: deviceModel.value,
-			theme: localStorage.getItem('theme') || 'dark',
-			preferences: JSON.parse(JSON.stringify(toRaw(preferences.value))),
-		});
+	preferences,
+	(val) => {
+		preferencesSnapshot.value = JSON.parse(JSON.stringify(toRaw(val)));
 	},
 	{ deep: true },
+);
+
+watch(
+	() => [activeTab.value, preferencesSnapshot.value, connectionMode.value, deviceModel.value],
+	async () => {
+		if (!cachedSettings) {
+			cachedSettings = await window.api.getSettings();
+		}
+		await window.api.saveSettings({
+			...cachedSettings,
+			lastTab: activeTab.value,
+			connectionMode: connectionMode.value ?? 'Adapter',
+			deviceModel: deviceModel.value,
+			theme: localStorage.getItem('theme') || 'dark',
+			preferences: preferencesSnapshot.value,
+		});
+		cachedSettings = null; // force re-read next time in case another component wrote
+	},
 );
 </script>
 
