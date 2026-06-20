@@ -22,7 +22,7 @@ interface AppSettings {
 		rgb: { r: number; g: number; b: number };
 	};
 	dpiConfig: {
-		activeStage: number;
+		activeStage: 1 | 2 | 3 | 4 | 5 | 6;
 		angleSnap: boolean;
 		ripplerControl: boolean;
 		dpiValues: [number, number, number, number, number, number];
