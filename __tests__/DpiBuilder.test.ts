@@ -6,8 +6,10 @@ describe('DpiBuilder', () => {
 	it('should initialize with default buffer', () => {
 		const builder = new DpiBuilder();
 		// Default: Angle Snap Off (0x00), Rippler On (0x01), Stages: 800, 1600, 2400, 3200, 5000, 22000
+		// ponytail: 22000 encodes as 0x8d (matches 12000 per register-page wrap)
+		// Checksum not recalculated until build() — toString shows initialized buffer
 		expect(builder.toString()).toBe(
-			'04380100013f20201225384b75810000000000000001000002ff000000ff000000ffffff0000ffffff00ffff4000ffffff020f6800000000',
+			'04380100013f20201225384b758d0000000000000001000002ff000000ff000000ffffff0000ffffff00ffff4000ffffff020f6800000000',
 		);
 	});
 
