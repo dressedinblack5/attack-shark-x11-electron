@@ -1,7 +1,7 @@
 # Maintainer: dressedinblack5 <dressedinblack5@proton.me>
 pkgname=attack-shark-x11-electron
-pkgver=1.4.0
-pkgrel=2
+pkgver=1.4.2
+pkgrel=1
 pkgdesc="Cross-platform driver for the Attack Shark X11 gaming mouse with Electron GUI"
 arch=('x86_64')
 url="https://github.com/dressedinblack5/attack-shark-x11-electron"
@@ -27,6 +27,9 @@ package() {
   install -d "$pkgdir/usr/lib/$pkgname"
   cp -r out/* "$pkgdir/usr/lib/$pkgname/"
 
+  # Strip devDeps and the bundled electron (system electron is the runtime dep)
+  bun install --production
+  rm -rf node_modules/electron
   cp -a node_modules "$pkgdir/usr/lib/$pkgname/"
   cp package.json "$pkgdir/usr/lib/$pkgname/"
 
