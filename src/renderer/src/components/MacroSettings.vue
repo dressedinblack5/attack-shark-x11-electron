@@ -22,8 +22,9 @@ const templateOptions = Object.keys(macroTemplates).map((name) => ({
 }));
 
 const statusMessage = ref('');
+const isError = ref(false);
 const isSaving = ref(false);
-const statusType = computed(() => (statusMessage.value.includes(t('macros.errorPrefix')) ? 'error' : 'success'));
+const statusType = computed(() => (isError.value ? 'error' : 'success'));
 const selectedTemplate = ref<MacroName>(templateOptions[0].value);
 
 const buttons = computed(() => [
@@ -64,6 +65,7 @@ const applyMacro = async () => {
 		setTimeout(() => (statusMessage.value = ''), 3000);
 	} catch (err: unknown) {
 		const error = err instanceof Error ? err : new Error(String(err));
+		isError.value = true;
 		statusMessage.value = `${t('macros.errorPrefix')}${error.message}`;
 	} finally {
 		isSaving.value = false;

@@ -216,7 +216,7 @@ const getEventDelayLabel = (event: MacroEvent): string => {
 					</div>
 					<div class="col-span-4">
 						<label class="block text-sm font-medium text-[var(--text-primary)] opacity-70 mb-1">{{
-							$t('macros.eventType') === 'key' ? $t('macros.key') : $t('macros.mouseButton')
+							newEventType === 'key' ? $t('macros.key') : $t('macros.mouseButton')
 						}}</label>
 						<BaseSelect v-model="newEventKeyCode">
 							<option

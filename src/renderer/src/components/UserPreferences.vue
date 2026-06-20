@@ -91,8 +91,9 @@ const lightModes = computed(() => [
 const keyResponses = Array.from({ length: 24 }, (_, i) => 4 + i * 2);
 
 const statusMessage = ref('');
+const isError = ref(false);
 const isSaving = ref(false);
-const statusType = computed(() => (statusMessage.value.includes('Error') ? 'error' : 'success'));
+const statusType = computed(() => (isError.value ? 'error' : 'success'));
 const profiles = ref<string[]>([]);
 const newProfileName = ref('');
 
@@ -153,53 +154,55 @@ const resetDevice = async () => {
 async function applyPreferences(showUi = true) {
 	if (!props.isConnected) return;
 
-	if (showUi) {
-		isSaving.value = true;
-		statusMessage.value = 'Applying settings...';
-	}
-
-	try {
-		// Strip lighting data in wired mode — firmware doesn't accept it
-		const plainPrefs = isWired.value
-			? {
-					keyResponse: form.keyResponse,
-					sleepTime: form.sleepTime,
-					deepSleepTime: form.deepSleepTime,
-				}
-			: {
-					lightMode: form.lightMode,
-					ledSpeed: form.ledSpeed,
-					keyResponse: form.keyResponse,
-					sleepTime: form.sleepTime,
-					deepSleepTime: form.deepSleepTime,
-					rgb: {
-						r: form.rgb.r,
-						g: form.rgb.g,
-						b: form.rgb.b,
-					},
-				};
-
-		await window.api.setUserPreferences(plainPrefs);
-		await window.api.setPollingRate(form.pollingRate);
-
 		if (showUi) {
-			statusMessage.value = 'Settings applied successfully!';
-			setTimeout(() => {
-				statusMessage.value = '';
-			}, 3000);
+			isSaving.value = true;
+			isError.value = false;
+			statusMessage.value = 'Applying settings...';
 		}
-	} catch (err: unknown) {
-		const error = err instanceof Error ? err : new Error(String(err));
-		if (showUi) {
-			statusMessage.value = `Error: ${error.message}`;
-		} else {
-			console.error('Auto-save failed:', error);
+
+		try {
+			// Strip lighting data in wired mode — firmware doesn't accept it
+			const plainPrefs = isWired.value
+				? {
+						keyResponse: form.keyResponse,
+						sleepTime: form.sleepTime,
+						deepSleepTime: form.deepSleepTime,
+					}
+				: {
+						lightMode: form.lightMode,
+						ledSpeed: form.ledSpeed,
+						keyResponse: form.keyResponse,
+						sleepTime: form.sleepTime,
+						deepSleepTime: form.deepSleepTime,
+						rgb: {
+							r: form.rgb.r,
+							g: form.rgb.g,
+							b: form.rgb.b,
+						},
+					};
+
+			await window.api.setUserPreferences(plainPrefs);
+			await window.api.setPollingRate(form.pollingRate);
+
+			if (showUi) {
+				statusMessage.value = 'Settings applied successfully!';
+				setTimeout(() => {
+					statusMessage.value = '';
+				}, 3000);
+			}
+		} catch (err: unknown) {
+			const error = err instanceof Error ? err : new Error(String(err));
+			isError.value = true;
+			if (showUi) {
+				statusMessage.value = `Error: ${error.message}`;
+			} else {
+				console.error('Auto-save failed:', error);
+			}
+		} finally {
+			if (showUi) {
+				isSaving.value = false;
+			}
 		}
-	} finally {
-		if (showUi) {
-			isSaving.value = false;
-		}
-	}
 }
 </script>
 

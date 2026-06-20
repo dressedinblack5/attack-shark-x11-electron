@@ -73,8 +73,9 @@ onMounted(async () => {
 });
 
 const statusMessage = ref('');
+const isError = ref(false);
 const isSaving = ref(false);
-const statusType = computed(() => (statusMessage.value.includes(t('dpi.error')) ? 'error' : 'success'));
+const statusType = computed(() => (isError.value ? 'error' : 'success'));
 
 const debouncedApplyDpi = useDebounce(async () => {
 	if (!props.isConnected) return;
@@ -113,6 +114,7 @@ const applyDpi = async () => {
 		}, 3000);
 	} catch (err: unknown) {
 		const error = err instanceof Error ? err : new Error(String(err));
+		isError.value = true;
 		statusMessage.value = `${t('dpi.error')}: ${error.message}`;
 	} finally {
 		isSaving.value = false;
