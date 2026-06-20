@@ -59,7 +59,7 @@
 				"deb"
 			],
 			"category": "Settings",
-			"icon": "assets/cs-mouse.svg",
+			"icon": "assets/attack-shark-x11.svg",
 			"syncDesktopName": true
 		}
 	},
