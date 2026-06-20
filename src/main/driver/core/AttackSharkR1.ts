@@ -415,6 +415,7 @@ export class AttackSharkR1 extends EventEmitter<AttackSharkR1Events> {
 		connectionMode: string;
 		interfaces: number;
 	} {
+		this.checkIsOpen();
 		return {
 			manufacturer: 'Beken',
 			product: 'Attack Shark R1',

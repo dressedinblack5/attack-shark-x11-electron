@@ -485,6 +485,7 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 		connectionMode: string;
 		interfaces: number;
 	} {
+		this.checkIsOpen();
 		return {
 			manufacturer: 'Beken',
 			product: 'Attack Shark X11',
