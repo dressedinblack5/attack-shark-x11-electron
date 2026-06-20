@@ -367,18 +367,19 @@ app.whenReady().then(() => {
 	});
 
 	// Ensure driver is closed when app quits
+	let isQuitting = false;
 	app.on('before-quit', async (e) => {
-		if (driver) {
+		if (driver && !isQuitting) {
 			e.preventDefault();
+			isQuitting = true;
 			const driverToClose = driver;
 			driver = null;
 			try {
 				await driverToClose.close();
 			} catch (err) {
 				console.error('Error during driver cleanup:', err);
-			} finally {
-				app.quit();
 			}
+			app.quit();
 		}
 	});
 });
