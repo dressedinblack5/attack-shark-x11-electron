@@ -70,7 +70,7 @@ describe('KeyCode enum', () => {
 	});
 
 	it('should have modifier key codes', () => {
-		expect(KeyCode.LCrtl).toBe(0xe0);
+		expect(KeyCode.LCtrl).toBe(0xe0);
 		expect(KeyCode.LShift).toBe(0xe1);
 		expect(KeyCode.LAlt).toBe(0xe2);
 	});
