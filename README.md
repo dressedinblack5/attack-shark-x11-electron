@@ -2,8 +2,7 @@
 
 ![Attack Shark X11 Gaming Mouse](assets/shark-x11-electron.png)
 
-[![npm version](https://img.shields.io/npm/v/attack-shark-x11-driver.svg)](https://www.npmjs.com/package/attack-shark-x11-driver)
-[![license](https://img.shields.io/npm/l/attack-shark-x11-driver.svg)](https://github.com/HarukaYamamoto0/attack-shark-x11-driver/blob/main/LICENSE)
+[![license](https://img.shields.io/github/license/dressedinblack5/attack-shark-x11-electron.svg)](LICENSE)
 [![Bun](https://img.shields.io/badge/Bun-%23000000.svg?style=flat&logo=bun&logoColor=white)](https://bun.sh)
 
 A cross-platform desktop app to configure your **Attack Shark X11** gaming mouse — DPI, macros, lighting, polling rate, and more. Built with Electron + Vue 3.
@@ -18,12 +17,8 @@ Fork of [HarukaYamamoto0's driver](https://github.com/HarukaYamamoto0) with a ne
 curl -fsSL https://raw.githubusercontent.com/dressedinblack5/attack-shark-x11-electron/main/install.sh | bash
 ```
 
-The script auto-detects your distro:
-- **Arch** → installs from AUR
-- **Ubuntu / Debian** → downloads the latest `.deb`
-- **any other Linux** → downloads the AppImage + sets up a `.desktop` entry
-
-Manual downloads are also available on the [Releases page](https://github.com/dressedinblack5/attack-shark-x11-electron/releases).
+The script builds the app from source — you only need Bun, Rust, and a C compiler.
+It handles everything: installs deps, builds, and sets up the desktop entry + udev rules.
 
 ---
 
