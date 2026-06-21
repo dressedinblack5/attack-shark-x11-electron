@@ -1,8 +1,8 @@
 {
-	"name": "attack-shark-x11-driver",
+	"name": "attack-shark-x11",
 	"version": "1.4.2",
-	"description": "A TypeScript driver for the Attack Shark X11 gaming mouse, supporting Linux and other platforms via Node.js/Bun and USB HID.",
-	"desktopName": "attack-shark-x11-electron",
+	"description": "Desktop configuration app for the Attack Shark X11 gaming mouse.",
+	"desktopName": "attack-shark-x11",
 	"author": {
 		"name": "dressedinblack5",
 		"email": "leonvargas4991@gmail.com",
@@ -43,9 +43,9 @@
 		"test": "bun test"
 	},
 	"build": {
-		"appId": "com.attackshark.driver",
-		"productName": "Attack Shark X11 Driver",
-		"artifactName": "attack-shark-x11-electron-${version}.${ext}",
+		"appId": "com.attackshark.x11",
+		"productName": "Attack Shark X11",
+		"artifactName": "attack-shark-x11-${version}.${ext}",
 		"directories": {
 			"output": "dist"
 		},

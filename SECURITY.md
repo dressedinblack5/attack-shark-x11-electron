@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-The following versions of Attack Shark X11 Electron are currently supported with security updates:
+The following versions of Attack Shark X11 are currently supported with security updates:
 
 | Version | Supported          |
 | ------- | ------------------ |
