@@ -6,7 +6,7 @@ APP_NAME="attack-shark-x11"
 UDEV_RULES="/etc/udev/rules.d/99-${APP_NAME}.rules"
 
 # build from source — no prebuilt releases
-TAG=$(curl -fsSL "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" \
+TAG=$(curl -fsSL "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" 2>/dev/null \
 	| grep -o '"tag_name": *"[^"]*"' | head -1 | cut -d'"' -f4 2>/dev/null || true)
 # if no releases exist, use HEAD
 REF=${TAG:-main}
@@ -56,7 +56,6 @@ ensure_deps() {
 		command -v rustc &>/dev/null || missing+=(rust)
 		command -v gcc   &>/dev/null || missing+=(base-devel)
 		ldconfig -p | grep -q libusb 2>/dev/null || missing+=(libusb)
-		ldconfig -p | grep -q libfuse 2>/dev/null || missing+=(libfuse2)
 		if [ ${#missing[@]} -gt 0 ]; then
 			yellow "Installing: ${missing[*]}"
 			sudo pacman -S --needed --noconfirm "${missing[@]}"
@@ -66,7 +65,6 @@ ensure_deps() {
 		command -v rustc &>/dev/null || missing+=(rustc cargo)
 		command -v gcc   &>/dev/null || missing+=(build-essential)
 		dpkg -s libusb-1.0-0-dev &>/dev/null 2>&1 || missing+=(libusb-1.0-0-dev)
-		dpkg -s libfuse2 &>/dev/null 2>&1 || missing+=(libfuse2)
 		if [ ${#missing[@]} -gt 0 ]; then
 			yellow "Installing: ${missing[*]}"
 			sudo apt update -qq && sudo apt install -y "${missing[@]}"
