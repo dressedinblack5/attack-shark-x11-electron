@@ -20,6 +20,16 @@ curl -fsSL https://raw.githubusercontent.com/dressedinblack5/attack-shark-x11-el
 The script builds the app from source — you only need Bun, Rust, and a C compiler.
 It handles everything: installs deps, builds, and sets up the desktop entry + udev rules.
 
+### Uninstall
+
+```bash
+rm -f ~/.local/bin/attack-shark-x11
+rm -f ~/.local/share/applications/attack-shark-x11.desktop
+rm -f ~/.local/share/icons/hicolor/scalable/apps/attack-shark-x11.svg
+sudo rm -f /etc/udev/rules.d/99-attack-shark-x11.rules
+sudo udevadm control --reload-rules
+```
+
 ---
 
 ## Features
