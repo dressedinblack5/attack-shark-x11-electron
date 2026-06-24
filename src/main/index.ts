@@ -9,7 +9,10 @@ import * as profileManager from './storage/profileManager.js';
 import * as settingsManager from './storage/settingsManager.js';
 
 import { CustomMacroBuilder, type CustomMacroBuilderOptions } from './driver/protocols/CustomMacroBuilder.js';
+import type { Rate } from './driver/protocols/PollingRateBuilder.js';
+import type { R1Rate } from './driver/protocols/R1PollingRateBuilder.js';
 import type { UserPreferencesBuilderOptions } from './driver/protocols/UserPreferencesBuilder.js';
+import type { R1UserPreferencesBuilderOptions } from './driver/protocols/R1UserPreferencesBuilder.js';
 import type { MacroBuilderOptions } from './driver/protocols/MacrosBuilder.js';
 import type { MacroMode } from '../shared/macro-types.js';
 import { usb } from 'usb';
@@ -137,9 +140,9 @@ app.whenReady().then(() => {
 	ipcMain.handle('set-polling-rate', (_, rate: number) => {
 		if (!driver) throw new Error('Device not connected');
 		if (deviceModel === 'R1') {
-			return (driver as AttackSharkR1).setPollingRate(rate as never);
+			return (driver as AttackSharkR1).setPollingRate(rate as R1Rate);
 		}
-		return (driver as AttackSharkX11).setPollingRate(rate as never);
+		return (driver as AttackSharkX11).setPollingRate(rate as Rate);
 	});
 
 	ipcMain.handle('set-user-preferences', (_, prefs: UserPreferencesBuilderOptions) => {
@@ -149,6 +152,7 @@ app.whenReady().then(() => {
 		if (typeof s.deepSleepTime !== 'number' || s.deepSleepTime < 1 || s.deepSleepTime > 60) s.deepSleepTime = 10;
 		if (typeof s.keyResponse !== 'number' || s.keyResponse < 4 || s.keyResponse > 50 || s.keyResponse % 2 !== 0)
 			s.keyResponse = 8;
+		if (typeof s.sleepTime !== 'number' || s.sleepTime < 0.5 || s.sleepTime > 30) s.sleepTime = 0.5;
 		return driver.setUserPreferences(s);
 	});
 
@@ -178,10 +182,9 @@ app.whenReady().then(() => {
 				driver.connectionMode === ConnectionMode.Wired || driver.connectionMode === ConnectionMode.R1Wired;
 
 			if (isWired) {
-				const cached = driver.getCachedUserPreferences() as UserPreferencesBuilderOptions | null;
-				if (!cached) return null;
-
 				if (deviceModel === 'R1') {
+					const cached = driver.getCachedUserPreferences() as R1UserPreferencesBuilderOptions | null;
+					if (!cached) return null;
 					return {
 						sleepTime: cached.sleepTime ?? 0.5,
 						keyResponse: cached.keyResponse ?? 4,
@@ -189,6 +192,8 @@ app.whenReady().then(() => {
 					};
 				}
 
+				const cached = driver.getCachedUserPreferences() as UserPreferencesBuilderOptions | null;
+				if (!cached) return null;
 				return {
 					lightMode: cached.lightMode ?? 0,
 					ledSpeed: cached.ledSpeed ?? 3,
