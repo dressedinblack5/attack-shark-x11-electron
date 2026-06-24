@@ -26,8 +26,10 @@ const api = {
 	getDeviceInfo: (): Promise<unknown> => ipcRenderer.invoke('get-device-info'),
 	getDeviceModel: (): Promise<'X11' | 'X11SE' | 'R1'> => ipcRenderer.invoke('get-device-model'),
 	getDeviceCapabilities: (): Promise<Record<string, boolean>> => ipcRenderer.invoke('get-device-capabilities'),
-	onBatteryUpdated: (callback: (level: number) => void): void => {
-		ipcRenderer.on('battery-updated', (_event, value) => callback(value));
+	onBatteryUpdated: (callback: (level: number) => void): (() => void) => {
+		const handler = (_event: Electron.IpcRendererEvent, value: number): void => callback(value);
+		ipcRenderer.on('battery-updated', handler);
+		return () => ipcRenderer.removeListener('battery-updated', handler);
 	},
 };
 
