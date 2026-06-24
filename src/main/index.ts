@@ -62,7 +62,7 @@ function createWindow(): void {
 // App lifecycle
 app.whenReady().then(() => {
 	// Set app user model id for windows
-	electronApp.setAppUserModelId('com.attackshark.driver');
+	electronApp.setAppUserModelId('com.attackshark.x11');
 
 	// Default open or close DevTools by F12 in development
 	// and ignore CommandOrControl + R in production.
