@@ -58,6 +58,11 @@ export class BatteryMonitor extends EventEmitter<BatteryMonitorEvents> {
 				return;
 			}
 
+			if (this.lastBattery !== -1 && this.lastBattery <= 100) {
+				resolve(this.lastBattery);
+				return;
+			}
+
 			let finished = false;
 
 			const cleanup = (): void => {
@@ -81,11 +86,6 @@ export class BatteryMonitor extends EventEmitter<BatteryMonitorEvents> {
 			}, timeoutMs);
 
 			this.on('batteryChange', handleBattery);
-
-			if (this.lastBattery !== -1 && this.lastBattery <= 100) {
-				cleanup();
-				resolve(this.lastBattery);
-			}
 		});
 	}
 

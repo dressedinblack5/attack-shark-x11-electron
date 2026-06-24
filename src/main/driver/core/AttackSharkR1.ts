@@ -319,6 +319,11 @@ export class AttackSharkR1 extends EventEmitter<AttackSharkR1Events> {
 		}
 
 		return new Promise((resolve, reject) => {
+			if (this.lastBattery !== -1 && this.lastBattery <= 100) {
+				resolve(this.lastBattery);
+				return;
+			}
+
 			let finished = false;
 
 			const cleanup = (): void => {
@@ -342,11 +347,6 @@ export class AttackSharkR1 extends EventEmitter<AttackSharkR1Events> {
 			}, timeoutMs);
 
 			this.on('batteryChange', handleBattery);
-
-			if (this.lastBattery !== -1 && this.lastBattery <= 100) {
-				cleanup();
-				resolve(this.lastBattery);
-			}
 		});
 	}
 

@@ -307,6 +307,11 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 		}
 
 		return new Promise((resolve, reject) => {
+			if (this.lastBattery !== -1 && this.lastBattery <= 100) {
+				resolve(this.lastBattery);
+				return;
+			}
+
 			let finished = false;
 
 			const cleanup = (): void => {
@@ -330,11 +335,6 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 			}, timeoutMs);
 
 			this.on('batteryChange', handleBattery);
-
-			if (this.lastBattery !== -1 && this.lastBattery <= 100) {
-				cleanup();
-				resolve(this.lastBattery);
-			}
 		});
 	}
 
