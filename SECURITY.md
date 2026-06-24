@@ -6,8 +6,8 @@ The following versions of Attack Shark X11 are currently supported with security
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.2.x   | :white_check_mark: |
-| < 1.2.0 | :x:                |
+| 1.4.x   | :white_check_mark: |
+| < 1.4.0 | :x:                |
 
 ## Reporting a Vulnerability
 
@@ -34,7 +34,7 @@ This project implements the following security measures:
 
 - The application requires USB HID access to communicate with the mouse device
 - Linux users must install udev rules to allow non-root access (see README)
-- The application uses `sandbox: false` in the main window for compatibility with the USB driver module
+- The application uses `sandbox: true` for the renderer process (Electron security best practice)
 
 ## Security Updates
 
