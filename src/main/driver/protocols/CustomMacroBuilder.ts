@@ -48,61 +48,20 @@ export class CustomMacroBuilder implements BaseProtocolBuilder {
 	private readonly fourthPacket: Buffer = Buffer.alloc(64);
 	private readonly macroEvents: number[] = [];
 
-	// noinspection FunctionTooLongJS
 	constructor(options?: CustomMacroBuilderOptions) {
-		this.secondPacket[0] = 0x09; // Header
-		this.secondPacket[1] = 0x40; // Header
-		this.secondPacket[2] = 0x00;
+		this.secondPacket[0] = 0x09;
+		this.secondPacket[1] = 0x40;
 		this.secondPacket[3] = 0x00; // Page 0
 		this.secondPacket[4] = MacroMode.THE_NUMBER_OF_TIME_TO_PLAY;
-		this.secondPacket[5] = 0x00;
-		this.secondPacket[6] = 0x00;
-		this.secondPacket[7] = 0x00;
-		this.secondPacket[8] = 0x01; // referring to THE_NUMBER_OF_TIME_TO_PLAY, which indicates how many times it will repeat the macro.
-		this.secondPacket[9] = 0x00;
-		this.secondPacket[10] = 0x00;
-		this.secondPacket[11] = 0x00;
-		this.secondPacket[12] = 0x00;
-		this.secondPacket[13] = 0x00;
-		this.secondPacket[14] = 0x00;
-		this.secondPacket[15] = 0x00;
+		this.secondPacket[8] = 0x01;
 
-		this.secondPacket[16] = 0x00;
-		this.secondPacket[17] = 0x00;
-		this.secondPacket[18] = 0x00;
-		this.secondPacket[19] = 0x00;
-		this.secondPacket[20] = 0x00;
-		this.secondPacket[21] = 0x00;
-		this.secondPacket[22] = 0x00;
-		this.secondPacket[23] = 0x00;
-		this.secondPacket[24] = 0x00;
-		this.secondPacket[25] = 0x00;
-		this.secondPacket[26] = 0x00;
-		this.secondPacket[27] = 0x00;
-		this.secondPacket[28] = 0x00;
-		this.secondPacket[29] = 0x00; // event counter
-
-		// Third Packet
-
-		this.thirdPacket[0] = 0x09; // Header
-		this.thirdPacket[1] = 0x40; // Header
-		this.thirdPacket[2] = 0x00;
+		this.thirdPacket[0] = 0x09;
+		this.thirdPacket[1] = 0x40;
 		this.thirdPacket[3] = 0x01; // Page 1
 
-		// Fourth Packet
-
-		this.fourthPacket[0] = 0x09; // Header
-		this.fourthPacket[1] = 0x0c; // Header
-		this.fourthPacket[2] = 0x00;
+		this.fourthPacket[0] = 0x09;
+		this.fourthPacket[1] = 0x0c;
 		this.fourthPacket[3] = 0x02; // Page 2
-		this.fourthPacket[4] = 0x00;
-		this.fourthPacket[5] = 0x00;
-		this.fourthPacket[6] = 0x00;
-		this.fourthPacket[7] = 0x00;
-		this.fourthPacket[8] = 0x00;
-		this.fourthPacket[9] = 0x00;
-		this.fourthPacket[10] = 0x00; // Big Endian Checksum
-		this.fourthPacket[11] = 0x00; // Big Endian Checksum
 
 		const config = { ...CustomMacroBuilder.DEFAULT_OPTIONS, ...options };
 
