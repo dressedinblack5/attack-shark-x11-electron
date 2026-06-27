@@ -30,8 +30,12 @@ export interface DpiBuilderOptions {
 	activeStage?: StageIndex;
 }
 
+export const R1_DEFAULT_DPI_VALUES: [number, number, number, number, number, number] = [
+	800, 1600, 3200, 4000, 5000, 12000,
+];
+
 /**
- * Builder for configuring DPI and other sensor parameters of the Attack Shark X11.
+ * Builder for configuring DPI and other sensor parameters of the Attack Shark X11/R1.
  */
 export class DpiBuilder implements BaseProtocolBuilder {
 	public static readonly DEFAULT_OPTIONS: DpiBuilderOptions = {
@@ -206,7 +210,9 @@ export class DpiBuilder implements BaseProtocolBuilder {
 		const checksum = this.calculateChecksum();
 		this.buffer.writeUInt16BE(checksum, OFFSET.CHECKSUM_HIGH_BYTE);
 
-		return mode === ConnectionMode.Wired ? this.buffer.subarray(0, OFFSET.CHECKSUM_LOW_BYTE + 1) : this.buffer;
+		return mode === ConnectionMode.Wired || mode === ConnectionMode.R1Wired
+			? this.buffer.subarray(0, OFFSET.CHECKSUM_LOW_BYTE + 1)
+			: this.buffer;
 	}
 
 	public toString(): string {
