@@ -9,7 +9,6 @@ import BaseSlider from './BaseSlider.vue';
 import Card from './Card.vue';
 import StatusMessage from './StatusMessage.vue';
 
-
 export interface UserPreferences {
 	lightMode: number;
 	ledSpeed: number;

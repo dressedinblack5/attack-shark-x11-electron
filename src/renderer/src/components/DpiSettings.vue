@@ -8,7 +8,6 @@ import BaseToggle from './BaseToggle.vue';
 import Card from './Card.vue';
 import StatusMessage from './StatusMessage.vue';
 
-
 const { t } = useI18n();
 
 const props = defineProps<{
