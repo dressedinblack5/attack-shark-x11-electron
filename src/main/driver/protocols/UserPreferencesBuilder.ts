@@ -146,6 +146,7 @@ export class UserPreferencesBuilder implements BaseProtocolBuilder {
 	public readonly wValue: number = 0x0305;
 	public readonly wIndex: number = 2;
 	private deepSleepMinutes: number = 10;
+	private keyResponseMs: number = 4;
 	private ledSpeed: number = 0x03;
 
 	constructor(options?: UserPreferencesBuilderOptions) {
@@ -248,6 +249,7 @@ export class UserPreferencesBuilder implements BaseProtocolBuilder {
 			throw new ParamsError('keyResponse', 'Invalid value (use 4–50ms, step 2)');
 		}
 
+		this.keyResponseMs = ms;
 		this.buffer[10] = (ms - 4) / 2 + 0x02;
 		return this;
 	}
@@ -262,8 +264,23 @@ export class UserPreferencesBuilder implements BaseProtocolBuilder {
 	}
 
 	build(mode: ConnectionMode): Buffer {
-		this.buffer[12] = this.calculateChecksum();
-		if (mode === ConnectionMode.Wired) return this.buffer.subarray(0, 13);
+		if (mode === ConnectionMode.R1Wired) {
+			const ds = this.deepSleepMinutes;
+			this.buffer[4] = (0x03 | ((ds >> 4) & 0x0f)) & 0xff;
+			this.buffer[5] = (0x08 | ((ds & 0x0f) << 4)) & 0xff;
+			this.buffer[6] = 0x00;
+			this.buffer[7] = 0x00;
+			this.buffer[8] = 0xff;
+			this.buffer[10] = this.keyResponseMs / 2;
+			this.buffer[11] = 0x01;
+			const deepSleepLo = ds & 0x0f;
+			const deepSleepHi = (ds >> 4) & 0x0f;
+			this.buffer[12] =
+				(((deepSleepLo + deepSleepHi) & 0x0f) << 4) + 0x0a + (this.buffer[9] ?? 0) + (this.buffer[10] ?? 0);
+		} else {
+			this.buffer[12] = this.calculateChecksum();
+		}
+		if (mode === ConnectionMode.Wired || mode === ConnectionMode.R1Wired) return this.buffer.subarray(0, 13);
 		else return this.buffer;
 	}
 

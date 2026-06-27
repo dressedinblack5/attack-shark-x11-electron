@@ -1,6 +1,6 @@
 import type { BaseProtocolBuilder } from '../core/BaseProtocolBuilder.js';
 import { ParamsError } from '../errors.js';
-import type { ConnectionMode } from '../types.js';
+import { ConnectionMode } from '../types.js';
 
 export enum Rate {
 	powerSaving = 125,
@@ -14,7 +14,8 @@ export interface PollingRateBuilderOptions {
 }
 
 /**
- * Builder for configuring the update rate (Polling Rate).
+ * Builder for configuring the polling rate.
+ * Handles both X11 (single-byte + checksum) and R1 (little-endian u16) encoding.
  */
 export class PollingRateBuilder implements BaseProtocolBuilder {
 	public static readonly DEFAULT_OPTIONS: PollingRateBuilderOptions = {
@@ -25,22 +26,21 @@ export class PollingRateBuilder implements BaseProtocolBuilder {
 	public readonly bRequest: number = 0x09;
 	public readonly wValue: number = 0x0306;
 	public readonly wIndex: number = 2;
+	private selectedRate: Rate = Rate.eSports;
 
 	constructor(options?: PollingRateBuilderOptions) {
 		this.reset();
 		if (options) {
 			this.applyOptions(options);
 		}
+		this.build(ConnectionMode.Adapter);
 	}
 
 	private initializeBuffer(): void {
 		this.buffer.fill(0);
-		this.buffer[0] = 0x06; // header
-		this.buffer[1] = 0x09; // header
-		this.buffer[2] = 0x01; // header
-		this.buffer[3] = 0x01; // polling rate
-		this.buffer[4] = 0xfe; // checksum
-		// 5-8 are 0x00 due to fill(0)
+		this.buffer[0] = 0x06;
+		this.buffer[1] = 0x09;
+		this.buffer[2] = 0x01;
 	}
 
 	private applyOptions(options: PollingRateBuilderOptions): void {
@@ -49,16 +49,26 @@ export class PollingRateBuilder implements BaseProtocolBuilder {
 
 	public reset(): this {
 		this.initializeBuffer();
-		this.applyOptions(PollingRateBuilder.DEFAULT_OPTIONS);
+		this.selectedRate = Rate.eSports;
 		return this;
 	}
 
 	calculateChecksum(): number {
-		return 0xff - (this.buffer[3] ?? 0x00);
+		return 0xff - this.x11RateByte(this.selectedRate);
+	}
+
+	private x11RateByte(rate: Rate): number {
+		const map: Record<Rate, number> = {
+			[Rate.powerSaving]: 0x08,
+			[Rate.office]: 0x04,
+			[Rate.gaming]: 0x02,
+			[Rate.eSports]: 0x01,
+		};
+		return map[rate] ?? 0x01;
 	}
 
 	/**
-	 * Sets the update rate (Polling Rate).
+	 * Sets the polling rate.
 	 * @param rate Rate option (125, 250, 500, or 1000 Hz).
 	 *
 	 * @example
@@ -67,26 +77,31 @@ export class PollingRateBuilder implements BaseProtocolBuilder {
 	 * ```
 	 */
 	setRate(rate: Rate): this {
-		const rateMap: Record<Rate, number> = {
-			[Rate.powerSaving]: 0x08,
-			[Rate.office]: 0x04,
-			[Rate.gaming]: 0x02,
-			[Rate.eSports]: 0x01,
-		};
-
-		const value = rateMap[rate];
-		if (value !== undefined) {
-			this.buffer[3] = value;
-		} else {
+		const validRates = new Set([125, 250, 500, 1000]);
+		if (!validRates.has(rate)) {
 			throw new ParamsError('rate', `Unsupported Polling Rate: ${rate}`);
 		}
-
+		this.selectedRate = rate;
 		return this;
 	}
 
-	build(_mode: ConnectionMode): Buffer {
-		// In both connection modes, the buffer is the same.
-		this.buffer[4] = this.calculateChecksum();
+	build(mode: ConnectionMode): Buffer {
+		if (mode === ConnectionMode.R1Wired) {
+			// R1 uses little-endian u16 encoding
+			const r1Map: Record<Rate, number> = {
+				[Rate.powerSaving]: 0xf708,
+				[Rate.office]: 0xfb04,
+				[Rate.gaming]: 0xfd02,
+				[Rate.eSports]: 0xfe01,
+			};
+			const value = r1Map[this.selectedRate];
+			this.buffer[3] = value & 0xff; // low byte
+			this.buffer[4] = (value >> 8) & 0xff; // high byte
+		} else {
+			// X11 uses single-byte rate + checksum
+			this.buffer[3] = this.x11RateByte(this.selectedRate);
+			this.buffer[4] = this.calculateChecksum();
+		}
 		return this.buffer;
 	}
 

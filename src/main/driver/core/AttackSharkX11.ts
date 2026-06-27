@@ -2,8 +2,7 @@ import { usb } from 'usb';
 import { EventEmitter } from 'node:events';
 import { DeviceError, DriverError, InterfaceError, TimeoutError } from '../errors.js';
 import { CustomMacroBuilder, type CustomMacroBuilderOptions } from '../protocols/CustomMacroBuilder.js';
-import { DpiBuilder, type DpiBuilderOptions } from '../protocols/DpiBuilder.js';
-import { InternalStateResetReportBuilder } from '../protocols/InternalStateResetReportBuilder.js';
+import { DpiBuilder, R1_DEFAULT_DPI_VALUES, type DpiBuilderOptions } from '../protocols/DpiBuilder.js';
 import { type MacroBuilderOptions, MacrosBuilder } from '../protocols/MacrosBuilder.js';
 import {
 	PollingRateBuilder,
@@ -18,11 +17,16 @@ import {
 	type ControlTransferIn,
 	type ControlTransferOptions,
 	type ControlTransferOut,
+	type DeviceModel,
 	type Logger,
 } from '../types.js';
-import { delay } from '../utils/delay.js';
-import { logger as defaultLogger } from '../logger/index.js';
-import { BatteryMonitor } from './BatteryMonitor.js';
+const defaultLogger: Logger = {
+	debug: (m, c) => console.debug({ time: new Date().toISOString(), level: 'debug', message: m, context: c }),
+	info: (m, c) => console.info({ time: new Date().toISOString(), level: 'info', message: m, context: c }),
+	warn: (m, c) => console.warn({ time: new Date().toISOString(), level: 'warn', message: m, context: c }),
+	error: (m, c) => console.error({ time: new Date().toISOString(), level: 'error', message: m, context: c }),
+};
+import { BatteryMonitor, type BatteryMonitorConfig } from './BatteryMonitor.js';
 
 type USBRequestType = 'standard' | 'class' | 'vendor';
 type USBRecipient = 'device' | 'interface' | 'endpoint' | 'other';
@@ -104,8 +108,14 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 	private logger: Logger;
 	private batteryMonitor: BatteryMonitor | null = null;
 	private cachedUserPreferences: UserPreferencesBuilderOptions | null = null;
+	private readonly deviceModel: DeviceModel;
 
-	constructor(options: { connectionMode: ConnectionMode; logger?: Logger; delayMs?: number }) {
+	constructor(options: {
+		connectionMode: ConnectionMode;
+		logger?: Logger;
+		delayMs?: number;
+		deviceModel?: DeviceModel;
+	}) {
 		super();
 		if (!options.connectionMode) {
 			throw new DriverError('The type of connection was not specified');
@@ -114,6 +124,7 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 		this.logger = options.logger ?? defaultLogger;
 		this.delayMs = options.delayMs ?? 250;
 		this.productId = options.connectionMode;
+		this.deviceModel = options.deviceModel ?? 'X11';
 	}
 
 	get connectionMode(): ConnectionMode {
@@ -186,12 +197,26 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 
 		this.isDeviceOpen = true;
 
+		const batteryConfig: BatteryMonitorConfig | undefined =
+			this.deviceModel === 'R1'
+				? this.device.productId === 0xfa60
+					? {
+							headerPrefix: Buffer.from([0x03, 0x55, 0x40, 0x01]),
+							extractValue: (data: Buffer): number => data[4] ?? 0,
+						}
+					: {
+							headerPrefix: null,
+							extractValue: (data: Buffer): number => (data[4] ?? 0) * 10,
+						}
+				: undefined;
+
 		this.batteryMonitor = new BatteryMonitor(
 			this.device,
 			INTERRUPT_ENDPOINT,
 			() => this.connectionMode,
 			this.logger,
 			() => this.isDeviceOpen,
+			batteryConfig,
 		);
 
 		this.batteryMonitor.on('batteryChange', (level) => {
@@ -273,7 +298,7 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 		}
 
 		if (Buffer.isBuffer(options.data)) {
-			await delay(this.delayMs);
+			await new Promise((r) => setTimeout(r, this.delayMs));
 		}
 
 		return result;
@@ -298,7 +323,7 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 	getBatteryLevel(timeoutMs = 1000): Promise<number> {
 		this.checkIsOpen();
 
-		if (this.connectionMode === ConnectionMode.Wired) {
+		if (this.connectionMode === ConnectionMode.Wired || this.connectionMode === ConnectionMode.R1Wired) {
 			return Promise.resolve(-1);
 		}
 
@@ -429,7 +454,17 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 
 	sendInternalStateResetReportBuilder(): Promise<number> {
 		this.checkIsOpen();
-		return this.sendBuilder(new InternalStateResetReportBuilder());
+		const buffer =
+			this.connectionMode === ConnectionMode.Wired
+				? Buffer.from([0x0c, 0x0a, 0x01, 0xfe, 0x01, 0xfe])
+				: Buffer.from([0x0c, 0x0a, 0x01, 0xfe, 0x01, 0xfe, 0x00, 0x00, 0x00, 0x00]);
+		return this.controlTransfer({
+			data: buffer,
+			bmRequestType: 0x21,
+			bRequest: 0x09,
+			wValue: 0x030c,
+			wIndex: 2,
+		} as ControlTransferOut) as Promise<number>;
 	}
 
 	resetPollingRate(): Promise<number> {
@@ -439,7 +474,9 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 
 	resetDpi(): Promise<number> {
 		this.checkIsOpen();
-		return this.sendBuilder(new DpiBuilder());
+		const builder =
+			this.deviceModel === 'R1' ? new DpiBuilder({ dpiValues: R1_DEFAULT_DPI_VALUES }) : new DpiBuilder();
+		return this.sendBuilder(builder);
 	}
 
 	resetMacro(): Promise<number> {
@@ -462,17 +499,23 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 
 	resetUserPreferences(): Promise<number> {
 		this.checkIsOpen();
-		return this.sendBuilder(new UserPreferencesBuilder().setKeyResponse(8));
+		const builder =
+			this.deviceModel === 'R1' ? new UserPreferencesBuilder() : new UserPreferencesBuilder().setKeyResponse(8);
+		return this.sendBuilder(builder);
 	}
 
 	async reset(): Promise<void> {
 		this.checkIsOpen();
-		await this.sendInternalStateResetReportBuilder();
+		if (this.deviceModel !== 'R1') {
+			await this.sendInternalStateResetReportBuilder();
+		}
 		await this.resetDpi();
 		await this.resetUserPreferences();
 		await this.resetPollingRate();
-		await this.resetMacro();
-		await this.resetCustomMacro();
+		if (this.deviceModel !== 'R1') {
+			await this.resetMacro();
+			await this.resetCustomMacro();
+		}
 	}
 
 	getDeviceInfo(): {
@@ -488,7 +531,7 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 		this.checkIsOpen();
 		return {
 			manufacturer: 'Beken',
-			product: 'Attack Shark X11',
+			product: this.deviceModel === 'R1' ? 'Attack Shark R1' : 'Attack Shark X11',
 			serialNumber: 'N/A',
 			vendorId: `0x${this.device.vendorId.toString(16).padStart(4, '0')}`,
 			productId: `0x${this.device.productId.toString(16).padStart(4, '0')}`,

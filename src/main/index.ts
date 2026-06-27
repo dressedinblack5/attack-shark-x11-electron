@@ -2,22 +2,20 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { AttackSharkX11 } from './driver/index.js';
-import { AttackSharkR1 } from './driver/core/AttackSharkR1.js';
 import { ConnectionMode, type DeviceModel } from './driver/types.js';
-import { validateDpiConfig } from './utils/validation.js';
+import { DpiBuilder, type DpiBuilderOptions } from './driver/protocols/DpiBuilder.js';
 import * as profileManager from './storage/profileManager.js';
 import * as settingsManager from './storage/settingsManager.js';
 
 import { CustomMacroBuilder, type CustomMacroBuilderOptions } from './driver/protocols/CustomMacroBuilder.js';
 import type { Rate } from './driver/protocols/PollingRateBuilder.js';
-import type { R1Rate } from './driver/protocols/R1PollingRateBuilder.js';
 import type { UserPreferencesBuilderOptions } from './driver/protocols/UserPreferencesBuilder.js';
-import type { R1UserPreferencesBuilderOptions } from './driver/protocols/R1UserPreferencesBuilder.js';
+
 import type { MacroBuilderOptions } from './driver/protocols/MacrosBuilder.js';
 import type { MacroMode } from '../shared/macro-types.js';
 import { usb } from 'usb';
 
-let driver: AttackSharkX11 | AttackSharkR1 | null = null;
+let driver: AttackSharkX11 | null = null;
 let deviceModel: DeviceModel = 'X11';
 // ... (in app.whenReady())
 
@@ -89,12 +87,7 @@ app.whenReady().then(() => {
 				await oldDriver.close();
 			}
 
-			let newDriver: AttackSharkX11 | AttackSharkR1;
-			if (model === 'R1') {
-				newDriver = new AttackSharkR1({ connectionMode: mode as ConnectionMode });
-			} else {
-				newDriver = new AttackSharkX11({ connectionMode: mode as ConnectionMode });
-			}
+			const newDriver = new AttackSharkX11({ connectionMode: mode as ConnectionMode, deviceModel: model });
 
 			await newDriver.open();
 
@@ -127,22 +120,47 @@ app.whenReady().then(() => {
 
 	ipcMain.handle('set-dpi', async (_, config: unknown) => {
 		if (!driver) throw new Error('Device not connected');
-		const validated = validateDpiConfig(config);
+		if (typeof config !== 'object' || config === null)
+			throw new Error('Invalid DPI configuration: must be an object');
+		const obj = config as Record<string, unknown>;
+		const validated: DpiBuilderOptions = { ...DpiBuilder.DEFAULT_OPTIONS };
+		if (obj['angleSnap'] !== undefined) {
+			if (typeof obj['angleSnap'] !== 'boolean') throw new Error('Invalid angleSnap: must be a boolean');
+			validated.angleSnap = obj['angleSnap'] as boolean;
+		}
+		if (obj['ripplerControl'] !== undefined) {
+			if (typeof obj['ripplerControl'] !== 'boolean')
+				throw new Error('Invalid ripplerControl: must be a boolean');
+			validated.ripplerControl = obj['ripplerControl'] as boolean;
+		}
+		if (obj['dpiValues'] !== undefined) {
+			const dpiValues = obj['dpiValues'];
+			if (
+				!Array.isArray(dpiValues) ||
+				dpiValues.length !== 6 ||
+				!dpiValues.every((v) => typeof v === 'number' && v > 0)
+			)
+				throw new Error('Invalid dpiValues: must be an array of 6 positive numbers');
+			validated.dpiValues = dpiValues as [number, number, number, number, number, number];
+		}
+		if (obj['activeStage'] !== undefined) {
+			const activeStage = obj['activeStage'] as number;
+			if (![1, 2, 3, 4, 5, 6].includes(activeStage))
+				throw new Error('Invalid activeStage: must be between 1 and 6');
+			validated.activeStage = activeStage as 1 | 2 | 3 | 4 | 5 | 6;
+		}
 		const result = await driver.setDpi(validated);
 
 		// Persist DPI config
 		const settings = await settingsManager.getSettings();
-		await settingsManager.saveSettings({ ...settings, dpiConfig: validated });
+		await settingsManager.saveSettings({ ...settings, dpiConfig: validated as Required<DpiBuilderOptions> });
 
 		return result;
 	});
 
 	ipcMain.handle('set-polling-rate', (_, rate: number) => {
 		if (!driver) throw new Error('Device not connected');
-		if (deviceModel === 'R1') {
-			return (driver as AttackSharkR1).setPollingRate(rate as R1Rate);
-		}
-		return (driver as AttackSharkX11).setPollingRate(rate as Rate);
+		return driver.setPollingRate(rate as Rate);
 	});
 
 	ipcMain.handle('set-user-preferences', (_, prefs: UserPreferencesBuilderOptions) => {
@@ -183,7 +201,7 @@ app.whenReady().then(() => {
 
 			if (isWired) {
 				if (deviceModel === 'R1') {
-					const cached = driver.getCachedUserPreferences() as R1UserPreferencesBuilderOptions | null;
+					const cached = driver.getCachedUserPreferences() as UserPreferencesBuilderOptions | null;
 					if (!cached) return null;
 					return {
 						sleepTime: cached.sleepTime ?? 0.5,
@@ -257,7 +275,7 @@ app.whenReady().then(() => {
 	ipcMain.handle('set-macro', (_, config: MacroBuilderOptions) => {
 		if (!driver) throw new Error('Device not connected');
 		if (deviceModel === 'R1') throw new Error('Macros not supported on R1');
-		return (driver as AttackSharkX11).setMacro(config);
+		return driver.setMacro(config);
 	});
 
 	ipcMain.handle('set-custom-macro', (_, options: CustomMacroBuilderOptions) => {
@@ -266,7 +284,7 @@ app.whenReady().then(() => {
 
 		const builder = new CustomMacroBuilder(options);
 
-		return (driver as AttackSharkX11).setCustomMacro(builder);
+		return driver.setCustomMacro(builder);
 	});
 
 	interface SendMacroEvent {
@@ -297,7 +315,7 @@ app.whenReady().then(() => {
 				builder.addEvent(event.keyCode, event.delayMs, event.isRelease);
 			}
 
-			return (driver as AttackSharkX11).setCustomMacro(builder);
+			return driver.setCustomMacro(builder);
 		},
 	);
 
