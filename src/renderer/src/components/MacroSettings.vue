@@ -3,7 +3,6 @@ import { ref, watch, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Keyboard } from 'lucide-vue-next';
 import { macroTemplates, MacroName, type MacroTuple } from '../../../shared/macro-templates.js';
-import { useDebounce } from '../composables/useDebounce';
 import BaseSelect from './BaseSelect.vue';
 import Card from './Card.vue';
 import StatusMessage from './StatusMessage.vue';
@@ -72,7 +71,11 @@ const applyMacro = async () => {
 	}
 };
 
-const debouncedApplyMacro = useDebounce(applyMacro, 300);
+let macroDebounceTimer: ReturnType<typeof setTimeout>;
+const debouncedApplyMacro = () => {
+	clearTimeout(macroDebounceTimer);
+	macroDebounceTimer = setTimeout(() => applyMacro(), 300);
+};
 
 watch([selectedTemplate, selectedButton], () => debouncedApplyMacro());
 </script>

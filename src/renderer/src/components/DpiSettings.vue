@@ -7,7 +7,7 @@ import BaseSlider from './BaseSlider.vue';
 import BaseToggle from './BaseToggle.vue';
 import Card from './Card.vue';
 import StatusMessage from './StatusMessage.vue';
-import { useDebounce } from '../composables/useDebounce';
+
 
 const { t } = useI18n();
 
@@ -77,21 +77,25 @@ const isError = ref(false);
 const isSaving = ref(false);
 const statusType = computed(() => (isError.value ? 'error' : 'success'));
 
-const debouncedApplyDpi = useDebounce(async () => {
-	if (!props.isConnected) return;
-	try {
-		const config = {
-			activeStage: dpiConfig.activeStage,
-			angleSnap: dpiConfig.angleSnap,
-			ripplerControl: dpiConfig.ripplerControl,
-			dpiValues: [...dpiConfig.dpiValues],
-		};
-		await window.api.setDpi(config);
-	} catch (err: unknown) {
-		const error = err instanceof Error ? err : new Error(String(err));
-		console.error('Auto-save DPI failed:', error);
-	}
-}, 300);
+let dpiDebounceTimer: ReturnType<typeof setTimeout>;
+const debouncedApplyDpi = () => {
+	clearTimeout(dpiDebounceTimer);
+	dpiDebounceTimer = setTimeout(async () => {
+		if (!props.isConnected) return;
+		try {
+			const config = {
+				activeStage: dpiConfig.activeStage,
+				angleSnap: dpiConfig.angleSnap,
+				ripplerControl: dpiConfig.ripplerControl,
+				dpiValues: [...dpiConfig.dpiValues],
+			};
+			await window.api.setDpi(config);
+		} catch (err: unknown) {
+			const error = err instanceof Error ? err : new Error(String(err));
+			console.error('Auto-save DPI failed:', error);
+		}
+	}, 300);
+};
 
 const applyDpi = async () => {
 	if (!props.isConnected) return;

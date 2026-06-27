@@ -8,7 +8,7 @@ import BaseSelect from './BaseSelect.vue';
 import BaseSlider from './BaseSlider.vue';
 import Card from './Card.vue';
 import StatusMessage from './StatusMessage.vue';
-import { useDebounce } from '../composables/useDebounce';
+
 
 export interface UserPreferences {
 	lightMode: number;
@@ -53,9 +53,13 @@ watch(
 	{ deep: true },
 );
 
-const debouncedApplyPreferences = useDebounce(async () => {
-	await applyPreferences(false);
-}, 300);
+let prefsDebounceTimer: ReturnType<typeof setTimeout>;
+const debouncedApplyPreferences = () => {
+	clearTimeout(prefsDebounceTimer);
+	prefsDebounceTimer = setTimeout(async () => {
+		await applyPreferences(false);
+	}, 300);
+};
 
 // Watch form changes to sync with parent and auto-apply
 watch(
