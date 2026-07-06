@@ -1,4 +1,4 @@
-import type { BaseProtocolBuilder } from '../core/BaseProtocolBuilder.js';
+import { BaseBuilder } from '../core/BaseProtocolBuilder.js';
 import { ParamsError } from '../errors.js';
 import { Button, type ConnectionMode } from '../types.js';
 import { type KeyCode, MacroName, macroTemplates, type MacroTuple } from '../../../shared/macro-templates.js';
@@ -29,7 +29,7 @@ export interface CustomMacroBuilderOptions {
  * Builder for creating complex custom macros (Report 0x0309).
  * Allows key sequences with specific delays and different playback modes.
  */
-export class CustomMacroBuilder implements BaseProtocolBuilder {
+export class CustomMacroBuilder extends BaseBuilder {
 	public static readonly MAX_MACRO_EVENTS = 47;
 	public static readonly DEFAULT_OPTIONS: CustomMacroBuilderOptions = {
 		playOptions: {
@@ -38,10 +38,7 @@ export class CustomMacroBuilder implements BaseProtocolBuilder {
 		},
 	};
 	readonly buffer: Buffer = Buffer.alloc(0);
-	public readonly bmRequestType: number = 0x21;
-	public readonly bRequest: number = 0x09;
-	public readonly wValue: number = 0x0309;
-	public readonly wIndex: number = 2;
+	readonly wValue: number = 0x0309;
 	private defineMacroButton: MacrosBuilder;
 	private readonly secondPacket: Buffer = Buffer.alloc(64);
 	private readonly thirdPacket: Buffer = Buffer.alloc(64);
@@ -49,6 +46,7 @@ export class CustomMacroBuilder implements BaseProtocolBuilder {
 	private readonly macroEvents: number[] = [];
 
 	constructor(options?: CustomMacroBuilderOptions) {
+		super();
 		this.secondPacket[0] = 0x09;
 		this.secondPacket[1] = 0x40;
 		this.secondPacket[3] = 0x00; // Page 0
@@ -205,10 +203,6 @@ export class CustomMacroBuilder implements BaseProtocolBuilder {
 		this.fourthPacket[11] = checksum & 0xff;
 
 		return [this.defineMacroButton.build(mode), this.secondPacket, this.thirdPacket, this.fourthPacket];
-	}
-
-	toString(): string {
-		return this.buffer.toString('hex');
 	}
 
 	private handleDelay(delayMs: number): {

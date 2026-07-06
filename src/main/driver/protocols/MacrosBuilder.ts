@@ -1,4 +1,4 @@
-import type { BaseProtocolBuilder } from '../core/BaseProtocolBuilder.js';
+import { BaseBuilder } from '../core/BaseProtocolBuilder.js';
 import { ParamsError } from '../errors.js';
 import { Button, type ConnectionMode } from '../types.js';
 import {
@@ -54,12 +54,7 @@ export interface MacroBuilderOptions {
 	scrollDown?: MacroTuple;
 }
 
-export class MacrosBuilder implements BaseProtocolBuilder {
-	public static readonly BM_REQUEST_TYPE = 0x21;
-	public static readonly B_REQUEST = 0x09;
-	public static readonly W_VALUE = 0x0308;
-	public static readonly W_INDEX = 2;
-
+export class MacrosBuilder extends BaseBuilder {
 	public static readonly DEFAULT_MACROS: MacroBuilderOptions = {
 		left: macroTemplates[MacroName.GLOBAL_LEFT_CLICK],
 		right: macroTemplates[MacroName.GLOBAL_RIGHT_CLICK],
@@ -69,12 +64,10 @@ export class MacrosBuilder implements BaseProtocolBuilder {
 	};
 
 	readonly buffer: Buffer = Buffer.alloc(59);
-	public readonly bmRequestType: number = MacrosBuilder.BM_REQUEST_TYPE;
-	public readonly bRequest: number = MacrosBuilder.B_REQUEST;
-	public readonly wValue: number = MacrosBuilder.W_VALUE;
-	public readonly wIndex: number = MacrosBuilder.W_INDEX;
+	readonly wValue: number = 0x0308;
 
 	constructor(options?: MacroBuilderOptions) {
+		super();
 		this.reset();
 		if (options) {
 			this.applyOptions(options);
@@ -147,10 +140,6 @@ export class MacrosBuilder implements BaseProtocolBuilder {
 	build(_mode: ConnectionMode): Buffer {
 		this.buffer[58] = this.calculateChecksum();
 		return this.buffer;
-	}
-
-	toString(): string {
-		return this.buffer.toString('hex');
 	}
 }
 

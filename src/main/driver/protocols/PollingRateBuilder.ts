@@ -1,4 +1,4 @@
-import type { BaseProtocolBuilder } from '../core/BaseProtocolBuilder.js';
+import { BaseBuilder } from '../core/BaseProtocolBuilder.js';
 import { ParamsError } from '../errors.js';
 import { ConnectionMode } from '../types.js';
 
@@ -17,18 +17,16 @@ export interface PollingRateBuilderOptions {
  * Builder for configuring the polling rate.
  * Handles both X11 (single-byte + checksum) and R1 (little-endian u16) encoding.
  */
-export class PollingRateBuilder implements BaseProtocolBuilder {
+export class PollingRateBuilder extends BaseBuilder {
 	public static readonly DEFAULT_OPTIONS: PollingRateBuilderOptions = {
 		rate: Rate.eSports,
 	};
 	readonly buffer: Buffer = Buffer.alloc(9);
-	public readonly bmRequestType: number = 0x21;
-	public readonly bRequest: number = 0x09;
-	public readonly wValue: number = 0x0306;
-	public readonly wIndex: number = 2;
+	readonly wValue: number = 0x0306;
 	private selectedRate: Rate = Rate.eSports;
 
 	constructor(options?: PollingRateBuilderOptions) {
+		super();
 		this.reset();
 		if (options) {
 			this.applyOptions(options);
@@ -103,9 +101,5 @@ export class PollingRateBuilder implements BaseProtocolBuilder {
 			this.buffer[4] = this.calculateChecksum();
 		}
 		return this.buffer;
-	}
-
-	toString(): string {
-		return this.buffer.toString('hex');
 	}
 }

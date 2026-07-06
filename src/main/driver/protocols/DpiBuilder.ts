@@ -1,4 +1,4 @@
-import type { BaseProtocolBuilder } from '../core/BaseProtocolBuilder.js';
+import { BaseBuilder } from '../core/BaseProtocolBuilder.js';
 import { ParamsError } from '../errors.js';
 import { DPI_STEP_MAP } from '../tables/dpi-map.js';
 import { ConnectionMode } from '../types.js';
@@ -37,7 +37,7 @@ export const R1_DEFAULT_DPI_VALUES: [number, number, number, number, number, num
 /**
  * Builder for configuring DPI and other sensor parameters of the Attack Shark X11/R1.
  */
-export class DpiBuilder implements BaseProtocolBuilder {
+export class DpiBuilder extends BaseBuilder {
 	public static readonly DEFAULT_OPTIONS: DpiBuilderOptions = {
 		angleSnap: false,
 		ripplerControl: true,
@@ -45,13 +45,11 @@ export class DpiBuilder implements BaseProtocolBuilder {
 		activeStage: 2,
 	};
 	readonly buffer: Buffer = Buffer.alloc(56);
-	public readonly bmRequestType: number = 0x21;
-	public readonly bRequest: number = 0x09;
-	public readonly wValue: number = 0x0304;
-	public readonly wIndex: number = 2;
+	readonly wValue: number = 0x0304;
 	private stages: [number, number, number, number, number, number] = [800, 1600, 2400, 3200, 5000, 22000];
 
 	constructor(options?: DpiBuilderOptions) {
+		super();
 		this.reset();
 		if (options) {
 			this.applyOptions(options);
@@ -213,10 +211,6 @@ export class DpiBuilder implements BaseProtocolBuilder {
 		return mode === ConnectionMode.Wired || mode === ConnectionMode.R1Wired
 			? this.buffer.subarray(0, OFFSET.CHECKSUM_LOW_BYTE + 1)
 			: this.buffer;
-	}
-
-	public toString(): string {
-		return this.buffer.toString('hex');
 	}
 
 	private encodeDpi(dpi: number): number {

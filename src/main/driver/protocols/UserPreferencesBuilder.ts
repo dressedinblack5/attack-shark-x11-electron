@@ -1,4 +1,4 @@
-import type { BaseProtocolBuilder } from '../core/BaseProtocolBuilder.js';
+import { BaseBuilder } from '../core/BaseProtocolBuilder.js';
 import { ParamsError } from '../errors.js';
 import { ConnectionMode } from '../types.js';
 
@@ -131,7 +131,7 @@ export type SleepTime = number;
  * Builder for user preferences and configurations (Report 0x0305)
  * Handles Light Mode, Deep Sleep, Sleep, Key Response and RGB settings.
  */
-export class UserPreferencesBuilder implements BaseProtocolBuilder {
+export class UserPreferencesBuilder extends BaseBuilder {
 	public static readonly DEFAULT_OPTIONS: UserPreferencesBuilderOptions = {
 		lightMode: LightMode.Off,
 		rgb: { r: 0, g: 255, b: 0 },
@@ -141,15 +141,13 @@ export class UserPreferencesBuilder implements BaseProtocolBuilder {
 		keyResponse: 4,
 	};
 	readonly buffer: Buffer;
-	public readonly bmRequestType: number = 0x21;
-	public readonly bRequest: number = 0x09;
-	public readonly wValue: number = 0x0305;
-	public readonly wIndex: number = 2;
+	readonly wValue: number = 0x0305;
 	private deepSleepMinutes: number = 10;
 	private keyResponseMs: number = 4;
 	private ledSpeed: number = 0x03;
 
 	constructor(options?: UserPreferencesBuilderOptions) {
+		super();
 		this.buffer = Buffer.alloc(15);
 		this.buffer[0] = 0x05; // header
 		this.buffer[1] = 0x0f; // header
@@ -282,10 +280,6 @@ export class UserPreferencesBuilder implements BaseProtocolBuilder {
 		}
 		if (mode === ConnectionMode.Wired || mode === ConnectionMode.R1Wired) return this.buffer.subarray(0, 13);
 		else return this.buffer;
-	}
-
-	toString(): string {
-		return this.buffer.toString('hex');
 	}
 
 	private updateIndex4(): void {

@@ -8,32 +8,19 @@ describe('PollingRateBuilder', () => {
 		expect(builder.toString()).toBe('06090101fe00000000');
 	});
 
-	it('should set polling rate to 125Hz (powerSaving)', () => {
-		const builder = new PollingRateBuilder({ rate: Rate.powerSaving });
-		builder.build(ConnectionMode.Wired);
-		// value 0x08, complement 0xF7
-		expect(builder.toString()).toBe('06090108f700000000');
-	});
-
-	it('should set polling rate to 250Hz (office)', () => {
-		const builder = new PollingRateBuilder({ rate: Rate.office });
-		builder.build(ConnectionMode.Wired);
-		// value 0x04, complement 0xFB
-		expect(builder.toString()).toBe('06090104fb00000000');
-	});
-
-	it('should set polling rate to 500Hz (gaming)', () => {
-		const builder = new PollingRateBuilder({ rate: Rate.gaming });
-		builder.build(ConnectionMode.Wired);
-		// value 0x02, complement 0xFD
-		expect(builder.toString()).toBe('06090102fd00000000');
-	});
-
-	it('should set polling rate to 1000Hz (eSports)', () => {
-		const builder = new PollingRateBuilder({ rate: Rate.eSports });
-		// value 0x01, complement 0xFE
-		expect(builder.toString()).toBe('06090101fe00000000');
-	});
+	const RATES: Array<[string, Rate, string]> = [
+		['125Hz', Rate.powerSaving, '06090108f700000000'],
+		['250Hz', Rate.office, '06090104fb00000000'],
+		['500Hz', Rate.gaming, '06090102fd00000000'],
+		['1000Hz', Rate.eSports, '06090101fe00000000'],
+	];
+	for (const [label, rate, expected] of RATES) {
+		it(`should encode ${label}`, () => {
+			const builder = new PollingRateBuilder({ rate });
+			builder.build(ConnectionMode.Wired);
+			expect(builder.toString()).toBe(expected);
+		});
+	}
 
 	it('should have correct USB control transfer parameters', () => {
 		const builder = new PollingRateBuilder();
