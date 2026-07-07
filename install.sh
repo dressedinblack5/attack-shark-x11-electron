@@ -79,8 +79,9 @@ ensure_deps() {
 # --- build from source -------------------------------------------------
 
 build_from_source() {
+	# Use a dir on the root filesystem — tmpfs triggers EOVERFLOW on copyfile
 	local tmp_dir
-	tmp_dir=$(mktemp -d)
+	tmp_dir=$(mktemp -d -p /var/tmp)
 	cd "$tmp_dir"
 
 	yellow "Downloading source …"
