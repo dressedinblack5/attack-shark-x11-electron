@@ -93,7 +93,7 @@ build_from_source() {
 	bun install 2>&1 | tail -1
 
 	yellow "Building (this will take a minute) …"
-	bun run package 2>&1 | tail -5
+	bun run package 2>&1 || true
 
 	# locate the AppImage
 	local appimage
