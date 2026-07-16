@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it, vi } from 'bun:test';
+vi.mock('usb', () => ({ usb: { findDeviceByIds: vi.fn() } }));
 import { MacrosBuilder } from '../src/main/driver/protocols/MacrosBuilder.js';
 import {
 	Button,

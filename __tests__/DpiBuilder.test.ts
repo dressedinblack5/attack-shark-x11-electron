@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it, vi } from 'bun:test';
+vi.mock('usb', () => ({ usb: { findDeviceByIds: vi.fn() } }));
 import { DpiBuilder } from '../src/main/driver/protocols/DpiBuilder.js';
 import { ConnectionMode, ParamsError } from '../src/main/driver/index.js';
 
