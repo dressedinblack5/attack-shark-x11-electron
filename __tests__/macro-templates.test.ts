@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it, vi } from 'bun:test';
+vi.mock('usb', () => ({ usb: { findDeviceByIds: vi.fn() } }));
 import { macroTemplates, MacroName, KeyCode, Modifiers } from '../src/main/driver/index.js';
 
 describe('macroTemplates', () => {

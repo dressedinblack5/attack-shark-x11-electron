@@ -1,4 +1,5 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it, vi } from 'bun:test';
+vi.mock('usb', () => ({ usb: { findDeviceByIds: vi.fn() } }));
 import { UserPreferencesBuilder } from '../src/main/driver/protocols/UserPreferencesBuilder.js';
 import { ConnectionMode, LightMode } from '../src/main/driver/index.js';
 import { DriverError } from '../src/main/driver/errors.js';
