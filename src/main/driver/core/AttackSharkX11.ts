@@ -185,6 +185,10 @@ export class AttackSharkX11 extends EventEmitter<AttackSharkX11Events> {
 			const error = e instanceof Error ? e : new Error(String(e));
 			if (error.message.includes('LIBUSB_ERROR_BUSY')) {
 				this.logger.warn(`Interface ${DEVICE_INTERFACE} is already claimed. Attempting to continue...`);
+			} else if (error.message.includes('incompatible driver')) {
+				const msg = `Could not claim interface ${DEVICE_INTERFACE}. An incompatible driver (e.g., Windows HID) is installed. Please use Zadig (https://zadig.akeo.ie/) to replace the driver with 'WinUSB' for this device.`;
+				this.logger.error(msg, error);
+				throw new InterfaceError(msg, DEVICE_INTERFACE, { cause: error });
 			} else {
 				this.logger.error(`Could not claim interface ${DEVICE_INTERFACE}`, error);
 				throw new InterfaceError(

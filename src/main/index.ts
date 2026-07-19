@@ -24,6 +24,7 @@ function createWindow(): void {
 	const mainWindow = new BrowserWindow({
 		width: 1125,
 		height: 837,
+		icon: join(__dirname, '../../assets/atackshark.png'),
 		show: false,
 		autoHideMenuBar: true,
 		webPreferences: {

@@ -25,7 +25,7 @@ It handles everything: installs deps, builds, and sets up the desktop entry + ud
 ```bash
 rm -f ~/.local/bin/attack-shark-x11
 rm -f ~/.local/share/applications/attack-shark-x11.desktop
-rm -f ~/.local/share/icons/hicolor/scalable/apps/attack-shark-x11.svg
+rm -f ~/.local/share/icons/hicolor/scalable/apps/attack-shark-x11.png
 sudo rm -f /etc/udev/rules.d/99-attack-shark-x11.rules
 sudo udevadm control --reload-rules
 ```
@@ -53,9 +53,9 @@ The mouse needs a udev rule so the app can access it without `sudo`:
 ```bash
 # 1. Create the rule file
 sudo tee /etc/udev/rules.d/99-attack-shark-x11.rules > /dev/null <<'UDEV'
-SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa60", MODE="0666", GROUP="plugdev"
-SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa55", MODE="0666", GROUP="plugdev"
-SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa61", MODE="0666", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa60", MODE="0666", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa55", MODE="0666", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa61", MODE="0666", TAG+="uaccess"
 UDEV
 
 # 2. Reload rules
