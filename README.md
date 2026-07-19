@@ -34,7 +34,11 @@ sudo udevadm control --reload-rules
 ## Windows install
 * clone the repo
 * run install.bat
-* have fun!
+* go to https://zadig.akeo.ie/ and install the tool
+* after that replace default windows drivers with winUSB drivers
+* run the installer from dist folder
+* now you can run the tool from start menu or desktop icon :)
+
 ## Features
 
 **Device control** — DPI stages, button remapping, macros with timing, lighting (mode/speed/color), polling rate (125–1000 Hz), battery monitoring, device reset.
