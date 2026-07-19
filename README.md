@@ -31,7 +31,10 @@ sudo udevadm control --reload-rules
 ```
 
 ---
-
+## Windows install
+* clone the repo
+* run install.bat
+* have fun!
 ## Features
 
 **Device control** — DPI stages, button remapping, macros with timing, lighting (mode/speed/color), polling rate (125–1000 Hz), battery monitoring, device reset.
