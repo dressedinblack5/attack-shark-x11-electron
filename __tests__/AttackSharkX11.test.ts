@@ -38,15 +38,13 @@ const createMockDevice = (productId: number): MockDevice => ({
 	attachKernelDriver: vi.fn().mockResolvedValue(undefined),
 	nativeControlTransferIn: vi
 		.fn()
-		.mockImplementation(
-			(_setup: unknown, _timeout: number, length: number): Promise<Uint8Array | null> =>
-				Promise.resolve(new Uint8Array(length)),
+		.mockImplementation((_setup: unknown, _timeout: number, length: number): Promise<Uint8Array | null> =>
+			Promise.resolve(new Uint8Array(length)),
 		),
 	nativeControlTransferOut: vi
 		.fn()
-		.mockImplementation(
-			(_setup: unknown, _timeout: number, data?: Uint8Array): Promise<number> =>
-				Promise.resolve(data?.length ?? 0),
+		.mockImplementation((_setup: unknown, _timeout: number, data?: Uint8Array): Promise<number> =>
+			Promise.resolve(data?.length ?? 0),
 		),
 	nativeTransferIn: vi.fn().mockResolvedValue(new Uint8Array(64)),
 	nativeTransferOut: vi.fn().mockResolvedValue(0),
