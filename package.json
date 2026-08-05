@@ -43,7 +43,7 @@
 		"test": "bun test"
 	},
 	"build": {
-		"icon": "assets/atackshark.png",
+		"icon": "assets/attack-shark.png",
 		"appId": "com.attackshark.x11",
 		"productName": "Attack Shark X11",
 		"artifactName": "attack-shark-x11-${version}.${ext}",
@@ -61,7 +61,7 @@
 				"deb"
 			],
 			"category": "Settings",
-			"icon": "assets/atackshark.png",
+			"icon": "assets/attack-shark.png",
 			"syncDesktopName": true
 		}
 	},

@@ -60,9 +60,9 @@ The mouse needs a udev rule so the app can access it without `sudo`:
 ```bash
 # 1. Create the rule file
 sudo tee /etc/udev/rules.d/99-attack-shark-x11.rules > /dev/null <<'UDEV'
-SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa60", MODE="0666", TAG+="uaccess"
-SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa55", MODE="0666", TAG+="uaccess"
-SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa61", MODE="0666", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa60", MODE="0666", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa55", MODE="0666", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa61", MODE="0666", GROUP="plugdev"
 UDEV
 
 # 2. Reload rules
@@ -123,7 +123,7 @@ Reverse-engineering effort. PRs welcome for protocol docs, features, or hardware
 
 ## License
 
-MIT © [HarukaYamamoto0](https://github.com/HarukaYamamoto0)
+MIT © [HarukaYamamoto0](https://github.com/HarukaYamamoto0) (original), [dressedinblack5](https://github.com/dressedinblack5) (fork)
 
 *Not affiliated with Attack Shark. Use at your own risk.*
 
