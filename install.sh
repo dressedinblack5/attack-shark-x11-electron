@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+GITHUB_REPO="dressedinblack5/attack-shark-x11-electron"
 APP_NAME="attack-shark-x11"
 UDEV_RULES="/etc/udev/rules.d/99-${APP_NAME}.rules"
+
+# build from source — no prebuilt releases
+TAG=$(curl -fsSL "https://api.github.com/repos/${GITHUB_REPO}/releases/latest" 2>/dev/null \
+	| grep -o '"tag_name": *"[^"]*"' | head -1 | cut -d'"' -f4 2>/dev/null || true)
+# if no releases exist, use HEAD
+REF=${TAG:-main}
+TAR_URL="https://github.com/${GITHUB_REPO}/archive/${REF}.tar.gz"
 
 # --- helpers -----------------------------------------------------------
 
@@ -10,28 +18,6 @@ color() { printf '\033[%sm%s\033[0m\n' "$1" "$2"; }
 green()  { color 32 "$*"; }
 yellow() { color 33 "$*"; }
 red()    { color 31 "$*"; }
-
-# --- distro detection & package management -----------------------------
-
-detect_package_manager() {
-    if command -v pacman &>/dev/null; then echo "pacman";
-    elif command -v apt-get &>/dev/null; then echo "apt";
-    elif command -v dnf &>/dev/null; then echo "dnf";
-    elif command -v zypper &>/dev/null; then echo "zypper";
-    else echo "unknown"; fi
-}
-
-install_package() {
-    local pm=$(detect_package_manager)
-    yellow "Attempting to install '$1' using $pm..."
-    case $pm in
-        pacman) sudo pacman -S --needed --noconfirm "$1" ;;
-        apt) sudo apt-get update && sudo apt-get install -y "$1" ;;
-        dnf) sudo dnf install -y "$1" ;;
-        zypper) sudo zypper install -y "$1" ;;
-        *) red "Unknown package manager. Please install '$1' manually."; exit 1 ;;
-    esac
-}
 
 # --- udev rules --------------------------------------------------------
 
@@ -42,9 +28,9 @@ write_udev() {
 	fi
 	yellow "Setting up udev rules (requires sudo) …"
 	sudo tee "$UDEV_RULES" >/dev/null <<'UDEV'
-SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa60", MODE="0666", TAG+="uaccess"
-SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa55", MODE="0666", TAG+="uaccess"
-SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa61", MODE="0666", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa60", MODE="0666", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa55", MODE="0666", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTR{idVendor}=="1d57", ATTR{idProduct}=="fa61", MODE="0666", GROUP="plugdev"
 UDEV
 	sudo udevadm control --reload-rules
 	sudo udevadm trigger
@@ -52,55 +38,81 @@ UDEV
 
 # --- deps --------------------------------------------------------------
 
-ensure_node_and_bun() {
-    # 1. Install Node/npm if missing
-    if ! command -v npm &>/dev/null; then
-        yellow "npm not found. Installing Node.js..."
-        install_package "nodejs"
-        install_package "npm"
-    fi
-
-    # 2. Install Bun if missing
-    if ! command -v bun &>/dev/null; then
-        yellow "Installing Bun..."
-        curl -fsSL https://bun.sh/install | bash
-        export BUN_INSTALL="$HOME/.bun"
-        export PATH="$BUN_INSTALL/bin:$PATH"
-    fi
+install_bun() {
+	if command -v bun &>/dev/null; then return; fi
+	yellow "Installing Bun …"
+	curl -fsSL https://bun.sh/install | bash
+	# shellcheck disable=SC2016
+	echo 'export BUN_INSTALL="$HOME/.bun"' >> "$HOME/.bashrc"
+	echo 'export PATH="$BUN_INSTALL/bin:$PATH"' >> "$HOME/.bashrc"
+	export BUN_INSTALL="$HOME/.bun"
+	export PATH="$BUN_INSTALL/bin:$PATH"
 }
 
-ensure_build_deps() {
-	yellow "Checking system build dependencies …"
-    # Basic requirements for Electron/Rust
-    local pm=$(detect_package_manager)
-    if [ "$pm" == "pacman" ]; then
-        sudo pacman -S --needed --noconfirm rust base-devel libusb
-    elif [ "$pm" == "apt" ]; then
-        sudo apt-get update && sudo apt-get install -y rustc cargo build-essential libusb-1.0-0-dev
-    elif [ "$pm" == "dnf" ]; then
-        sudo dnf groupinstall -y "Development Tools"
-        sudo dnf install -y rust cargo libusb-devel
-    fi
+ensure_deps() {
+	yellow "Checking system dependencies …"
+	if [ -f /etc/arch-release ]; then
+		local missing=()
+		command -v rustc &>/dev/null || missing+=(rust)
+		command -v gcc   &>/dev/null || missing+=(base-devel)
+		ldconfig -p | grep -q libusb 2>/dev/null || missing+=(libusb)
+		if [ ${#missing[@]} -gt 0 ]; then
+			yellow "Installing: ${missing[*]}"
+			sudo pacman -S --needed --noconfirm "${missing[@]}"
+		fi
+	elif grep -qi "ubuntu\|debian" /etc/os-release 2>/dev/null; then
+		local missing=()
+		command -v rustc &>/dev/null || missing+=(rustc cargo)
+		command -v gcc   &>/dev/null || missing+=(build-essential)
+		dpkg -s libusb-1.0-0-dev &>/dev/null 2>&1 || missing+=(libusb-1.0-0-dev)
+		if [ ${#missing[@]} -gt 0 ]; then
+			yellow "Installing: ${missing[*]}"
+			sudo apt update -qq && sudo apt install -y "${missing[@]}"
+		fi
+	else
+		# assume the user has rust etc.
+		command -v rustc &>/dev/null || { red "rustc required — install rustup: https://rustup.rs"; exit 1; }
+		command -v gcc   &>/dev/null || { red "C compiler required — install build-essential / base-devel"; exit 1; }
+	fi
 }
 
 # --- build from source -------------------------------------------------
 
-build_local() {
+build_from_source() {
+	# Use a dir on the root filesystem — tmpfs triggers EOVERFLOW on copyfile
+	local tmp_dir
+	tmp_dir=$(mktemp -d -p /var/tmp)
+	cd "$tmp_dir"
+
+	yellow "Downloading source …"
+	curl -fsSL "$TAR_URL" -o source.tar.gz
+	tar xzf source.tar.gz
+	cd attack-shark-x11-* 2>/dev/null || cd */ 2>/dev/null
+
 	yellow "Installing JS dependencies …"
-	bun install
+	bun install 2>&1 | tail -1
 
 	yellow "Building (this will take a minute) …"
-	bun run package
+	bun run package 2>&1
 
 	# locate the AppImage
 	local appimage
 	appimage=$(ls dist/*.AppImage 2>/dev/null | head -1)
 	if [ -z "$appimage" ]; then
+		# maybe built as deb — install that instead
+		local deb
+		deb=$(ls dist/*.deb 2>/dev/null | head -1)
+		if [ -n "$deb" ]; then
+			yellow "Installing .deb …"
+			sudo dpkg -i "$deb" 2>/dev/null || sudo apt install -f -y
+			cd / && rm -rf "$tmp_dir"
+			return
+		fi
 		red "Build output not found in dist/"
 		exit 1
 	fi
 
-	# install
+	# install AppImage
 	local bin_dir="${HOME}/.local/bin"
 	local desktop_dir="${HOME}/.local/share/applications"
 	local icon_dir="${HOME}/.local/share/icons/hicolor/scalable/apps"
@@ -109,21 +121,27 @@ build_local() {
 	cp "$appimage" "${bin_dir}/${APP_NAME}"
 	chmod +x "${bin_dir}/${APP_NAME}"
 
-	# icon
-	local installed_icon="${icon_dir}/atackshark.png"
-	cp assets/atackshark.png "$installed_icon" 2>/dev/null || true
+	# icon — use the one from the build
+	cp assets/attack-shark-x11.svg "${icon_dir}/" 2>/dev/null || true
 
 	cat >"${desktop_dir}/${APP_NAME}.desktop" <<EOF
 [Desktop Entry]
 Name=Attack Shark X11
 Comment=Configuration tool for the Attack Shark X11 gaming mouse
 Exec=${bin_dir}/${APP_NAME}
-Icon=${installed_icon}
+Icon=attack-shark-x11
 Terminal=false
 Type=Application
 Categories=HardwareSettings;Settings;
 Keywords=mouse;gaming;driver;
 EOF
+
+	cd / && rm -rf "$tmp_dir"
+
+	if ! echo "$PATH" | tr ':' '\n' | grep -qxF "$bin_dir"; then
+		yellow "Tip: add ~/.local/bin to your PATH:"
+		echo "  export PATH=\"\$HOME/.local/bin:\$PATH\"  # >> ~/.bashrc"
+	fi
 
 	green "Installed to ${bin_dir}/${APP_NAME}"
 }
@@ -132,11 +150,13 @@ EOF
 
 main() {
 	green "=== Attack Shark X11 Installer ==="
-	
-    write_udev
-    ensure_node_and_bun
-    ensure_build_deps
-    build_local
+	echo "   building from source"
+	echo
+
+	write_udev
+	install_bun
+	ensure_deps
+	build_from_source
 
 	echo
 	green "Done. Launch 'Attack Shark X11' from your app menu or run: ${APP_NAME}"

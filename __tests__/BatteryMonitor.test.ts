@@ -17,9 +17,14 @@ describe('BatteryMonitor', () => {
 
 	beforeEach(() => {
 		mockDevice = { nativeTransferIn: vi.fn().mockResolvedValue(new Uint8Array(64)) };
-		mockLogger = { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() };
-		connectionMode = () => ConnectionMode.Adapter;
-		isOpen = () => true;
+		mockLogger = {
+			debug: vi.fn(),
+			info: vi.fn(),
+			warn: vi.fn(),
+			error: vi.fn(),
+		};
+		connectionMode = (): ConnectionMode => ConnectionMode.Adapter;
+		isOpen = (): boolean => true;
 		monitor = new BatteryMonitor(mockDevice, 0x02, connectionMode, mockLogger, isOpen);
 	});
 
@@ -35,7 +40,7 @@ describe('BatteryMonitor', () => {
 		it('should accept custom headerPrefix and extractValue', () => {
 			const custom = new BatteryMonitor(mockDevice, 0x02, connectionMode, mockLogger, isOpen, {
 				headerPrefix: Buffer.from([0xaa, 0xbb]),
-				extractValue: (data: Buffer) => data[2] + data[3],
+				extractValue: (data: Buffer): number => data[2] + data[3],
 			});
 			const spy = vi.fn();
 			custom.on('batteryChange', spy);
@@ -153,7 +158,7 @@ describe('BatteryMonitor', () => {
 
 	describe('startPolling / stopPolling', () => {
 		it('should start polling and call nativeTransferIn', async () => {
-			let resolveTransfer: (v: Uint8Array) => void;
+			let resolveTransfer: ((v: Uint8Array) => void) | null = null;
 			mockDevice.nativeTransferIn.mockReturnValue(
 				new Promise<Uint8Array>((resolve) => {
 					resolveTransfer = resolve;
@@ -163,7 +168,7 @@ describe('BatteryMonitor', () => {
 			expect(monitor.isPolling).toBe(true);
 			expect(mockDevice.nativeTransferIn).toHaveBeenCalledWith(0x02, 2000, 64);
 			monitor.stopPolling();
-			resolveTransfer!(new Uint8Array(64));
+			(resolveTransfer as (v: Uint8Array) => void)(new Uint8Array(64));
 			await new Promise((r) => setTimeout(r, 5));
 		});
 
@@ -174,7 +179,7 @@ describe('BatteryMonitor', () => {
 		});
 
 		it('should not start polling twice', async () => {
-			let resolveTransfer: (v: Uint8Array) => void;
+			let resolveTransfer: ((v: Uint8Array) => void) | null = null;
 			mockDevice.nativeTransferIn.mockReturnValue(
 				new Promise<Uint8Array>((resolve) => {
 					resolveTransfer = resolve;
@@ -185,12 +190,12 @@ describe('BatteryMonitor', () => {
 			expect(monitor.isPolling).toBe(true);
 			expect(mockDevice.nativeTransferIn).toHaveBeenCalledTimes(1);
 			monitor.stopPolling();
-			resolveTransfer!(new Uint8Array(64));
+			(resolveTransfer as (v: Uint8Array) => void)(new Uint8Array(64));
 			await new Promise((r) => setTimeout(r, 5));
 		});
 
 		it('should emit batteryChange when poll returns matching data', async () => {
-			let resolveTransfer: (v: Uint8Array) => void;
+			let resolveTransfer: ((v: Uint8Array) => void) | null = null;
 			mockDevice.nativeTransferIn.mockReturnValue(
 				new Promise<Uint8Array>((resolve) => {
 					resolveTransfer = resolve;
@@ -201,13 +206,13 @@ describe('BatteryMonitor', () => {
 			monitor.setupListeners();
 			monitor.startPolling();
 			monitor.stopPolling();
-			resolveTransfer!(Buffer.from([0x03, 0x55, 0x40, 0x01, 65]));
+			(resolveTransfer as (v: Uint8Array) => void)(Buffer.from([0x03, 0x55, 0x40, 0x01, 65]));
 			await new Promise((r) => setTimeout(r, 5));
 			expect(spy).toHaveBeenCalledWith(65);
 		});
 
 		it('should log errors from nativeTransferIn (non-Cancelled)', async () => {
-			let rejectTransfer: (e: Error) => void;
+			let rejectTransfer: ((e: Error) => void) | null = null;
 			mockDevice.nativeTransferIn.mockReturnValue(
 				new Promise<Uint8Array>((_, reject) => {
 					rejectTransfer = reject;
@@ -215,14 +220,14 @@ describe('BatteryMonitor', () => {
 			);
 			monitor.setupListeners();
 			monitor.startPolling();
-			rejectTransfer!(new Error('USB stall'));
+			(rejectTransfer as (e: Error) => void)(new Error('USB stall'));
 			await new Promise((r) => setTimeout(r, 10));
 			monitor.stopPolling();
 			expect(mockLogger.warn).toHaveBeenCalledWith('Battery monitor interrupt read error', expect.any(Error));
 		});
 
 		it('should not log Cancelled errors', async () => {
-			let rejectTransfer: (e: Error) => void;
+			let rejectTransfer: ((e: Error) => void) | null = null;
 			mockDevice.nativeTransferIn.mockReturnValue(
 				new Promise<Uint8Array>((_, reject) => {
 					rejectTransfer = reject;
@@ -230,14 +235,14 @@ describe('BatteryMonitor', () => {
 			);
 			monitor.setupListeners();
 			monitor.startPolling();
-			rejectTransfer!(new Error('Cancelled'));
+			(rejectTransfer as (e: Error) => void)(new Error('Cancelled'));
 			await new Promise((r) => setTimeout(r, 10));
 			monitor.stopPolling();
 			expect(mockLogger.warn).not.toHaveBeenCalled();
 		});
 
 		it('should not call logger.warn after stopPolling clears polling flag', async () => {
-			let resolveTransfer: (v: Uint8Array) => void;
+			let resolveTransfer: ((v: Uint8Array) => void) | null = null;
 			mockDevice.nativeTransferIn.mockReturnValue(
 				new Promise<Uint8Array>((resolve) => {
 					resolveTransfer = resolve;
@@ -247,7 +252,7 @@ describe('BatteryMonitor', () => {
 			monitor.startPolling();
 			await new Promise((r) => setTimeout(r, 5));
 			monitor.stopPolling();
-			resolveTransfer!(new Uint8Array(64));
+			(resolveTransfer as (v: Uint8Array) => void)(new Uint8Array(64));
 			await new Promise((r) => setTimeout(r, 5));
 			expect(mockLogger.warn).not.toHaveBeenCalled();
 		});
@@ -255,7 +260,7 @@ describe('BatteryMonitor', () => {
 
 	describe('destroy', () => {
 		it('should stop polling and remove all listeners', async () => {
-			let resolveTransfer: (v: Uint8Array) => void;
+			let resolveTransfer: ((v: Uint8Array) => void) | null = null;
 			mockDevice.nativeTransferIn.mockReturnValue(
 				new Promise<Uint8Array>((resolve) => {
 					resolveTransfer = resolve;
@@ -264,7 +269,7 @@ describe('BatteryMonitor', () => {
 			monitor.startPolling();
 			monitor.destroy();
 			expect(monitor.isPolling).toBe(false);
-			resolveTransfer!(new Uint8Array(64));
+			(resolveTransfer as (v: Uint8Array) => void)(new Uint8Array(64));
 			await new Promise((r) => setTimeout(r, 5));
 			const spy = vi.fn();
 			monitor.on('batteryChange', spy);

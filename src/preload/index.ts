@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 import type { AppSettings } from '../main/storage/settingsManager.js';
 
 // Custom APIs for renderer
-const api = {
+export const api = {
 	detectDevice: (): Promise<{ detected: boolean; mode?: number; model?: string }> =>
 		ipcRenderer.invoke('detect-device'),
 	connectDevice: (params: number | { model: string; mode: number }): Promise<{ success: boolean; error?: string }> =>

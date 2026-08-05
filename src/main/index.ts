@@ -84,9 +84,6 @@ app.whenReady().then(() => {
 			}
 
 			const oldDriver = driver;
-			if (oldDriver) {
-				await oldDriver.close();
-			}
 
 			const newDriver = new AttackSharkX11({ connectionMode: mode as ConnectionMode, deviceModel: model });
 
@@ -96,6 +93,10 @@ app.whenReady().then(() => {
 				const windows = BrowserWindow.getAllWindows();
 				windows.forEach((w) => w.webContents.send('battery-updated', level));
 			});
+
+			if (oldDriver) {
+				await oldDriver.close();
+			}
 
 			// eslint-disable-next-line require-atomic-updates
 			driver = newDriver;
