@@ -47,7 +47,7 @@ sudo udevadm control --reload-rules
 
 **App features** — Dark/Light/Cappuccino themes, i18n (EN/ES), auto-save, full config persistence across restarts, type-safe settings loading, auto-detect connected device on launch.
 
-**Platform** — Linux, macOS, Windows. 141 tests across 10 files.
+**Platform** — Linux, macOS, Windows. 149 tests across 11 files.
 
 **USB Stack** — Fully migrated from `usb` v2 (node-usb, synchronous Transfer API) to `usb` v3 (node-usb-rs, async WebUSB API). Battery monitoring uses interrupt endpoint polling via `nativeTransferIn`. Upstream bug fix submitted (node-usb-rs#4).
 
@@ -83,7 +83,7 @@ bun run package     # outputs to ./dist
 ```
 
 ```bash
-bun test            # 141 tests
+bun test            # 149 tests
 ```
 
 ---

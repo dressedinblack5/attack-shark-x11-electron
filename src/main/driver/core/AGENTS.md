@@ -44,5 +44,5 @@ src/main/driver/core/
 - **Never use `AttackSharkX11` without `deviceModel` for R1** — pass `{ deviceModel: 'R1' }` in constructor
 
 ## TESTS
-- `__tests__/AttackSharkX11.test.ts` — full MockDevice (usb v3 async API), 34 tests
-- `__tests__/BatteryMonitor.test.ts` — fake timers, EventEmitter, 37 tests
+- `__tests__/AttackSharkX11.test.ts` — full MockDevice (usb v3 async API), 31 tests
+- `__tests__/BatteryMonitor.test.ts` — fake timers, EventEmitter, 22 tests

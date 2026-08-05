@@ -17,10 +17,10 @@ Cross-platform Electron + Vue 3 desktop app to configure Attack Shark X11/R1 gam
 │   ├── preload/        # contextBridge IPC API (src/preload/index.ts)
 │   ├── renderer/       # Vue 3 + Tailwind UI — see src/renderer/src/components/AGENTS.md
 │   └── shared/         # Shared types (macro-templates, macro-types)
-├── __tests__/          # 9 test files, bun:test — see __tests__/AGENTS.md
+├── __tests__/          # 11 test files, bun:test — see __tests__/AGENTS.md
 ├── docs/               # Protocol docs (packet analysis, DPI mapping)
 ├── locales/            # i18n (en.json, es.json)
-├── .github/workflows/  # 3 CI + 6 AI bot workflows
+├── .github/workflows/  # 4 CI + 6 AI bot workflows
 ├── .husky/             # pre-commit (lint-staged), pre-push (test + tsc)
 └── Config: package.json, tsconfig.json, eslint.config.ts, electron.vite.config.ts, .editorconfig, .prettierrc
 ```
@@ -90,13 +90,12 @@ bun run lint:fix         # eslint --fix
 bun run format           # prettier --check
 bun run format:fix       # prettier --write
 bun run typecheck        # tsc --noEmit
-bun test                 # 145 tests, bun:test
+bun test                 # 149 tests, bun:test
 bun test --coverage      # coverage/ (gitignored)
 ```
 
 ## NOTES
-- **No CodeGraph index**: `.codegraph` symlink dangling; run `codegraph init` to enable `codegraph callers/affected`
-- **README stale**: claims "145 tests across 12 files" — actual: 9 files
-- **Install script**: `install.sh` (curl-pipe, builds in /var/tmp, `|| true` swallows build failure — fix if distributing)
+- **CodeGraph index**: initialized — `codegraph callers/affected` available
+- **Install script**: `install.sh` (curl-pipe, builds in /var/tmp — build failure now fails loudly)
 - **Cross-platform**: Linux (udev rules needed), macOS, Windows; `usb` v3 uses node-usb-rs (Rust backend)
 - **Key vendor/product**: VID=0x1d57; PIDs=0xfa60 (wireless), 0xfa55 (X11 wired), 0xfa61 (R1 wired)
