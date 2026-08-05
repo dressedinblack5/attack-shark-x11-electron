@@ -74,29 +74,29 @@
 	"dependencies": {
 		"@electron-toolkit/utils": "^4.0.0",
 		"lucide-vue-next": "^1.0.0",
-		"usb": "^3.0.0",
-		"vue": "^3.5.38",
-		"vue-i18n": "^11.4.5"
+		"usb": "^3.0.1",
+		"vue": "^3.5.40",
+		"vue-i18n": "^11.4.8"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
-		"@tailwindcss/vite": "^4.3.1",
-		"@types/node": "^25.9.3",
-		"@vitejs/plugin-vue": "^6.0.7",
-		"electron": "^42.4.0",
+		"@tailwindcss/vite": "^4.3.3",
+		"@types/bun": "^1.3.14",
+		"@types/node": "^26.1.2",
+		"@vitejs/plugin-vue": "^6.0.8",
+		"electron": "^43.3.0",
 		"electron-builder": "^26.15.3",
 		"electron-vite": "^5.0.0",
-		"eslint": "^10.5.0",
+		"eslint": "^10.8.0",
 		"eslint-config-prettier": "^10.1.8",
-		"globals": "^17.6.0",
+		"globals": "^17.9.0",
 		"husky": "^9.1.7",
-		"lint-staged": "^17.0.7",
-		"prettier": "3.8.4",
-		"tailwindcss": "^4.3.1",
+		"lint-staged": "^17.3.0",
+		"prettier": "3.9.6",
+		"tailwindcss": "^4.3.3",
 		"typescript": "^6.0.3",
-		"typescript-eslint": "^8.61.0",
-		"vite": "^8.0.16",
-		"@types/bun": "latest"
+		"typescript-eslint": "^8.66.0",
+		"vite": "^8.2.0"
 	},
 	"trustedDependencies": [
 		"usb"
