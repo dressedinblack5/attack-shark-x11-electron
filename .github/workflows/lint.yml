@@ -12,15 +12,15 @@ jobs:
 
         steps:
             -   name: Checkout repository
-                uses: actions/checkout@v4 # ratchet:actions/checkout@v4
+                uses: actions/checkout@v4
 
             -   name: Setup Bun
-                uses: oven-sh/setup-bun@v1 # ratchet:oven-sh/setup-bun@v1
+                uses: oven-sh/setup-bun@v2
                 with:
-                    bun-version: 1.3.9
+                    bun-version: latest
 
             -   name: Cache dependencies
-                uses: actions/cache@v4 # ratchet:actions/cache@v4
+                uses: actions/cache@v4
                 with:
                     path: |
                         ~/.bun/install/cache

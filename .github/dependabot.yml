@@ -22,7 +22,7 @@ updates:
         patterns:
           - "*"
         update-types:
-          - "security"
+          - "patch"
     # Security updates only
     allow:
       - dependency-type: "direct"
