@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, toRaw } from 'vue';
+import { ref, computed, toRaw, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Keyboard, Plus, Trash2, Minimize } from 'lucide-vue-next';
 import BaseButton from './BaseButton.vue';
@@ -8,15 +8,14 @@ import BaseInput from './BaseInput.vue';
 import Card from './Card.vue';
 import StatusMessage from './StatusMessage.vue';
 import { KeyCode } from '../../../shared/macro-templates.js';
-import { MacroMode } from '../../../shared/macro-types.js';
-
-enum Button {
-	LEFT = 0,
-	RIGHT = 1,
-	MIDDLE = 2,
-	FORWARD = 3,
-	BACKWARD = 4,
-}
+import {
+	MacroMode,
+	Button,
+	MouseMacroEvent,
+	MAX_MACRO_EVENTS,
+	MAX_DELAY_MS,
+	MAX_REPEAT_COUNT,
+} from '../../../shared/macro-types.js';
 
 const props = defineProps<{
 	isConnected: boolean;
@@ -38,6 +37,7 @@ const buttons = computed(() => [
 	{ label: t('macros.buttons.middle'), value: Button.MIDDLE },
 	{ label: t('macros.buttons.forward'), value: Button.FORWARD },
 	{ label: t('macros.buttons.backward'), value: Button.BACKWARD },
+	{ label: t('macros.buttons.dpi'), value: Button.DPI },
 ]);
 
 const selectedButton = ref<Button>(Button.FORWARD);
@@ -52,6 +52,7 @@ const selectedPlaybackMode = ref<MacroMode>(MacroMode.THE_NUMBER_OF_TIME_TO_PLAY
 const repeatCount = ref(1);
 
 interface MacroEvent {
+	id: string;
 	type: 'key' | 'mouse';
 	keyCode: number;
 	delayMs: number;
@@ -68,11 +69,11 @@ const keyOptions = computed(() => {
 });
 
 const mouseEventOptions = [
-	{ label: 'Left Click', value: 0xf1 },
-	{ label: 'Right Click', value: 0xf2 },
-	{ label: 'Middle Click', value: 0xf3 },
-	{ label: 'Backward Click', value: 0xf4 },
-	{ label: 'Forward Click', value: 0xf5 },
+	{ label: t('macros.mouseEvents.leftClick'), value: MouseMacroEvent.LEFT_CLICK },
+	{ label: t('macros.mouseEvents.rightClick'), value: MouseMacroEvent.RIGHT_CLICK },
+	{ label: t('macros.mouseEvents.middleClick'), value: MouseMacroEvent.MIDDLE_CLICK },
+	{ label: t('macros.mouseEvents.backwardClick'), value: MouseMacroEvent.BACKWARD_CLICK },
+	{ label: t('macros.mouseEvents.forwardClick'), value: MouseMacroEvent.FORWARD_CLICK },
 ];
 
 const newEventType = ref<'key' | 'mouse'>('key');
@@ -80,8 +81,12 @@ const newEventKeyCode = ref(keyOptions.value[0]?.value ?? KeyCode.A);
 const newEventDelay = ref(10);
 const newEventIsRelease = ref(false);
 
+const isAtEventLimit = computed(() => events.value.length >= MAX_MACRO_EVENTS);
+
 const addEvent = () => {
+	if (isAtEventLimit.value) return;
 	events.value.push({
+		id: crypto.randomUUID(),
 		type: newEventType.value,
 		keyCode: newEventKeyCode.value,
 		delayMs: newEventDelay.value,
@@ -91,9 +96,27 @@ const addEvent = () => {
 	newEventIsRelease.value = false;
 };
 
-const removeEvent = (index: number) => {
-	events.value.splice(index, 1);
+const removeEvent = (id: string) => {
+	const index = events.value.findIndex((e) => e.id === id);
+	if (index !== -1) events.value.splice(index, 1);
 };
+
+const handleKeyDown = (event: KeyboardEvent) => {
+	if (event.key === 'Enter' && !isAtEventLimit.value) {
+		addEvent();
+	}
+	if (event.key === 'Delete') {
+		// Could implement selected event removal here
+	}
+};
+
+onMounted(() => {
+	window.addEventListener('keydown', handleKeyDown);
+});
+
+onUnmounted(() => {
+	window.removeEventListener('keydown', handleKeyDown);
+});
 
 const applyCustomMacro = async () => {
 	if (!props.isConnected) return;
@@ -194,9 +217,13 @@ const getEventDelayLabel = (event: MacroEvent): string => {
 			<template #title>
 				<div class="flex items-center justify-between">
 					<Plus class="w-5 h-5 text-shark-primary" /> {{ $t('macros.events') }}
+					<span class="text-sm text-[var(--text-tertiary)]">
+						{{ events.length }} / {{ MAX_MACRO_EVENTS }}
+					</span>
 					<button
 						@click="addEvent"
-						class="bg-shark-primary hover:bg-shark-primary/80 text-white px-3 py-1 rounded-lg text-sm transition-all flex items-center gap-1"
+						:disabled="isAtEventLimit"
+						class="bg-shark-primary hover:bg-shark-primary/80 text-white px-3 py-1 rounded-lg text-sm transition-all flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
 					>
 						<Plus class="w-4 h-4" /> {{ $t('macros.addEvent') }}
 					</button>
@@ -236,7 +263,7 @@ const getEventDelayLabel = (event: MacroEvent): string => {
 							type="number"
 							v-model.number="newEventDelay"
 							min="0"
-							max="60000"
+							:max="MAX_DELAY_MS"
 							step="1"
 							class="w-full"
 						/>
@@ -259,21 +286,21 @@ const getEventDelayLabel = (event: MacroEvent): string => {
 
 				<div v-else class="space-y-2 max-h-96 overflow-y-auto">
 					<div
-						v-for="(event, index) in events"
-						:key="index"
+						v-for="event in events"
+						:key="event.id"
 						class="flex items-center gap-3 p-3 bg-[var(--bg-primary)] border border-[var(--border-card)] rounded-lg"
 					>
 						<span
 							class="w-8 h-8 flex items-center justify-center bg-[var(--border-card)] rounded text-sm font-medium text-[var(--text-primary)]"
-							>{{ index + 1 }}</span
-						>
+						></span>
 						<div class="flex-1 min-w-0">
 							<p class="font-medium text-[var(--text-primary)] truncate">{{ getEventLabel(event) }}</p>
 							<p class="text-xs text-[var(--text-tertiary)]">{{ getEventDelayLabel(event) }}</p>
 						</div>
 						<button
-							@click="removeEvent(index)"
+							@click="removeEvent(event.id)"
 							class="text-red-400 hover:text-red-300 p-1 transition-colors"
+							:aria-label="`Remove event: ${getEventLabel(event)}`"
 						>
 							<Trash2 class="w-5 h-5" />
 						</button>

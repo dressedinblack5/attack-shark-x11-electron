@@ -126,6 +126,13 @@
 			"forward": "Forward Button",
 			"backward": "Backward Button",
 			"dpi": "DPI Button"
+		},
+		"mouseEvents": {
+			"leftClick": "Left Click",
+			"rightClick": "Right Click",
+			"middleClick": "Middle Click",
+			"backwardClick": "Backward Click",
+			"forwardClick": "Forward Click"
 		}
 	},
 	"overview": {

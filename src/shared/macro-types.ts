@@ -4,6 +4,25 @@ export enum MacroMode {
 	PRESS_AND_HOLD_RELEASE_STOP = 0x02,
 }
 
+export enum Button {
+	LEFT = 0,
+	RIGHT = 1,
+	MIDDLE = 2,
+	FORWARD = 3,
+	BACKWARD = 4,
+	DPI = 5,
+	SCROLL_UP = 6,
+	SCROLL_DOWN = 7,
+}
+
+export enum MouseMacroEvent {
+	LEFT_CLICK = 0xf1,
+	RIGHT_CLICK = 0xf2,
+	MIDDLE_CLICK = 0xf3,
+	BACKWARD_CLICK = 0xf4,
+	FORWARD_CLICK = 0xf5,
+}
+
 export enum CUSTOM_MACRO_BUTTONS {
 	LEFT_BUTTON = 0x01,
 	RIGHT_BUTTON = 0x02,
@@ -11,3 +30,7 @@ export enum CUSTOM_MACRO_BUTTONS {
 	EXTRA_BUTTON_4 = 0x07,
 	EXTRA_BUTTON_5 = 0x08,
 }
+
+export const MAX_MACRO_EVENTS = 47;
+export const MAX_DELAY_MS = 51000;
+export const MAX_REPEAT_COUNT = 255;
