@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, toRaw, onMounted } from 'vue';
+import { ref, computed, toRaw, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Keyboard, Plus, Trash2, Minimize } from 'lucide-vue-next';
 import BaseButton from './BaseButton.vue';
