@@ -71,6 +71,53 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 ---
 
+## Release v1.4.3 Installation
+
+Pre-built distributions are available for immediate use:
+
+### Linux (AppImage)
+```bash
+# Download from GitHub Releases or use curl
+curl -L https://github.com/dressedinblack5/attack-shark-x11-electron/releases/download/v1.4.3/attack-shark-x11-1.4.3.AppImage -o attack-shark-x11-1.4.3.AppImage
+
+# Make executable
+chmod +x attack-shark-x11-1.4.3.AppImage
+
+# Run
+./attack-shark-x11-1.4.3.AppImage
+```
+
+### Linux (Debian .deb)
+```bash
+# Download from GitHub Releases
+curl -L https://github.com/dressedinblack5/attack-shark-x11-electron/releases/download/v1.4.3/attack-shark-x11-1.4.3.deb -o attack-shark-x11-1.4.3.deb
+
+# Install
+sudo dpkg -i attack-shark-x11-1.4.3.deb
+```
+
+### Linux (from package manager)
+```bash
+# After adding the repo, install:
+sudo apt install attack-shark-x11   # Debian/Ubuntu
+# OR
+sudo pacman -S attack-shark-x11     # Arch Linux (AUR)
+```
+
+### Verify Installation
+```bash
+# Check the app is accessible
+attack-shark-x11
+
+# Or via desktop entry
+# The app should appear in your applications menu
+```
+
+### If using without udev rules
+If you haven't set up udev rules (see "Linux Setup (udev)" section), run the app with `sudo` initially, or ensure your user is in the `plugdev` group.
+
+---
+
 ## Build from Source
 
 Prerequisite: [Bun](https://bun.sh/)

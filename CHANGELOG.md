@@ -1,6 +1,16 @@
 # Changelog
 
-## [1.2.8] - 2026-06-13
+## [1.4.3] - 2026-08-14
+
+### Fixed
+- Release build: proper electron-vite build output
+
+### Changed
+- README consistency verification completed
+- Git tag v1.4.3 created and pushed
+- All 149 tests passing across 11 files
+
+## [1.4.2] - 2026-06-05
 
 ### Added
 - Reusable UI widgets: `BaseToggle`, `ColorPreview`, `BatteryIndicator`, `ToastStack`, `SkeletonCard`, and `useToast` composable
