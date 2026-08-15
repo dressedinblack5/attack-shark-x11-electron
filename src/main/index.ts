@@ -11,12 +11,13 @@ import { CustomMacroBuilder, type CustomMacroBuilderOptions } from './driver/pro
 import type { Rate } from './driver/protocols/PollingRateBuilder.js';
 import type { UserPreferencesBuilderOptions } from './driver/protocols/UserPreferencesBuilder.js';
 
-import type { MacroBuilderOptions } from './driver/protocols/MacrosBuilder.js';
+import { MacrosBuilder, type MacroBuilderOptions } from './driver/protocols/MacrosBuilder.js';
 import type { MacroMode } from '../shared/macro-types.js';
 import { usb } from 'usb';
 
 let driver: AttackSharkX11 | null = null;
 let deviceModel: DeviceModel = 'X11';
+let currentMacrosBuilder: MacrosBuilder | null = null;
 // ... (in app.whenReady())
 
 function createWindow(): void {
@@ -284,7 +285,14 @@ app.whenReady().then(() => {
 		if (!driver) throw new Error('Device not connected');
 		if (deviceModel === 'R1') throw new Error('Macros not supported on R1');
 
-		const builder = new CustomMacroBuilder(options);
+		if (!currentMacrosBuilder) {
+			currentMacrosBuilder = new MacrosBuilder();
+		}
+
+		const builder = new CustomMacroBuilder({
+			...options,
+			macrosBuilder: currentMacrosBuilder,
+		});
 
 		return driver.setCustomMacro(builder);
 	});
@@ -308,9 +316,14 @@ app.whenReady().then(() => {
 			if (!driver) throw new Error('Device not connected');
 			if (deviceModel === 'R1') throw new Error('Macros not supported on R1');
 
+			if (!currentMacrosBuilder) {
+				currentMacrosBuilder = new MacrosBuilder();
+			}
+
 			const builder = new CustomMacroBuilder({
 				targetButton: config.targetButton,
 				playOptions: config.playOptions,
+				macrosBuilder: currentMacrosBuilder,
 			});
 
 			for (const event of config.events) {
