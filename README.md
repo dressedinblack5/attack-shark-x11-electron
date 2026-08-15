@@ -32,12 +32,12 @@ sudo udevadm control --reload-rules
 
 ---
 ## Windows install
-* clone the repo
-* run install.bat
-* go to https://zadig.akeo.ie/ and install the tool
-* after that replace default windows drivers with winUSB drivers
-* run the installer from dist folder
-* now you can run the tool from start menu or desktop icon :)
+* Clone the repo
+* Run install.bat
+* Go to https://zadig.akeo.ie/ and install the tool
+* After that replace default windows drivers with winUSB drivers
+* Run the installer from dist folder
+* Now you can run the tool from start menu or desktop icon :)
 
 ## Features
 
@@ -94,14 +94,6 @@ curl -L https://github.com/dressedinblack5/attack-shark-x11-electron/releases/do
 
 # Install
 sudo dpkg -i attack-shark-x11-1.4.3.deb
-```
-
-### Linux (from package manager)
-```bash
-# After adding the repo, install:
-sudo apt install attack-shark-x11   # Debian/Ubuntu
-# OR
-sudo pacman -S attack-shark-x11     # Arch Linux (AUR)
 ```
 
 ### Verify Installation
