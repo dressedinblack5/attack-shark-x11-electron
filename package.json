@@ -89,7 +89,7 @@
 		"electron-vite": "^5.0.0",
 		"eslint": "^10.8.0",
 		"eslint-config-prettier": "^10.1.8",
-		"globals": "^17.9.0",
+		"globals": "^17.11.0",
 		"husky": "^9.1.7",
 		"lint-staged": "^17.3.0",
 		"prettier": "3.9.6",
