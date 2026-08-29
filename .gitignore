@@ -31,9 +31,9 @@ temp/
 *.rpm
 *.snap
 *.msi
-*.yml
 *.blockmap
 *.nupkg
+dist/*.yml
 
 # TypeScript
 *.tsbuildinfo
