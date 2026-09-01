@@ -1,6 +1,6 @@
 {
 	"name": "attack-shark-x11",
-	"version": "1.4.3",
+	"version": "1.4.4",
 	"description": "Desktop configuration app for the Attack Shark X11 gaming mouse.",
 	"desktopName": "attack-shark-x11",
 	"author": {
@@ -97,6 +97,13 @@
 		"typescript": "^6.0.3",
 		"typescript-eslint": "^8.68.0",
 		"vite": "^8.2.2"
+	},
+	"overrides": {
+		"brace-expansion": "^5.0.9",
+		"fast-uri": "^3.1.5",
+		"js-yaml": "^4.3.1",
+		"tar": "^7.5.21",
+		"undici": "^7.29.0"
 	},
 	"trustedDependencies": [
 		"usb"
