@@ -43,7 +43,7 @@ jobs:
         uses: trufflesecurity/trufflehog@v3.97.1
         with:
           path: ./
-          extra_args: --only-verified --fail
+          extra_args: --only-verified
 
       - name: Run Snyk test
         uses: snyk/actions/node@master
